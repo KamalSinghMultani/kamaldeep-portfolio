@@ -1,0 +1,13 @@
+# Sketch/Figma sources and their extracted pages — large, re-downloadable
+*.sketch
+*.fig
+peeps/
+pages/
+previews/
+text-previews/
+
+# scratch
+__pycache__/
+*.pyc
+_p*.html
+peek*.png

@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700&family=Archivo:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif; }
+    a { color: #f0c000; text-decoration: none; } a:hover { color: #ffe066; }
+    .anton { font-family: "Anton", Impact, "Arial Black", sans-serif; }
+    .arch { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; }
+    .halftone { background-image: radial-gradient(#f2ede1 1.15px, transparent 1.2px); background-size: 7px 7px; }
+    .lbl { font-size: 12px; letter-spacing: 0.2em; color: #6e6e78; font-weight: 700; }
+  </style>
+</helmet>
+
+<div style="width: 900px; min-height: 1100px; background: #0b0b0d; color: #f2ede1; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px;">
+
+  <div>
+    <div class="anton" style="font-size: 44px; line-height: 1;">STYLE KIT</div>
+    <div style="height: 5px; background: #d92020; margin: 8px 0 10px;"></div>
+    <div class="arch" style="font-size: 14px; color: #8a8a94;">Tokens and components for the portfolio — reference when building the hosted version.</div>
+  </div>
+
+  <!-- palette -->
+  <div>
+    <div class="lbl" style="margin-bottom: 14px;">PALETTE</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+      <div style="border: 2px solid #26262d;">
+        <div style="height: 88px; background: #0b0b0d; border-bottom: 2px solid #26262d;"></div>
+        <div style="padding: 10px 12px;"><div class="anton" style="font-size: 15px;">INK</div><div class="arch" style="font-size: 13px; color: #8a8a94;">#0b0b0d</div></div>
+      </div>
+      <div style="border: 2px solid #26262d;">
+        <div style="height: 88px; background: #f2ede1;"></div>
+        <div style="padding: 10px 12px;"><div class="anton" style="font-size: 15px;">BONE</div><div class="arch" style="font-size: 13px; color: #8a8a94;">#f2ede1</div></div>
+      </div>
+      <div style="border: 2px solid #26262d;">
+        <div style="height: 88px; background: #d92020;"></div>
+        <div style="padding: 10px 12px;"><div class="anton" style="font-size: 15px;">CRIMSON</div><div class="arch" style="font-size: 13px; color: #8a8a94;">#d92020</div></div>
+      </div>
+      <div style="border: 2px solid #26262d;">
+        <div style="height: 88px; background: #f0c000;"></div>
+        <div style="padding: 10px 12px;"><div class="anton" style="font-size: 15px;">ACID</div><div class="arch" style="font-size: 13px; color: #8a8a94;">#f0c000</div></div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 12px;">
+      <div style="border: 2px solid #26262d; padding: 10px 12px;"><div style="height: 22px; background: #131318; margin-bottom: 8px;"></div><div class="arch" style="font-size: 12px; color: #8a8a94;">panel #131318</div></div>
+      <div style="border: 2px solid #26262d; padding: 10px 12px;"><div style="height: 22px; background: #26262d; margin-bottom: 8px;"></div><div class="arch" style="font-size: 12px; color: #8a8a94;">rule #26262d</div></div>
+      <div style="border: 2px solid #26262d; padding: 10px 12px;"><div style="height: 22px; background: #9a9aa4; margin-bottom: 8px;"></div><div class="arch" style="font-size: 12px; color: #8a8a94;">muted #9a9aa4</div></div>
+      <div style="border: 2px solid #26262d; padding: 10px 12px;"><div style="height: 22px; background: #2fb8c6; margin-bottom: 8px;"></div><div class="arch" style="font-size: 12px; color: #8a8a94;">alt accent #2fb8c6</div></div>
+    </div>
+  </div>
+
+  <!-- type -->
+  <div>
+    <div class="lbl" style="margin-bottom: 14px;">TYPE RAMP</div>
+    <div style="background: #131318; border: 2px solid #26262d; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; align-items: baseline;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Anton 138 / display</div>
+        <div class="anton" style="font-size: 52px; line-height: 0.9;">KAMALDEEP</div>
+      </div>
+      <div style="height: 2px; background: #26262d;"></div>
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; align-items: baseline;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Anton 64 / section</div>
+        <div class="anton" style="font-size: 38px;">ARSENAL</div>
+      </div>
+      <div style="height: 2px; background: #26262d;"></div>
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; align-items: baseline;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Anton 19-22 / label</div>
+        <div class="anton" style="font-size: 20px; letter-spacing: 0.05em;">DIRECTORY SERVICES</div>
+      </div>
+      <div style="height: 2px; background: #26262d;"></div>
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; align-items: baseline;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Archivo 15 / body</div>
+        <div class="arch" style="font-size: 15px; line-height: 1.55; color: #d8d4c8;">Deployed a multi-domain-controller AD forest with integrated DNS and global catalog across a routed three-subnet GNS3 topology.</div>
+      </div>
+      <div style="height: 2px; background: #26262d;"></div>
+      <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; align-items: baseline;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Barlow Cond. 13 / meta</div>
+        <div style="font-size: 13px; letter-spacing: 0.2em; color: #6e6e78; font-weight: 700;">JUN – DEC 2023</div>
+      </div>
+    </div>
+    <div class="arch" style="font-size: 13px; color: #6e6e78; margin-top: 10px; line-height: 1.5;">Fallbacks: Anton → Impact, Arial Black · Archivo → Helvetica Neue, Arial · Barlow Condensed → Arial Narrow. PNG and PDF exports use the fallbacks, so headline sizes carry ~10% slack.</div>
+  </div>
+
+  <!-- components -->
+  <div>
+    <div class="lbl" style="margin-bottom: 14px;">COMPONENTS</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Skewed nav item — active / rest</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="height: 54px; display: flex; align-items: center; gap: 12px; padding: 0 16px; background: #d92020; color: #f2ede1; transform: skewX(-7deg); border-left: 5px solid #f0c000;">
+            <span style="transform: skewX(7deg); display: flex; gap: 12px; align-items: center;"><span class="anton" style="font-size: 12px; opacity: 0.55;">01</span><span class="anton" style="font-size: 20px;">STATUS</span></span>
+          </div>
+          <div style="height: 54px; display: flex; align-items: center; gap: 12px; padding: 0 16px; background: #16161c; color: #9a9aa4; transform: skewX(-7deg); border-left: 5px solid #2c2c34;">
+            <span style="transform: skewX(7deg); display: flex; gap: 12px; align-items: center;"><span class="anton" style="font-size: 12px; opacity: 0.55;">02</span><span class="anton" style="font-size: 20px;">TARGETS</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Rank bar — 5 segments, 20% each</div>
+        <div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px;">
+            <div class="anton" style="font-size: 17px;">NETWORKING</div>
+            <div class="anton" style="font-size: 14px; color: #f0c000;">RANK 4</div>
+          </div>
+          <div style="position: relative; height: 12px; background: #26262d;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 80%; background: #d92020;"></div>
+            <div style="position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));">
+              <div style="border-right: 2px solid #0b0b0d;"></div><div style="border-right: 2px solid #0b0b0d;"></div>
+              <div style="border-right: 2px solid #0b0b0d;"></div><div style="border-right: 2px solid #0b0b0d;"></div><div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Buttons — 3px border, hard offset shadow on hover</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div class="anton" style="background: #f2ede1; color: #0b0b0d; padding: 14px 22px; font-size: 17px; letter-spacing: 0.08em; border: 3px solid #f2ede1;">BEGIN</div>
+          <div class="anton" style="background: transparent; color: #f2ede1; padding: 14px 22px; font-size: 17px; letter-spacing: 0.08em; border: 3px solid #3a3a42;">CONTACT</div>
+        </div>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="arch" style="font-size: 12px; color: #6e6e78;">Skill chips — bottom edge colour-codes the category</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <div class="arch" style="font-size: 14px; padding: 9px 13px; background: #16161c; border: 2px solid #2c2c34; border-bottom: 4px solid #d92020;">Active Directory DS</div>
+          <div class="arch" style="font-size: 14px; padding: 9px 13px; background: #16161c; border: 2px solid #2c2c34; border-bottom: 4px solid #f0c000;">AWS IAM</div>
+          <div class="arch" style="font-size: 14px; padding: 9px 13px; background: #16161c; border: 2px solid #2c2c34; border-bottom: 4px solid #2fb8c6;">GNS3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- motion -->
+  <div>
+    <div class="lbl" style="margin-bottom: 14px;">MOTION</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px;">
+        <div class="anton" style="font-size: 17px; margin-bottom: 12px;">DEPTH LADDER</div>
+        <div class="arch" style="font-size: 13px; line-height: 1.7; color: #b8b4a8;">
+          Pointer position writes <span style="color: #f0c000;">--px</span> / <span style="color: #f0c000;">--py</span> (−1…1) onto the root; layers translate by a per-plane multiplier.<br>
+          halftone 6px · red slab 10px · yellow wedge 16px · name 26px · chips 34px · buttons 40px<br>
+          The whole plate tilts ±2.2° / ∓1.6° in a 1200px perspective. Idle for 2.5s and a slow sine keeps it drifting.
+        </div>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px;">
+        <div class="anton" style="font-size: 17px; margin-bottom: 12px;">TIMING</div>
+        <div class="arch" style="font-size: 13px; line-height: 1.7; color: #b8b4a8;">
+          Parallax &amp; tilt — 450–500ms <span style="color: #f0c000;">cubic-bezier(.2,.8,.3,1)</span><br>
+          Hover pop — 160ms <span style="color: #f0c000;">cubic-bezier(.2,.8,.2,1)</span><br>
+          Entrance rise / settle — 500–550ms, staggered 60ms per step<br>
+          Speed-line burst — 500ms, 4 bars, 40ms apart<br>
+          Ambient: halftone drift 34s · sheen sweep 7s · nav pulse 2.4s
+        </div>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px;">
+        <div class="anton" style="font-size: 17px; margin-bottom: 12px;">LENTICULAR SPLIT</div>
+        <div class="arch" style="font-size: 13px; line-height: 1.7; color: #b8b4a8; margin-bottom: 14px;">
+          Three stacked copies of the display type — ink shadow, bone face, acid ghost — separating in opposite directions with the pointer.
+        </div>
+        <div style="position: relative; height: 62px;">
+          <div class="anton" style="position: absolute; left: 5px; top: 5px; font-size: 46px; line-height: 1; color: #0b0b0d;">SPLIT</div>
+          <div class="anton" style="position: absolute; left: -8px; top: -3px; font-size: 46px; line-height: 1; color: #f0c000; opacity: .8;">SPLIT</div>
+          <div class="anton" style="position: absolute; left: 0; top: 0; font-size: 46px; line-height: 1; color: #f2ede1;">SPLIT</div>
+        </div>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 18px;">
+        <div class="anton" style="font-size: 17px; margin-bottom: 12px;">HOVER LANGUAGE</div>
+        <div class="arch" style="font-size: 13px; line-height: 1.7; color: #b8b4a8;">
+          Everything interactive lifts <span style="color: #f0c000;">translate(−3px, −3px)</span> and drops a hard offset shadow — no blur, no glow. Shadow is ink on the red and bone grounds, accent on the dark panels where ink would vanish. Skewed chrome keeps its skew in the hover transform.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- texture + rules -->
+  <div>
+    <div class="lbl" style="margin-bottom: 14px;">TEXTURE & RULES</div>
+    <div style="display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 16px; align-items: stretch;">
+      <div style="position: relative; background: #d92020; min-height: 120px; overflow: hidden;">
+        <div class="halftone" style="position: absolute; inset: 0; opacity: 0.09;"></div>
+        <div class="arch" style="position: relative; z-index: 2; padding: 12px; font-size: 12px; color: #0b0b0d; font-weight: 600;">Halftone — radial-gradient dots, 7px grid, 0.085 opacity (0.035 on CALM)</div>
+      </div>
+      <div class="arch" style="background: #131318; border: 2px solid #26262d; padding: 18px; font-size: 14px; line-height: 1.65; color: #b8b4a8;">
+        Skew is −7° on chrome, with a +7° counter-skew on the label so text stays upright. Diagonal fields are clip-path polygons, never rotated boxes. Hit targets never below 44px. Body copy never below 14px. Icons are inline stroke SVG on a 24px grid — no emoji.
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

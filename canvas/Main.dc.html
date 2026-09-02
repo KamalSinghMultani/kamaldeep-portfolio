@@ -1,0 +1,844 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap">
+  <style>
+    :root { --px: 0; --py: 0; --sk: -7deg; --accent: #d92020; --amp: 1; }
+
+    body { margin: 0; font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif; }
+    a { color: #f0c000; text-decoration: none; }
+    a:hover { color: #ffe066; }
+    .anton { font-family: "Anton", Impact, "Arial Black", sans-serif; font-weight: 400; }
+    .arch { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; }
+
+    /* ---------- depth planes ---------- */
+    .stage { perspective: 1200px; perspective-origin: 50% 45%; }
+    .plate {
+      transform: rotateY(calc(var(--px) * var(--amp) * 1.6deg)) rotateX(calc(var(--py) * var(--amp) * -1.1deg));
+      transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.2,.8,.3,1);
+      will-change: transform;
+    }
+    /* Background planes carry the motion and travel AGAINST the pointer; foreground
+       planes barely move, so buttons never drift out from under the cursor. */
+    .lyr { transition: transform .5s cubic-bezier(.2,.8,.3,1); will-change: transform; }
+    .z0  { transform: translate3d(calc(var(--px) * var(--amp) * -52px), calc(var(--py) * var(--amp) * -33px), 0); }
+    .z0b { transform: translate3d(calc(var(--px) * var(--amp) * -36px), calc(var(--py) * var(--amp) * -23px), 0); }
+
+    /* deep background plate — the furthest plane, travels most, never competes with copy */
+    .bgart { position: absolute; inset: -110px; overflow: hidden; pointer-events: none; z-index: 0; }
+    .bgnum { font-family: "Anton", Impact, "Arial Black", sans-serif; line-height: .8; letter-spacing: -0.03em; }
+    /* Open Peeps figure on the deepest plane — flat silhouette, well under the copy */
+    .bgfig { position: absolute; width: auto; opacity: .17; }
+    .bgfig-red { opacity: .16; }
+    .z1  { transform: translate3d(calc(var(--px) * var(--amp) * -24px), calc(var(--py) * var(--amp) * -15px), 0); }
+    .z2  { transform: translate3d(calc(var(--px) * var(--amp) * -17px), calc(var(--py) * var(--amp) * -11px), 0); }
+    .z3  { transform: translate3d(calc(var(--px) * var(--amp) * -28px), calc(var(--py) * var(--amp) * -17px), 0); }
+    .z4  { transform: translate3d(calc(var(--px) * var(--amp) *  11px), calc(var(--py) * var(--amp) *   6px), 0); }
+    .z5  { transform: translate3d(calc(var(--px) * var(--amp) *   6px), calc(var(--py) * var(--amp) *   4px), 0); }
+    .z6  { transform: translate3d(calc(var(--px) * var(--amp) *   3px), calc(var(--py) * var(--amp) *   2px), 0); }
+
+    /* lenticular colour split on the display name */
+    .lent { position: relative; }
+    .lent-ghost {
+      position: absolute; left: 0; top: 0; right: 0;
+      transform: translate3d(calc(var(--px) * var(--amp) * -10px), calc(var(--py) * var(--amp) * -4px), 0);
+      transition: transform .5s cubic-bezier(.2,.8,.3,1);
+      pointer-events: none; opacity: .8;
+    }
+    .lent-shadow {
+      position: absolute; left: 0; top: 0; right: 0;
+      transform: translate3d(calc(var(--px) * var(--amp) * 7px + 5px), calc(var(--py) * var(--amp) * 3px + 5px), 0);
+      transition: transform .5s cubic-bezier(.2,.8,.3,1);
+      pointer-events: none;
+    }
+    .lent-face { position: relative; }
+
+    /* moving sheen across an object */
+    .gloss { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .gloss::after {
+      content: ""; position: absolute; top: -60%; bottom: -60%; width: 18%;
+      background: linear-gradient(100deg, transparent, rgba(242,237,225,.10), transparent);
+      left: calc(50% + var(--px) * var(--amp) * 40% - 9%);
+      transition: left .5s cubic-bezier(.2,.8,.3,1);
+      transform: skewX(-14deg);
+    }
+
+    /* card-level tilt for things that read as objects */
+    .tilt {
+      transform: rotateY(calc(var(--px) * var(--amp) * 3deg)) rotateX(calc(var(--py) * var(--amp) * -2deg));
+      transition: transform .45s cubic-bezier(.2,.8,.3,1), box-shadow .18s ease;
+      transform-style: preserve-3d;
+    }
+
+    /* ---------- one hover language ---------- */
+    .pop { transition: transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s ease, background .16s ease, color .16s ease, border-color .16s ease; cursor: pointer; }
+    .pop:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 #0b0b0d; }
+    .pop-dark:hover { box-shadow: 7px 7px 0 var(--accent); }
+    .pop-tilt:hover { transform: translate(-4px, -4px) rotateY(calc(var(--px) * var(--amp) * 3deg)) rotateX(calc(var(--py) * var(--amp) * -2deg)); box-shadow: 10px 10px 0 #0b0b0d; }
+    .pop-skew { transition: transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s ease, background .16s ease, color .16s ease, border-color .16s ease; cursor: pointer; }
+    .pop-skew:hover { transform: translate(-4px, -4px) skewX(var(--sk)); box-shadow: 8px 8px 0 var(--accent); }
+    .pop-skew-ink:hover { box-shadow: 8px 8px 0 #0b0b0d; }
+
+    /* ---------- entrance choreography ---------- */
+    .sect { animation: slideIn .4s cubic-bezier(.2,.85,.25,1) both; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(34px); } to { opacity: 1; transform: none; } }
+
+    .rise { animation: rise .55s cubic-bezier(.16,.9,.28,1) both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(26px) skewY(2deg); } to { opacity: 1; transform: none; } }
+    .d1 { animation-delay: .06s; } .d2 { animation-delay: .12s; } .d3 { animation-delay: .18s; }
+    .d4 { animation-delay: .24s; } .d5 { animation-delay: .3s; }  .d6 { animation-delay: .36s; }
+    .d7 { animation-delay: .42s; } .d8 { animation-delay: .48s; }
+
+    .settle { animation: settle .5s cubic-bezier(.16,.9,.28,1) both; }
+    @keyframes settle { from { opacity: 0; transform: translateX(-30px) skewX(-12deg); } to { opacity: 1; transform: none; } }
+
+    .wipe { animation: wipe .55s .12s cubic-bezier(.2,.85,.25,1) both; transform-origin: left center; }
+    @keyframes wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .fill { animation: grow .8s cubic-bezier(.2,.85,.25,1) both; transform-origin: left center; }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .rank-pop { animation: rankPop .4s .55s cubic-bezier(.2,1.4,.4,1) both; }
+    @keyframes rankPop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
+
+    /* speed-line burst on every section change */
+    .lines { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 6; }
+    .lines i {
+      position: absolute; left: -30%; height: 5px; width: 130%;
+      transform: skewX(-24deg); animation: dash .5s cubic-bezier(.3,.9,.2,1) both;
+    }
+    .lines i:nth-child(1) { top: 18%; background: #f2ede1; animation-delay: 0s; }
+    .lines i:nth-child(2) { top: 34%; background: var(--accent); height: 9px; animation-delay: .04s; }
+    .lines i:nth-child(3) { top: 57%; background: #f0c000; animation-delay: .09s; }
+    .lines i:nth-child(4) { top: 76%; background: #f2ede1; height: 3px; animation-delay: .14s; }
+    @keyframes dash {
+      0%   { transform: translateX(-115%) skewX(-24deg); opacity: 1; }
+      70%  { opacity: 1; }
+      100% { transform: translateX(115%) skewX(-24deg); opacity: 0; }
+    }
+
+    /* ---------- ambient loops ---------- */
+    .halftone {
+      background-image: radial-gradient(#f2ede1 1.15px, transparent 1.2px);
+      background-size: 7px 7px;
+      pointer-events: none;
+      animation: drift 34s linear infinite;
+    }
+    @keyframes drift { to { background-position: 140px 84px; } }
+
+    .sheen { position: relative; overflow: hidden; }
+    .sheen::after {
+      content: ""; position: absolute; top: -40%; bottom: -40%; left: -40%; width: 22%;
+      background: linear-gradient(100deg, transparent, rgba(242,237,225,.28), transparent);
+      transform: skewX(-18deg); animation: sweep 7s 1.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes sweep {
+      0%, 62% { left: -40%; } 78%, 100% { left: 128%; }
+    }
+
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+
+    .scroller { overflow-y: auto; scrollbar-width: thin; }
+    .scroller::-webkit-scrollbar { width: 6px; }
+    .scroller::-webkit-scrollbar-thumb { background: #3a3a40; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .plate, .lyr, .lent-ghost, .lent-shadow, .tilt, .gloss::after { transform: none !important; }
+      .halftone, .sheen::after, .pulse, .lines i { animation: none !important; }
+    }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 900px; background: #0b0b0d; color: #f2ede1; display: flex; overflow: hidden; position: relative; box-sizing: border-box;">
+
+  <!-- ============ NAV RAIL ============ -->
+  <sc-if value="{{showRail}}" hint-placeholder-val="{{true}}">
+  <div style="width: 268px; flex-shrink: 0; background: #101014; border-right: 3px solid {{accent}}; display: flex; flex-direction: column; position: relative; z-index: 3;">
+
+    <div class="pop pop-dark" onClick="{{goTitle}}" style="display: flex; align-items: center; gap: 14px; padding: 26px 22px; border-bottom: 2px solid #232329;">
+      <div class="anton" style="width: 52px; height: 52px; background: {{accent}}; color: #f2ede1; display: flex; align-items: center; justify-content: center; font-size: 24px; letter-spacing: -0.02em; transform: skewX({{sk}});">
+        <span style="transform: skewX({{unsk}});">KS</span>
+      </div>
+      <div>
+        <div class="anton" style="font-size: 19px; line-height: 1; letter-spacing: 0.01em;">KAMALDEEP</div>
+        <div class="anton" style="font-size: 19px; line-height: 1.1; letter-spacing: 0.01em; color: #f0c000;">SINGH</div>
+      </div>
+    </div>
+
+    <div onClick="{{onNav}}" style="display: flex; flex-direction: column; gap: 8px; padding: 22px 0 22px 18px;">
+      <sc-for list="{{navItems}}" as="n" hint-placeholder-count="5">
+        <div class="pop-skew" data-nav="{{n.key}}" style="height: 62px; display: flex; align-items: center; gap: 14px; padding: 0 18px; background: {{n.bg}}; color: {{n.fg}}; transform: skewX({{sk}}); border-left: 5px solid {{n.edge}};">
+          <div style="transform: skewX({{unsk}}); display: flex; align-items: center; gap: 14px; width: 100%;">
+            <span class="anton" style="font-size: 13px; opacity: 0.55; letter-spacing: 0.06em;">{{n.num}}</span>
+            <span class="anton" style="font-size: 22px; letter-spacing: 0.03em;">{{n.label}}</span>
+            <span class="{{n.pulse}}" style="margin-left: auto; width: 5px; height: 24px; background: {{n.tick}};"></span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top: auto; padding: 20px 22px; border-top: 2px solid #232329; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-size: 13px; letter-spacing: 0.16em; color: #6e6e78; font-weight: 600;">CURRENTLY SEEKING</div>
+      <div class="anton" style="font-size: 17px; color: #f0c000; line-height: 1.2;">ENTRY-LEVEL<br>CS / IT ROLES</div>
+      <div style="font-size: 14px; color: #8a8a94; margin-top: 4px;">Brampton, ON</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ STAGE ============ -->
+  <div style="flex-grow: 1; position: relative; overflow: hidden;">
+
+    <!-- ---------- TITLE ---------- -->
+    <sc-if value="{{isTitle}}" hint-placeholder-val="{{true}}">
+    <div class="stage" style="position: absolute; inset: 0; background: #0b0b0d; overflow: hidden;">
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+
+      <div class="plate" style="position: absolute; inset: 0;">
+
+      <div class="lyr z2" style="position: absolute; inset: -40px; background: {{accent}}; clip-path: polygon(0 0, 100% 0, 100% 63%, 0 85%);"></div>
+      <div class="halftone lyr z1" style="position: absolute; inset: -40px; opacity: {{dots}}; clip-path: polygon(0 0, 100% 0, 100% 63%, 0 85%);"></div>
+      <div class="lyr z3" style="position: absolute; left: -40px; right: -40px; bottom: -40px; height: 290px; background: #f0c000; clip-path: polygon(0 74%, 100% 22%, 100% 100%, 0 100%);"></div>
+
+      <div style="position: relative; z-index: 2; height: 900px; display: flex; flex-direction: column; justify-content: flex-start; padding: 84px 80px 0; box-sizing: border-box;">
+
+        <div class="lyr z3" style="margin-bottom: 26px;">
+          <div class="rise" style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 54px; height: 4px; background: #0b0b0d;"></div>
+            <div style="font-size: 15px; font-weight: 700; letter-spacing: 0.3em; color: #0b0b0d;">PORTFOLIO — 2026</div>
+          </div>
+        </div>
+
+        <div class="lent lyr z4" style="position: relative;">
+          <div class="anton lent-shadow" style="font-size: 138px; line-height: 0.82; letter-spacing: -0.015em; color: #0b0b0d;">KAMALDEEP</div>
+          <div class="anton lent-ghost" style="font-size: 138px; line-height: 0.82; letter-spacing: -0.015em; color: #f0c000;">KAMALDEEP</div>
+          <div class="anton lent-face sheen rise d1" style="font-size: 138px; line-height: 0.82; letter-spacing: -0.015em; color: #f2ede1;">KAMALDEEP</div>
+        </div>
+
+        <div class="lent lyr z4" style="position: relative; margin-left: 96px;">
+          <div class="anton lent-ghost" style="font-size: 138px; line-height: 0.96; letter-spacing: -0.015em; color: #f2ede1; opacity: .4;">SINGH</div>
+          <div class="anton lent-face rise d2" style="font-size: 138px; line-height: 0.96; letter-spacing: -0.015em; color: #0b0b0d;">SINGH</div>
+        </div>
+
+        <div class="lyr z5" style="margin-top: 34px; margin-left: 4px;">
+          <div class="rise d3" style="display: flex; align-items: center; gap: 0;">
+            <div class="anton pop-skew pop-skew-ink" style="background: #0b0b0d; color: #f2ede1; padding: 11px 20px; font-size: 17px; letter-spacing: 0.1em; transform: skewX({{sk}});"><span style="display: block; transform: skewX({{unsk}});">COMPUTER SCIENCE</span></div>
+            <div class="anton pop-skew pop-skew-ink" style="background: #f2ede1; color: #0b0b0d; padding: 11px 20px; font-size: 17px; letter-spacing: 0.1em; transform: skewX({{sk}});"><span style="display: block; transform: skewX({{unsk}});">CLOUD COMPUTING</span></div>
+            <div class="anton pop-skew pop-skew-ink" style="background: {{accent}}; color: #f2ede1; padding: 11px 20px; font-size: 17px; letter-spacing: 0.1em; transform: skewX({{sk}}); border: 2px solid #0b0b0d;"><span style="display: block; transform: skewX({{unsk}});">BRAMPTON, ON</span></div>
+          </div>
+        </div>
+
+        <div class="lyr z5" style="margin-top: 30px;">
+          <div class="arch rise d4" style="max-width: 620px; font-size: 16px; line-height: 1.6; color: #0b0b0d; font-weight: 500; text-wrap: pretty;">
+            Computer Science graduate specializing in cloud computing, with hands-on Windows Server and Active Directory administration and prior IT help desk experience supporting 100+ end users.
+          </div>
+        </div>
+
+        <div class="lyr z6" style="margin-top: 34px;">
+          <div class="rise d5" style="display: flex; gap: 16px;">
+            <div class="pop anton" onClick="{{goStatus}}" style="background: #0b0b0d; color: #f2ede1; padding: 18px 34px; font-size: 21px; letter-spacing: 0.08em; border: 3px solid #0b0b0d; display: flex; align-items: center; gap: 12px;">
+              BEGIN
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f0c000" stroke-width="3" stroke-linecap="square"><path d="M5 4l13 8-13 8z" fill="#f0c000"></path></svg>
+            </div>
+            <a class="pop anton" href="mailto:singkamal670@gmail.com" style="background: #f2ede1; color: #0b0b0d; padding: 18px 34px; font-size: 21px; letter-spacing: 0.08em; border: 3px solid #f2ede1;">GET IN TOUCH</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lyr z5" style="position: absolute; top: 44px; right: 60px; z-index: 3;">
+        <div class="anton rise d2" style="background: #0b0b0d; color: #f0c000; padding: 14px 20px; font-size: 15px; letter-spacing: 0.08em; line-height: 1.35; text-align: right; border-right: 5px solid {{accent}};">
+          AWS SOLUTIONS ARCHITECT<br><span style="color: #f2ede1;">ASSOCIATE — EXAM SEPT 2026</span>
+        </div>
+      </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ---------- STATUS ---------- -->
+    <sc-if value="{{isStatus}}" hint-placeholder-val="{{false}}">
+    <div class="sect scroller" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box;">
+      <div class="bgart">
+        <img class="bgfig lyr z0" src="fig-status.svg" style="height: 285px; left: 165px; bottom: 45px;">
+        <div class="lyr z0b" style="position: absolute; right: 40px; bottom: -120px;">
+          <div class="bgnum" style="font-size: 600px; color: #1b1b24;">01</div>
+        </div>
+      </div>
+      <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+
+      <div class="stage" style="position: relative; z-index: 2;">
+        <div style="display: flex; align-items: flex-end; gap: 18px; margin-bottom: 6px;">
+          <div class="anton settle sheen" style="font-size: 64px; line-height: 0.9; letter-spacing: 0.01em;">STATUS</div>
+          <div class="wipe" style="height: 5px; flex-grow: 1; background: {{accent}}; margin-bottom: 12px;"></div>
+        </div>
+        <div class="arch rise d2" style="font-size: 15px; color: #8a8a94; margin-bottom: 32px; letter-spacing: 0.04em;">Sheridan College — Honours Bachelor of Computer Science, Specialty in Cloud Computing</div>
+
+        <div style="display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 28px; align-items: start;">
+
+          <!-- identity card -->
+          <div class="rise d3">
+          <div class="tilt" style="background: #131318; border: 3px solid #26262d; padding: 26px; display: flex; flex-direction: column; gap: 20px;">
+            <div class="anton" style="position: relative; height: 148px; background: {{accent}}; color: #f2ede1; display: flex; align-items: center; justify-content: center; font-size: 78px; letter-spacing: -0.03em; clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%);">KS<span class="gloss"></span></div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <div style="font-size: 12px; letter-spacing: 0.2em; color: #6e6e78; font-weight: 700; margin-bottom: 6px;">PROGRAM</div>
+                <div class="arch" style="font-size: 15px; line-height: 1.45;">Honours BSc Computer Science<br>Cloud Computing specialty</div>
+              </div>
+              <div style="height: 2px; background: #26262d;"></div>
+              <div>
+                <div style="font-size: 12px; letter-spacing: 0.2em; color: #6e6e78; font-weight: 700; margin-bottom: 6px;">TERM</div>
+                <div class="arch" style="font-size: 15px;">Jan 2023 – Aug 2026 · Oakville, ON</div>
+              </div>
+              <div style="height: 2px; background: #26262d;"></div>
+              <div style="display: flex; align-items: baseline; gap: 12px;">
+                <div>
+                  <div style="font-size: 12px; letter-spacing: 0.2em; color: #6e6e78; font-weight: 700; margin-bottom: 6px;">GPA</div>
+                  <div class="anton" style="font-size: 34px; color: #f0c000; line-height: 1;">3.5<span style="font-size: 17px; color: #8a8a94;"> / 4.0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <!-- ranks -->
+          <div style="display: flex; flex-direction: column; gap: 18px;">
+            <div class="rise d2" style="display: flex; align-items: center; gap: 12px; margin-bottom: 2px;">
+              <div class="anton" style="font-size: 22px; letter-spacing: 0.06em; color: #f0c000;">PROFICIENCY</div>
+              <div class="arch" style="font-size: 13px; color: #6e6e78;">self-assessed — evidence noted under each</div>
+            </div>
+
+            <sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
+              <div class="rise {{s.delay}}">
+              <div class="pop pop-dark" style="background: #131318; border-left: 4px solid {{accent}}; padding: 15px 18px;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 10px;">
+                  <div class="anton" style="font-size: 19px; letter-spacing: 0.05em;">{{s.name}}</div>
+                  <div class="anton rank-pop" style="font-size: 15px; color: #f0c000; letter-spacing: 0.08em;">RANK {{s.rank}}</div>
+                </div>
+                <div style="position: relative; height: 12px; background: #26262d; margin-bottom: 10px;">
+                  <div class="fill" style="position: absolute; left: 0; top: 0; bottom: 0; width: {{s.width}}; background: {{accent}};"></div>
+                  <div style="position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));">
+                    <div style="border-right: 2px solid #0b0b0d;"></div>
+                    <div style="border-right: 2px solid #0b0b0d;"></div>
+                    <div style="border-right: 2px solid #0b0b0d;"></div>
+                    <div style="border-right: 2px solid #0b0b0d;"></div>
+                    <div></div>
+                  </div>
+                </div>
+                <div class="arch" style="font-size: 14px; color: #9a9aa4; line-height: 1.45; text-wrap: pretty;">{{s.note}}</div>
+              </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ---------- TARGETS ---------- -->
+    <sc-if value="{{isTargets}}" hint-placeholder-val="{{false}}">
+    <div class="sect" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box; display: flex; flex-direction: column;">
+      <div class="bgart">
+        <img class="bgfig lyr z0" src="fig-targets.svg" style="height: 250px; left: 440px; bottom: 45px;">
+        <div class="lyr z0b" style="position: absolute; right: 30px; bottom: -130px;">
+          <div class="bgnum" style="font-size: 600px; color: #1b1b24;">02</div>
+        </div>
+      </div>
+      <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+
+      <div class="stage" style="position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%;">
+        <div style="display: flex; align-items: flex-end; gap: 18px; margin-bottom: 6px;">
+          <div class="anton settle sheen" style="font-size: 64px; line-height: 0.9; letter-spacing: 0.01em;">TARGETS</div>
+          <div class="wipe" style="height: 5px; flex-grow: 1; background: {{accent}}; margin-bottom: 12px;"></div>
+        </div>
+        <div class="arch rise d2" style="font-size: 15px; color: #8a8a94; margin-bottom: 26px; letter-spacing: 0.04em;">Technical projects — select one for the full briefing</div>
+
+        <div style="display: grid; grid-template-columns: 358px minmax(0, 1fr); gap: 26px; flex-grow: 1; min-height: 0;">
+
+          <div onClick="{{onMission}}" style="display: flex; flex-direction: column; gap: 14px;">
+            <sc-for list="{{missions}}" as="m" hint-placeholder-count="3">
+              <div class="rise {{m.delay}}">
+              <div class="tilt pop pop-tilt" data-mission="{{m.id}}" style="position: relative; background: {{m.bg}}; color: {{m.fg}}; border: 3px solid {{m.border}}; padding: 18px; min-height: 44px;">
+                <span class="gloss"></span>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                  <div class="anton" style="font-size: 30px; line-height: 1; opacity: 0.45;">{{m.num}}</div>
+                  <div class="anton" style="font-size: 13px; letter-spacing: 0.1em; background: {{m.tagBg}}; color: {{m.tagFg}}; padding: 5px 10px;">{{m.kind}}</div>
+                </div>
+                <div class="anton" style="font-size: 21px; line-height: 1.1; letter-spacing: 0.01em;">{{m.title}}</div>
+                <div class="arch" style="font-size: 13px; margin-top: 8px; opacity: 0.75;">{{m.stackLine}}</div>
+              </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div class="scroller rise d4" style="background: #131318; border: 3px solid #26262d; border-top: 6px solid {{accent}}; padding: 28px 30px; min-height: 0;">
+            <div class="anton" style="font-size: 13px; letter-spacing: 0.22em; color: {{accent}}; margin-bottom: 12px;">BRIEFING</div>
+            <div class="anton" style="font-size: 34px; line-height: 1.08; letter-spacing: 0.01em; margin-bottom: 6px;">{{sel.title}}</div>
+            <div class="arch" style="font-size: 15px; color: #9a9aa4; margin-bottom: 22px;">{{sel.subtitle}}</div>
+
+            <div class="anton" style="font-size: 15px; letter-spacing: 0.16em; color: #f0c000; margin-bottom: 12px;">LOADOUT</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px;">
+              <sc-for list="{{sel.stack}}" as="t" hint-placeholder-count="4">
+                <div class="anton pop pop-dark" style="font-size: 14px; letter-spacing: 0.05em; background: #1e1e25; color: #f2ede1; border: 2px solid #32323b; padding: 7px 12px;">{{t.name}}</div>
+              </sc-for>
+            </div>
+
+            <div class="anton" style="font-size: 15px; letter-spacing: 0.16em; color: #f0c000; margin-bottom: 14px;">OBJECTIVES</div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <sc-for list="{{sel.bullets}}" as="b" hint-placeholder-count="3">
+                <div class="rise {{b.delay}}" style="display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: start;">
+                  <div class="anton" style="font-size: 15px; color: {{accent}}; background: #1e1e25; text-align: center; padding: 4px 0;">{{b.n}}</div>
+                  <div class="arch" style="font-size: 15px; line-height: 1.55; color: #d8d4c8; text-wrap: pretty;">{{b.text}}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ---------- RECORDS ---------- -->
+    <sc-if value="{{isRecords}}" hint-placeholder-val="{{false}}">
+    <div class="sect scroller" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box;">
+      <div class="bgart">
+        <img class="bgfig lyr z0" src="fig-records.svg" style="height: 190px; right: 300px; bottom: 40px;">
+        <div class="lyr z0b" style="position: absolute; left: 60px;  bottom: -125px;">
+          <div class="bgnum" style="font-size: 560px; color: #1b1b24;">03</div>
+        </div>
+      </div>
+      <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+
+      <div class="stage" style="position: relative; z-index: 2;">
+        <div style="display: flex; align-items: flex-end; gap: 18px; margin-bottom: 6px;">
+          <div class="anton settle sheen" style="font-size: 64px; line-height: 0.9; letter-spacing: 0.01em;">RECORDS</div>
+          <div class="wipe" style="height: 5px; flex-grow: 1; background: {{accent}}; margin-bottom: 12px;"></div>
+        </div>
+        <div class="arch rise d2" style="font-size: 15px; color: #8a8a94; margin-bottom: 26px; letter-spacing: 0.04em;">Work history — two roles, one internship and one help desk post</div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-bottom: 24px;">
+
+          <div class="rise d3">
+          <div class="tilt pop pop-tilt" style="position: relative; background: #131318; border: 3px solid #26262d; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+            <span class="gloss"></span>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;">
+              <div>
+                <div class="anton" style="font-size: 26px; line-height: 1.05; letter-spacing: 0.01em;">FULL-STACK<br>DEVELOPER INTERN</div>
+                <div class="anton" style="font-size: 17px; color: {{accent}}; margin-top: 8px; letter-spacing: 0.04em;">SAMSKRITA BHARATI</div>
+              </div>
+              <div class="anton" style="font-size: 13px; letter-spacing: 0.06em; background: #f0c000; color: #0b0b0d; padding: 6px 10px; white-space: nowrap;">MAY – AUG 2025</div>
+            </div>
+            <div class="arch" style="font-size: 13px; color: #6e6e78; letter-spacing: 0.06em;">REMOTE</div>
+            <div style="height: 2px; background: #26262d;"></div>
+            <div style="display: flex; flex-direction: column; gap: 11px;">
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Built and shipped features for Sanskrit Pictionary, a browser-based word-game platform for online game-show events</div></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Developed responsive interface components in JavaScript and HTML5/CSS3, resolving cross-device layout defects tracked in Jira</div></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Integrated front-end views with REST API endpoints for game state and content, handling loading and error conditions</div></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Collaborated through GitHub feature branching, pull requests, and peer code review within an Agile delivery cycle</div></div>
+            </div>
+          </div>
+          </div>
+
+          <div class="rise d4">
+          <div class="tilt pop pop-tilt" style="position: relative; background: #131318; border: 3px solid #26262d; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+            <span class="gloss"></span>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;">
+              <div>
+                <div class="anton" style="font-size: 26px; line-height: 1.05; letter-spacing: 0.01em;">HELP DESK<br>TECHNICIAN</div>
+                <div class="anton" style="font-size: 17px; color: {{accent}}; margin-top: 8px; letter-spacing: 0.04em;">PEARSON MANUFACTURING</div>
+              </div>
+              <div class="anton" style="font-size: 13px; letter-spacing: 0.06em; background: #f0c000; color: #0b0b0d; padding: 6px 10px; white-space: nowrap;">JUN – DEC 2023</div>
+            </div>
+            <div class="arch" style="font-size: 13px; color: #6e6e78; letter-spacing: 0.06em;">MISSISSAUGA, ON</div>
+            <div style="height: 2px; background: #26262d;"></div>
+            <div style="display: flex; flex-direction: column; gap: 11px;">
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Installed, configured, and maintained 10+ workstations and wireless network devices supporting 100+ end users</div></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Resolved hardware, software, and network incidents through ticketing and remote desktop tools, escalating with documented steps</div></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Administered Active Directory user accounts — password resets, group membership, and permissions — plus software imaging</div></div>
+              <div style="display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px;"><div style="height: 8px; width: 8px; background: {{accent}}; margin-top: 7px;"></div><div class="arch" style="font-size: 14px; line-height: 1.5; color: #cfcbc0; text-wrap: pretty;">Applied firewall rules, deployed security patches, and automated recurring administrative tasks with PowerShell and Bash</div></div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="rise d6">
+        <div class="pop" style="position: relative; background: {{accent}}; color: #f2ede1; padding: 22px 26px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; border: 3px solid #0b0b0d;"><span class="gloss"></span>
+          <div>
+            <div class="anton" style="font-size: 15px; letter-spacing: 0.2em; opacity: 0.8; margin-bottom: 8px;">EDUCATION</div>
+            <div class="anton" style="font-size: 27px; line-height: 1.1; letter-spacing: 0.01em;">SHERIDAN COLLEGE — HONOURS BSc COMPUTER SCIENCE</div>
+            <div class="arch" style="font-size: 14px; margin-top: 8px; opacity: 0.9;">Cloud Architecture · DevOps · Networking · Information Security · Database Design</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="anton" style="font-size: 19px; letter-spacing: 0.04em;">JAN 2023 – AUG 2026</div>
+            <div class="anton" style="font-size: 15px; margin-top: 6px; background: #0b0b0d; color: #f0c000; padding: 7px 12px; display: inline-block;">GPA 3.5 / 4.0</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ---------- ARSENAL ---------- -->
+    <sc-if value="{{isArsenal}}" hint-placeholder-val="{{false}}">
+    <div class="sect scroller" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box;">
+      <div class="bgart">
+        <img class="bgfig lyr z0" src="fig-arsenal.svg" style="height: 570px; right: 240px; bottom: 55px;">
+        <div class="lyr z0b" style="position: absolute; left: 70px;  bottom: -130px;">
+          <div class="bgnum" style="font-size: 620px; color: #1b1b24;">04</div>
+        </div>
+      </div>
+      <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+
+      <div class="stage" style="position: relative; z-index: 2;">
+        <div style="display: flex; align-items: flex-end; gap: 18px; margin-bottom: 6px;">
+          <div class="anton settle sheen" style="font-size: 64px; line-height: 0.9; letter-spacing: 0.01em;">ARSENAL</div>
+          <div class="wipe" style="height: 5px; flex-grow: 1; background: {{accent}}; margin-bottom: 12px;"></div>
+        </div>
+        <div class="arch rise d2" style="font-size: 15px; color: #8a8a94; margin-bottom: 24px; letter-spacing: 0.04em;">Technical skills — filter by category</div>
+
+        <div onClick="{{onCat}}" class="rise d3" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
+          <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+            <div class="pop-skew anton" data-cat="{{c.key}}" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; font-size: 16px; letter-spacing: 0.06em; background: {{c.bg}}; color: {{c.fg}}; border: 3px solid {{c.border}}; transform: skewX({{sk}});">
+              <span style="display: block; transform: skewX({{unsk}});">{{c.label}}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div class="rise d4" style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <sc-for list="{{chips}}" as="k" hint-placeholder-count="18">
+            <div class="pop pop-dark arch" style="font-size: 15px; font-weight: 500; padding: 11px 16px; background: #16161c; color: #e2ded2; border: 2px solid #2c2c34; border-bottom: 4px solid {{k.edge}};">{{k.name}}</div>
+          </sc-for>
+        </div>
+
+        <div class="rise d6" style="margin-top: 34px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;">
+          <div style="border-left: 4px solid {{accent}}; padding: 12px 0 12px 16px;">
+            <div class="anton" style="font-size: 17px; letter-spacing: 0.04em; margin-bottom: 6px;">CERTIFICATION TRACK</div>
+            <div class="arch" style="font-size: 14px; color: #9a9aa4; line-height: 1.5;">AWS Certified Solutions Architect – Associate, exam scheduled September 2026</div>
+          </div>
+          <div style="border-left: 4px solid #f0c000; padding: 12px 0 12px 16px;">
+            <div class="anton" style="font-size: 17px; letter-spacing: 0.04em; margin-bottom: 6px;">STRONGEST GROUND</div>
+            <div class="arch" style="font-size: 14px; color: #9a9aa4; line-height: 1.5;">Directory services, networking, and PowerShell automation</div>
+          </div>
+          <div style="border-left: 4px solid #4a4a54; padding: 12px 0 12px 16px;">
+            <div class="anton" style="font-size: 17px; letter-spacing: 0.04em; margin-bottom: 6px;">PLATFORMS</div>
+            <div class="arch" style="font-size: 14px; color: #9a9aa4; line-height: 1.5;">Windows Server 2022, Windows 10/11, AWS, Azure, Hyper-V, Docker</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ---------- CONTACT ---------- -->
+    <sc-if value="{{isContact}}" hint-placeholder-val="{{false}}">
+    <div class="sect stage" style="position: absolute; inset: 0; background: #0b0b0d; overflow: hidden;">
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+      <div class="lyr z2" style="position: absolute; inset: -40px; background: {{accent}}; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 74%);"></div>
+      <div class="bgart">
+        <img class="bgfig bgfig-red lyr z0" src="fig-contact.svg" style="height: 195px; right: 190px; top: 135px;">
+      </div>
+      <div class="halftone lyr z1" style="position: absolute; inset: -40px; opacity: {{dots}}; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 74%);"></div>
+
+      <div style="position: relative; z-index: 2; height: 900px; display: flex; flex-direction: column; justify-content: center; padding: 0 62px; box-sizing: border-box;">
+        <div class="rise d2">
+        <div class="tilt" style="position: relative; background: #0b0b0d; border: 4px solid #f2ede1; padding: 44px 48px; box-shadow: 16px 16px 0 rgba(11, 11, 13, 0.55);">
+          <span class="gloss"></span>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 44px; align-items: center;">
+
+            <div>
+              <div class="anton" style="font-size: 15px; letter-spacing: 0.24em; color: #f0c000; margin-bottom: 14px;">CALLING CARD</div>
+              <div class="lent" style="position: relative;">
+                <div class="anton lent-ghost" style="font-size: 86px; line-height: 0.86; letter-spacing: -0.01em; color: {{accent}};">LET'S<br>TALK.</div>
+                <div class="anton lent-face sheen" style="font-size: 86px; line-height: 0.86; letter-spacing: -0.01em; color: #f2ede1;">LET'S<br>TALK.</div>
+              </div>
+              <div class="arch" style="font-size: 16px; line-height: 1.6; color: #b8b4a8; margin-top: 22px; max-width: 480px; text-wrap: pretty;">
+                Open to entry-level Computer Science and IT roles across the GTA — support, systems administration, and cloud.
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <a class="pop" href="mailto:singkamal670@gmail.com" style="display: flex; align-items: center; gap: 14px; min-height: 56px; background: #f2ede1; color: #0b0b0d; padding: 0 18px; border: 3px solid #f2ede1;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0b0b0d" stroke-width="2" stroke-linecap="square"><rect x="2" y="5" width="20" height="14"></rect><path d="M2 6l10 7 10-7"></path></svg>
+                <span class="arch" style="font-size: 15px; font-weight: 600;">singkamal670@gmail.com</span>
+              </a>
+              <a class="pop pop-dark" href="tel:+12262000963" style="display: flex; align-items: center; gap: 14px; min-height: 56px; background: transparent; color: #f2ede1; padding: 0 18px; border: 3px solid #3a3a42;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f0c000" stroke-width="2" stroke-linecap="square"><path d="M6 3h4l2 5-3 2a13 13 0 006 6l2-3 5 2v4a2 2 0 01-2 2A17 17 0 014 5a2 2 0 012-2z"></path></svg>
+                <span class="arch" style="font-size: 15px; font-weight: 600;">(226) 200-0963</span>
+              </a>
+              <a class="pop pop-dark" href="https://www.linkedin.com/in/kamaldeep-multani-singh/" style="display: flex; align-items: center; gap: 14px; min-height: 56px; background: transparent; color: #f2ede1; padding: 0 18px; border: 3px solid #3a3a42;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f0c000" stroke-width="2" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"></rect><path d="M7 10v7M7 7v.5M12 17v-4a2 2 0 014 0v4"></path></svg>
+                <span class="arch" style="font-size: 15px; font-weight: 600;">kamaldeep-multani-singh</span>
+              </a>
+              <a class="pop pop-dark" href="https://github.com/KamalSinghMultani" style="display: flex; align-items: center; gap: 14px; min-height: 56px; background: transparent; color: #f2ede1; padding: 0 18px; border: 3px solid #3a3a42;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f0c000" stroke-width="2" stroke-linecap="square"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 00-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0019.9 5a4.9 4.9 0 00-.1-3.6s-1.2-.3-3.9 1.5a13.4 13.4 0 00-7 0C6.2 1.1 5 1.4 5 1.4A4.9 4.9 0 004.9 5 5.2 5.2 0 003.5 8.8c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 00-.9 2.6V22"></path></svg>
+                <span class="arch" style="font-size: 15px; font-weight: 600;">KamalSinghMultani</span>
+              </a>
+              <div class="arch" style="font-size: 14px; color: #6e6e78; margin-top: 6px; letter-spacing: 0.04em;">Brampton, ON · open to GTA and remote</div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#d92020","options":["#d92020","#f0c000","#2fb8c6","#8b2fd8"],"section":"Theme"},"heat":{"editor":"enum","options":["FULL","CALM"],"default":"FULL","section":"Theme"},"motion":{"editor":"enum","options":["FULL","REDUCED"],"default":"FULL","section":"Theme"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { section: 'title', mission: 'ad', cat: 'ALL' };
+    this.pointer = { x: 0, y: 0 };
+    this.lastMove = 0;
+    this.frame = null;
+  }
+
+  // ---- depth runtime: writes --px / --py (and the theme vars) onto :root ----
+  setVar(name, value) {
+    try { document.documentElement.style.setProperty(name, value); } catch (e) {}
+  }
+
+  syncTheme() {
+    this.setVar('--accent', this.props.accent || '#d92020');
+    this.setVar('--sk', this.props.heat === 'CALM' ? '0deg' : '-7deg');
+    this.setVar('--amp', this.props.motion === 'REDUCED' ? '0' : '1');
+  }
+
+  componentDidMount() {
+    var self = this;
+    this.syncTheme();
+
+    this.onMove = function (e) {
+      var w = window.innerWidth || 1440;
+      var h = window.innerHeight || 900;
+      self.pointer.x = Math.max(-1, Math.min(1, (e.clientX / w) * 2 - 1));
+      self.pointer.y = Math.max(-1, Math.min(1, (e.clientY / h) * 2 - 1));
+      self.lastMove = Date.now();
+      self.setVar('--px', self.pointer.x.toFixed(4));
+      self.setVar('--py', self.pointer.y.toFixed(4));
+    };
+    document.addEventListener('mousemove', this.onMove, { passive: true });
+
+    // idle drift — keeps the plate breathing when nobody is moving the mouse
+    var tick = function () {
+      if (Date.now() - self.lastMove > 2500) {
+        var t = Date.now() / 1000;
+        self.setVar('--px', (Math.sin(t * 0.32) * 0.55).toFixed(4));
+        self.setVar('--py', (Math.cos(t * 0.23) * 0.4).toFixed(4));
+      }
+      self.frame = window.requestAnimationFrame(tick);
+    };
+    this.frame = window.requestAnimationFrame(tick);
+  }
+
+  componentDidUpdate() {
+    this.syncTheme();
+  }
+
+  componentWillUnmount() {
+    if (this.onMove) document.removeEventListener('mousemove', this.onMove);
+    if (this.frame) window.cancelAnimationFrame(this.frame);
+  }
+
+  data() {
+    return {
+      nav: [
+        { key: 'status',  num: '01', label: 'STATUS' },
+        { key: 'targets', num: '02', label: 'TARGETS' },
+        { key: 'records', num: '03', label: 'RECORDS' },
+        { key: 'arsenal', num: '04', label: 'ARSENAL' },
+        { key: 'contact', num: '05', label: 'CONTACT' }
+      ],
+      stats: [
+        { name: 'DIRECTORY SERVICES', rank: 5, note: 'Multi-domain-controller AD forest, FSMO role placement, multi-site replication, and OU-scoped Group Policy' },
+        { name: 'SCRIPTING & AUTOMATION', rank: 4, note: 'PowerShell and Bash automation of recurring admin tasks; Git/GitHub, GitHub Actions, Infrastructure as Code' },
+        { name: 'NETWORKING', rank: 4, note: 'Routed three-subnet GNS3 topology, subnetting, VPN, firewall configuration, and remote desktop support' },
+        { name: 'CLOUD & VIRTUALIZATION', rank: 4, note: 'AWS EC2, S3, IAM, VPC and CloudWatch; Azure Entra ID, VMs and Blob Storage; Hyper-V and Docker' },
+        { name: 'DEVELOPMENT', rank: 3, note: 'Shipped React and ASP.NET MVC applications, REST API integration, SQL Server data modelling' }
+      ],
+      missions: [
+        {
+          id: 'ad', num: '01', kind: 'INFRASTRUCTURE',
+          title: 'WINDOWS SERVER 2022 AD INFRASTRUCTURE',
+          subtitle: 'A multi-site Active Directory forest built and validated end to end in a routed lab topology.',
+          stack: ['Windows Server 2022', 'PowerShell', 'Hyper-V', 'GNS3'],
+          bullets: [
+            'Deployed a multi-domain-controller AD forest with integrated DNS and global catalog across a routed three-subnet GNS3 topology; performed controlled DC demotion and repromotion, verifying FSMO role placement with netdom',
+            'Configured multi-site replication through AD Sites and Services — sites, subnets, and cost-weighted site links — validating convergence with repadmin /showrepl and /replsummary and joining Windows 11 clients across site boundaries',
+            'Authored and linked OU-scoped GPOs for user rights assignment and desktop policy, tracing object distinguished names and replication metadata across the schema, configuration, and domain naming contexts using ADSI Edit'
+          ]
+        },
+        {
+          id: 'hive', num: '02', kind: 'FULL-STACK',
+          title: 'HIVEMIND — COLLABORATIVE WORKSPACE PLATFORM',
+          subtitle: 'A team workspace with real-time task tracking, scoped access control, and a containerized deployment.',
+          stack: ['React', 'Next.js', 'Firebase', 'Docker'],
+          bullets: [
+            'Built a team workspace with real-time task tracking and role-based access control scoped per workspace',
+            'Integrated AI-generated activity summaries and a repository-backed sandbox for automated code validation',
+            'Containerized the application with Docker for consistent local and deployed environments'
+          ]
+        },
+        {
+          id: 'flex', num: '03', kind: 'FULL-STACK',
+          title: 'FLEXIFIT — GYM MEMBERSHIP PLATFORM',
+          subtitle: 'A server-rendered MVC application covering memberships, class schedules, and registrations.',
+          stack: ['ASP.NET MVC', 'C#', 'SQL Server'],
+          bullets: [
+            'Developed a full-stack MVC application with role-based access control separating member and administrator permissions',
+            'Modeled and queried a SQL Server database backing membership plans, class schedules, and registrations',
+            'Implemented workout browsing, plan purchase, and class registration flows with server-side validation'
+          ]
+        }
+      ],
+      cats: [
+        { key: 'ALL', label: 'ALL' },
+        { key: 'dir', label: 'DIRECTORY SERVICES' },
+        { key: 'cloud', label: 'CLOUD & VIRTUALIZATION' },
+        { key: 'net', label: 'NETWORKING' },
+        { key: 'auto', label: 'SCRIPTING & AUTOMATION' },
+        { key: 'dev', label: 'SUPPORT & DEVELOPMENT' }
+      ],
+      skills: [
+        ['Active Directory DS', 'dir'], ['Group Policy (GPMC)', 'dir'], ['Sites & Services', 'dir'],
+        ['ADSI Edit', 'dir'], ['FSMO Roles', 'dir'], ['OU Design', 'dir'], ['DNS', 'dir'],
+        ['DHCP', 'dir'], ['Windows Server 2022', 'dir'], ['Windows 10/11', 'dir'],
+        ['AWS EC2', 'cloud'], ['AWS S3', 'cloud'], ['AWS IAM', 'cloud'], ['AWS VPC', 'cloud'],
+        ['CloudWatch', 'cloud'], ['Azure Entra ID', 'cloud'], ['Azure VMs', 'cloud'],
+        ['Blob Storage', 'cloud'], ['App Service', 'cloud'], ['Hyper-V', 'cloud'], ['Docker', 'cloud'],
+        ['TCP/IP', 'net'], ['Subnetting', 'net'], ['Routing', 'net'], ['VPN', 'net'],
+        ['Firewall Configuration', 'net'], ['Remote Desktop', 'net'], ['GNS3', 'net'],
+        ['PowerShell', 'auto'], ['Bash', 'auto'], ['Python', 'auto'], ['Git/GitHub', 'auto'],
+        ['GitHub Actions', 'auto'], ['Infrastructure as Code', 'auto'],
+        ['Jira', 'dev'], ['ServiceNow', 'dev'], ['C#', 'dev'], ['JavaScript/TypeScript', 'dev'],
+        ['SQL', 'dev'], ['React', 'dev'], ['Next.js', 'dev'], ['ASP.NET MVC', 'dev'],
+        ['Node.js', 'dev'], ['REST APIs', 'dev']
+      ]
+    };
+  }
+
+  renderVals() {
+    var self = this;
+    var d = this.data();
+    var accent = this.props.accent || '#d92020';
+    var calm = this.props.heat === 'CALM';
+    var sec = this.state.section;
+
+    var edge = { dir: accent, cloud: '#f0c000', net: '#2fb8c6', auto: '#8b8bf0', dev: '#7a7a86' };
+
+    var navItems = d.nav.map(function (n) {
+      var on = sec === n.key;
+      return {
+        key: n.key,
+        num: n.num,
+        label: n.label,
+        bg: on ? accent : '#16161c',
+        fg: on ? '#f2ede1' : '#9a9aa4',
+        edge: on ? '#f0c000' : '#2c2c34',
+        tick: on ? '#f0c000' : 'transparent',
+        pulse: on ? 'pulse' : ''
+      };
+    });
+
+    var pick = function (attr, key) {
+      return function (e) {
+        var node = e && e.target ? e.target : null;
+        var hit = node && node.closest ? node.closest('[' + attr + ']') : null;
+        if (!hit) return;
+        var patch = {};
+        patch[key] = hit.getAttribute(attr);
+        self.setState(patch);
+      };
+    };
+
+    var stepClass = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8'];
+
+    var stats = d.stats.map(function (s, i) {
+      return { name: s.name, rank: s.rank, note: s.note, width: (s.rank * 20) + '%', delay: stepClass[i + 2] || 'd8' };
+    });
+
+    var missions = d.missions.map(function (m, i) {
+      var on = self.state.mission === m.id;
+      return {
+        id: m.id,
+        num: m.num,
+        kind: m.kind,
+        title: m.title,
+        delay: stepClass[i + 2] || 'd8',
+        stackLine: m.stack.join(' · '),
+        bg: on ? accent : '#131318',
+        fg: on ? '#f2ede1' : '#cfcbc0',
+        border: on ? '#0b0b0d' : '#26262d',
+        tagBg: on ? '#0b0b0d' : '#1e1e25',
+        tagFg: on ? '#f0c000' : '#8a8a94'
+      };
+    });
+
+    var found = d.missions[0];
+    for (var i = 0; i < d.missions.length; i++) {
+      if (d.missions[i].id === self.state.mission) found = d.missions[i];
+    }
+    var sel = {
+      title: found.title,
+      subtitle: found.subtitle,
+      stack: found.stack.map(function (t) { return { name: t }; }),
+      bullets: found.bullets.map(function (b, idx) { return { n: String(idx + 1), text: b, delay: stepClass[idx + 4] || 'd8' }; })
+    };
+
+    var cats = d.cats.map(function (c) {
+      var on = self.state.cat === c.key;
+      return {
+        key: c.key,
+        label: c.label,
+        bg: on ? accent : 'transparent',
+        fg: on ? '#f2ede1' : '#9a9aa4',
+        border: on ? accent : '#2c2c34'
+      };
+    });
+
+    var chips = d.skills
+      .filter(function (s) { return self.state.cat === 'ALL' || s[1] === self.state.cat; })
+      .map(function (s) { return { name: s[0], edge: edge[s[1]] }; });
+
+    return {
+      accent: accent,
+      sk: calm ? '0deg' : '-7deg',
+      unsk: calm ? '0deg' : '7deg',
+      dots: calm ? 0.035 : 0.085,
+      showRail: sec !== 'title',
+      isTitle: sec === 'title',
+      isStatus: sec === 'status',
+      isTargets: sec === 'targets',
+      isRecords: sec === 'records',
+      isArsenal: sec === 'arsenal',
+      isContact: sec === 'contact',
+      goTitle: function () { self.setState({ section: 'title' }); },
+      goStatus: function () { self.setState({ section: 'status' }); },
+      onNav: pick('data-nav', 'section'),
+      onMission: pick('data-mission', 'mission'),
+      onCat: pick('data-cat', 'cat'),
+      navItems: navItems,
+      stats: stats,
+      missions: missions,
+      sel: sel,
+      cats: cats,
+      chips: chips
+    };
+  }
+}
+</script>
+</body>
+</html>

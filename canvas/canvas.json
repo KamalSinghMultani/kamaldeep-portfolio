@@ -1,0 +1,18 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Portfolio — Desktop", "x": 0, "y": 0, "w": 1440, "h": 900, "is_interactive": true, "expand": "fit" },
+    { "file": "Mobile.dc.html", "title": "Portfolio — Mobile", "x": 1560, "y": 0, "w": 390, "h": 844, "is_interactive": true, "expand": "fit" },
+    { "file": "CallingCard.dc.html", "title": "Calling Card — LinkedIn / README banner", "x": 0, "y": 1060, "w": 1200, "h": 630 },
+    { "file": "StyleKit.dc.html", "title": "Style Kit", "x": 1320, "y": 1060, "w": 900, "h": 1540 }
+  ],
+  "annotations": [
+    { "id": "note-nav", "x": 0, "y": -190, "w": 700, "text": "PORTFOLIO — KAMALDEEP SINGH\nEverything here is from your resume; nothing invented. Click BEGIN on the title screen, then move through STATUS / TARGETS / RECORDS / ARSENAL / CONTACT in the left rail. Project cards and skill filters are live." },
+    { "id": "note-ranks", "x": 2010, "y": 0, "w": 420, "text": "CHECK THESE: the RANK 1-5 bars are the only numbers not on your resume — I set them from what your bullets actually evidence (Directory Services 5, Automation / Networking / Cloud 4, Development 3). Each carries its evidence line underneath. Change any you disagree with." },
+    { "id": "note-tweaks", "x": 2010, "y": 250, "w": 420, "text": "Three levers sit above each artboard: ACCENT swaps the crimson (three alternates included), HEAT set to CALM flattens the skew and thins the halftone, and MOTION set to REDUCED stops the parallax and the ambient loops. The page also honours a viewer's own reduced-motion setting on its own." },
+    { "id": "note-figures", "x": 2010, "y": 900, "w": 420, "text": "FIGURES — one Open Peeps character per section, composed from the Sketch file you sent (body + head + face), flattened to a bone silhouette and dropped to 17%. They sit on the deepest plane, so they travel furthest as you move the mouse. Open Peeps is by Pablo Stanley and is free for commercial use — no attribution required, but crediting him costs nothing.\n\nSwapping one is easy: name the pose, hair and expression you want and I will recompose it." },
+    { "id": "note-motion", "x": 2010, "y": 560, "w": 420, "text": "MOTION — move the mouse across the desktop artboard. The background planes slide against the pointer while the foreground barely moves, so the whole thing reads as depth without the buttons wandering off under your cursor. The name carries a three-copy colour split that separates as you tilt. Leave it alone for a couple of seconds and a slow drift keeps it breathing. Sections burst in behind speed lines. On mobile the same depth is driven by scrolling instead." },
+    { "id": "note-card", "x": 0, "y": 1740, "w": 1200, "text": "The calling card is sized 1200x630 — export it as a PNG for a LinkedIn banner or a GitHub profile README header." },
+    { "id": "note-kit", "x": 1320, "y": 2650, "w": 900, "text": "The style kit is the reference for building the hosted version — palette, type ramp, component anatomy, the motion timings and depth ladder, and the rules the design follows." }
+  ],
+  "launch": { "view": "focused", "file": "Main.dc.html" }
+}

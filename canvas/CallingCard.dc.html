@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700&family=Archivo:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif; }
+    a { color: #f0c000; text-decoration: none; } a:hover { color: #ffe066; }
+    .anton { font-family: "Anton", Impact, "Arial Black", sans-serif; }
+    .arch { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; }
+    .halftone { background-image: radial-gradient(#f2ede1 1.2px, transparent 1.25px); background-size: 8px 8px; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; height: 630px; background: #0b0b0d; color: #f2ede1; position: relative; overflow: hidden; box-sizing: border-box;">
+
+  <div style="position: absolute; inset: 0; background: #d92020; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 88%);"></div>
+  <div class="halftone" style="position: absolute; inset: 0; opacity: 0.09; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 88%);"></div>
+  <div style="position: absolute; right: -60px; top: -60px; width: 340px; height: 340px; background: #f0c000; transform: rotate(45deg);"></div>
+
+  <div style="position: relative; z-index: 2; height: 630px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 40px; padding: 52px 56px; box-sizing: border-box; align-items: center;">
+
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div class="anton" style="width: 56px; height: 56px; background: #0b0b0d; color: #f0c000; display: flex; align-items: center; justify-content: center; font-size: 25px; transform: skewX(-7deg);"><span style="transform: skewX(7deg);">KS</span></div>
+        <div style="font-size: 15px; font-weight: 700; letter-spacing: 0.26em; color: #0b0b0d;">PORTFOLIO — 2026</div>
+      </div>
+
+      <div style="position: relative;">
+        <div class="anton" style="position: absolute; left: 5px; top: 5px; font-size: 82px; line-height: 0.85; letter-spacing: -0.015em; color: #0b0b0d;">KAMALDEEP</div>
+        <div class="anton" style="position: absolute; left: -9px; top: -4px; font-size: 82px; line-height: 0.85; letter-spacing: -0.015em; color: #f0c000; opacity: .8;">KAMALDEEP</div>
+        <div class="anton" style="position: relative; font-size: 82px; line-height: 0.85; letter-spacing: -0.015em; color: #f2ede1;">KAMALDEEP</div>
+        <div class="anton" style="font-size: 82px; line-height: 0.95; letter-spacing: -0.015em; color: #0b0b0d;">SINGH</div>
+      </div>
+
+      <div style="display: flex; gap: 0; margin-top: 6px;">
+        <div class="anton" style="background: #0b0b0d; color: #f2ede1; padding: 10px 18px; font-size: 16px; letter-spacing: 0.09em; transform: skewX(-7deg);"><span style="display: block; transform: skewX(7deg);">COMPUTER SCIENCE</span></div>
+        <div class="anton" style="background: #f2ede1; color: #0b0b0d; padding: 10px 18px; font-size: 16px; letter-spacing: 0.09em; transform: skewX(-7deg);"><span style="display: block; transform: skewX(7deg);">CLOUD COMPUTING</span></div>
+      </div>
+
+      <div class="arch" style="font-size: 16px; line-height: 1.55; color: #0b0b0d; font-weight: 500; max-width: 540px; margin-top: 8px; text-wrap: pretty;">
+        Windows Server and Active Directory administration, cloud infrastructure, and PowerShell automation. Open to entry-level Computer Science and IT roles across the GTA.
+      </div>
+    </div>
+
+    <div style="background: #0b0b0d; border: 4px solid #f2ede1; padding: 26px; display: flex; flex-direction: column; gap: 12px;">
+      <div class="anton" style="font-size: 13px; letter-spacing: 0.22em; color: #f0c000;">CALLING CARD</div>
+      <div style="height: 3px; background: #26262d;"></div>
+
+      <a class="arch" href="mailto:singkamal670@gmail.com" style="font-size: 15px; font-weight: 600; color: #f2ede1; line-height: 1.4;">singkamal670@gmail.com</a>
+      <a class="arch" href="tel:+12262000963" style="font-size: 15px; font-weight: 600; color: #f2ede1;">(226) 200-0963</a>
+      <a class="arch" href="https://www.linkedin.com/in/kamaldeep-multani-singh/" style="font-size: 15px; font-weight: 600; color: #f2ede1; line-height: 1.4;">linkedin.com/in/<br>kamaldeep-multani-singh</a>
+      <a class="arch" href="https://github.com/KamalSinghMultani" style="font-size: 15px; font-weight: 600; color: #f2ede1;">github.com/KamalSinghMultani</a>
+
+      <div style="height: 3px; background: #26262d; margin-top: 4px;"></div>
+      <div class="anton" style="font-size: 15px; color: #f0c000; line-height: 1.3;">AWS SOLUTIONS ARCHITECT<br>ASSOCIATE — EXAM SEPT 2026</div>
+      <div class="arch" style="font-size: 13px; color: #6e6e78;">Brampton, ON · open to GTA and remote</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

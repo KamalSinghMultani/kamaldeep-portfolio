@@ -1,0 +1,555 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap">
+  <style>
+    :root { --sy: 0; --sk: -7deg; --accent: #d92020; --amp: 1; }
+
+    body { margin: 0; font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif; }
+    a { color: #f0c000; text-decoration: none; }
+    a:hover { color: #ffe066; }
+    .anton { font-family: "Anton", Impact, "Arial Black", sans-serif; font-weight: 400; }
+    .arch { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; }
+
+    /* scroll-driven depth — --sy is 0 at the top, 1 a screen down */
+    .lyr { will-change: transform; }
+    .z1 { transform: translate3d(0, calc(var(--sy) * var(--amp) *  22px), 0); }
+    .z2 { transform: translate3d(0, calc(var(--sy) * var(--amp) *  48px), 0); }
+    .z3 { transform: translate3d(0, calc(var(--sy) * var(--amp) *  78px), 0); }
+    .z4 { transform: translate3d(0, calc(var(--sy) * var(--amp) * -34px), 0); }
+
+    .lent { position: relative; }
+    .lent-ghost {
+      position: absolute; left: 0; top: 0; right: 0; pointer-events: none; opacity: .8;
+      transform: translate3d(calc(var(--sy) * var(--amp) * -14px), calc(var(--sy) * var(--amp) * -6px), 0);
+    }
+    .lent-shadow {
+      position: absolute; left: 0; top: 0; right: 0; pointer-events: none;
+      transform: translate3d(calc(var(--sy) * var(--amp) * 9px + 4px), calc(var(--sy) * var(--amp) * 4px + 4px), 0);
+    }
+    .lent-face { position: relative; }
+
+    /* one hover / press language */
+    .pop { transition: transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s ease, background .16s ease, color .16s ease; cursor: pointer; }
+    .pop:hover, .pop:active { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 #0b0b0d; }
+    .pop-dark:hover, .pop-dark:active { box-shadow: 6px 6px 0 var(--accent); }
+
+    .sect { animation: fade .32s cubic-bezier(.2,.85,.25,1) both; }
+    @keyframes fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+    .rise { animation: rise .5s cubic-bezier(.16,.9,.28,1) both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(20px) skewY(1.5deg); } to { opacity: 1; transform: none; } }
+    .d1 { animation-delay: .05s; } .d2 { animation-delay: .1s; } .d3 { animation-delay: .15s; }
+    .d4 { animation-delay: .2s; }  .d5 { animation-delay: .25s; } .d6 { animation-delay: .3s; }
+    .d7 { animation-delay: .35s; } .d8 { animation-delay: .4s; }
+
+    .settle { animation: settle .45s cubic-bezier(.16,.9,.28,1) both; }
+    @keyframes settle { from { opacity: 0; transform: translateX(-22px) skewX(-10deg); } to { opacity: 1; transform: none; } }
+
+    .wipe { animation: wipe .5s .1s cubic-bezier(.2,.85,.25,1) both; transform-origin: left center; }
+    @keyframes wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .fill { animation: grow .75s cubic-bezier(.2,.85,.25,1) both; transform-origin: left center; }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .rank-pop { animation: rankPop .38s .5s cubic-bezier(.2,1.4,.4,1) both; }
+    @keyframes rankPop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
+
+    .lines { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 6; }
+    .lines i { position: absolute; left: -30%; height: 4px; width: 140%; transform: skewX(-24deg); animation: dash .45s cubic-bezier(.3,.9,.2,1) both; }
+    .lines i:nth-child(1) { top: 22%; background: #f2ede1; }
+    .lines i:nth-child(2) { top: 46%; background: var(--accent); height: 7px; animation-delay: .05s; }
+    .lines i:nth-child(3) { top: 71%; background: #f0c000; animation-delay: .1s; }
+    @keyframes dash {
+      0% { transform: translateX(-120%) skewX(-24deg); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(120%) skewX(-24deg); opacity: 0; }
+    }
+
+    .halftone {
+      background-image: radial-gradient(#f2ede1 1.1px, transparent 1.15px);
+      background-size: 7px 7px; pointer-events: none;
+      animation: drift 34s linear infinite;
+    }
+    @keyframes drift { to { background-position: 140px 84px; } }
+
+    .sheen { position: relative; overflow: hidden; }
+    .sheen::after {
+      content: ""; position: absolute; top: -40%; bottom: -40%; left: -40%; width: 24%;
+      background: linear-gradient(100deg, transparent, rgba(242,237,225,.26), transparent);
+      transform: skewX(-18deg); animation: sweep 7s 1.2s ease-in-out infinite; pointer-events: none;
+    }
+    @keyframes sweep { 0%, 62% { left: -40%; } 78%, 100% { left: 130%; } }
+
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+
+    .scroller { overflow-y: auto; scrollbar-width: none; }
+    .scroller::-webkit-scrollbar { display: none; }
+    .tap { cursor: pointer; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lyr, .lent-ghost, .lent-shadow { transform: none !important; }
+      .halftone, .sheen::after, .pulse, .lines i { animation: none !important; }
+    }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #0b0b0d; color: #f2ede1; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box;">
+
+  <!-- top bar -->
+  <sc-if value="{{showChrome}}" hint-placeholder-val="{{true}}">
+  <div class="tap pop pop-dark" onClick="{{goTitle}}" style="flex-shrink: 0; display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #101014; border-bottom: 3px solid {{accent}};">
+    <div class="anton" style="width: 40px; height: 40px; background: {{accent}}; color: #f2ede1; display: flex; align-items: center; justify-content: center; font-size: 19px; transform: skewX({{sk}});"><span style="transform: skewX({{unsk}});">KS</span></div>
+    <div>
+      <div class="anton" style="font-size: 17px; line-height: 1;">KAMALDEEP SINGH</div>
+      <div class="arch" style="font-size: 12px; color: #8a8a94; margin-top: 3px;">Computer Science · Cloud · Brampton</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- content -->
+  <div class="scroller" style="flex-grow: 1; position: relative; min-height: 0;">
+
+    <!-- TITLE -->
+    <sc-if value="{{isTitle}}" hint-placeholder-val="{{true}}">
+    <div class="sect" style="min-height: 844px; position: relative; background: #0b0b0d; overflow: hidden;">
+      <div class="lines"><i></i><i></i><i></i></div>
+      <div class="lyr z1" style="position: absolute; inset: -30px; background: {{accent}}; clip-path: polygon(0 0, 100% 0, 100% 56%, 0 88%);"></div>
+      <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}}; clip-path: polygon(0 0, 100% 0, 100% 56%, 0 88%);"></div>
+      <div class="lyr z2" style="position: absolute; left: -30px; right: -30px; bottom: -30px; height: 220px; background: #f0c000; clip-path: polygon(0 62%, 100% 30%, 100% 100%, 0 100%);"></div>
+
+      <div style="position: relative; z-index: 2; padding: 56px 24px; display: flex; flex-direction: column; min-height: 844px; box-sizing: border-box;">
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.26em; color: #0b0b0d; margin-bottom: 18px;">PORTFOLIO — 2026</div>
+        <div class="lent lyr z4">
+          <div class="anton lent-shadow" style="font-size: 54px; line-height: 0.85; color: #0b0b0d;">KAMAL<br>DEEP</div>
+          <div class="anton lent-ghost" style="font-size: 54px; line-height: 0.85; color: #f0c000;">KAMAL<br>DEEP</div>
+          <div class="anton lent-face sheen rise" style="font-size: 54px; line-height: 0.85; color: #f2ede1;">KAMAL<br>DEEP</div>
+        </div>
+        <div class="lent lyr z4" style="margin-left: 34px;">
+          <div class="anton lent-ghost" style="font-size: 54px; line-height: 0.95; color: #f2ede1; opacity: .4;">SINGH</div>
+          <div class="anton lent-face rise d1" style="font-size: 54px; line-height: 0.95; color: #0b0b0d;">SINGH</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 24px;">
+          <div class="anton" style="background: #0b0b0d; color: #f2ede1; padding: 8px 14px; font-size: 14px; letter-spacing: 0.08em;">COMPUTER SCIENCE</div>
+          <div class="anton" style="background: #f2ede1; color: #0b0b0d; padding: 8px 14px; font-size: 14px; letter-spacing: 0.08em;">CLOUD COMPUTING</div>
+          <div class="anton" style="background: #0b0b0d; color: #f0c000; padding: 8px 14px; font-size: 14px; letter-spacing: 0.08em;">AWS SAA — SEPT 2026</div>
+        </div>
+
+        <div class="arch" style="font-size: 14px; line-height: 1.6; color: #0b0b0d; font-weight: 500; margin-top: 26px; text-wrap: pretty;">
+          Computer Science graduate specializing in cloud computing, with hands-on Windows Server and Active Directory administration and prior IT help desk experience supporting 100+ end users.
+        </div>
+
+        <div class="tap pop anton" onClick="{{goStatus}}" style="margin-top: auto; background: #f2ede1; color: #0b0b0d; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 20px; letter-spacing: 0.1em; border: 3px solid #0b0b0d; box-shadow: 6px 6px 0 #0b0b0d;">
+          BEGIN
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M5 4l13 8-13 8z" fill="#d92020"></path></svg>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- STATUS -->
+    <sc-if value="{{isStatus}}" hint-placeholder-val="{{false}}">
+    <div class="sect" style="padding: 20px 16px 28px;">
+      <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">STATUS</div>
+      <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 18px;"></div>
+
+      <div style="background: #131318; border: 2px solid #26262d; padding: 16px; display: flex; gap: 14px; align-items: center; margin-bottom: 20px;">
+        <div class="anton" style="width: 76px; height: 76px; flex-shrink: 0; background: {{accent}}; color: #f2ede1; display: flex; align-items: center; justify-content: center; font-size: 34px; clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%);">KS</div>
+        <div class="arch" style="font-size: 13px; line-height: 1.5; color: #cfcbc0;">
+          Sheridan College<br>Honours BSc Computer Science<br>Cloud Computing specialty<br>
+          <span style="color: #f0c000; font-weight: 600;">Jan 2023 – Aug 2026 · GPA 3.5 / 4.0</span>
+        </div>
+      </div>
+
+      <div class="anton" style="font-size: 17px; letter-spacing: 0.06em; color: #f0c000; margin-bottom: 4px;">PROFICIENCY</div>
+      <div class="arch" style="font-size: 12px; color: #6e6e78; margin-bottom: 14px;">self-assessed — evidence noted under each</div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
+          <div class="rise {{s.delay}}"><div class="pop pop-dark" style="background: #131318; border-left: 4px solid {{accent}}; padding: 12px 14px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px;">
+              <div class="anton" style="font-size: 16px; letter-spacing: 0.04em;">{{s.name}}</div>
+              <div class="anton rank-pop" style="font-size: 13px; color: #f0c000;">RANK {{s.rank}}</div>
+            </div>
+            <div style="position: relative; height: 10px; background: #26262d; margin-bottom: 8px;">
+              <div class="fill" style="position: absolute; left: 0; top: 0; bottom: 0; width: {{s.width}}; background: {{accent}};"></div>
+            </div>
+            <div class="arch" style="font-size: 13px; color: #9a9aa4; line-height: 1.45; text-wrap: pretty;">{{s.note}}</div>
+          </div></div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- TARGETS -->
+    <sc-if value="{{isTargets}}" hint-placeholder-val="{{false}}">
+    <div class="sect" style="padding: 20px 16px 28px;">
+      <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">TARGETS</div>
+      <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 8px;"></div>
+      <div class="arch" style="font-size: 13px; color: #8a8a94; margin-bottom: 16px;">Technical projects — tap for the briefing</div>
+
+      <div onClick="{{onMission}}" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+        <sc-for list="{{missions}}" as="m" hint-placeholder-count="3">
+          <div class="tap pop pop-dark" data-mission="{{m.id}}" style="background: {{m.bg}}; color: {{m.fg}}; border: 2px solid {{m.border}}; padding: 14px; min-height: 44px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px;">
+              <div class="anton" style="font-size: 20px; opacity: 0.45;">{{m.num}}</div>
+              <div class="anton" style="font-size: 11px; letter-spacing: 0.1em; background: {{m.tagBg}}; color: {{m.tagFg}}; padding: 4px 8px;">{{m.kind}}</div>
+            </div>
+            <div class="anton" style="font-size: 17px; line-height: 1.15;">{{m.title}}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background: #131318; border: 2px solid #26262d; border-top: 5px solid {{accent}}; padding: 18px;">
+        <div class="anton" style="font-size: 11px; letter-spacing: 0.22em; color: {{accent}}; margin-bottom: 10px;">BRIEFING</div>
+        <div class="anton" style="font-size: 22px; line-height: 1.1; margin-bottom: 6px;">{{sel.title}}</div>
+        <div class="arch" style="font-size: 13px; color: #9a9aa4; margin-bottom: 16px; line-height: 1.5;">{{sel.subtitle}}</div>
+
+        <div class="anton" style="font-size: 12px; letter-spacing: 0.16em; color: #f0c000; margin-bottom: 8px;">LOADOUT</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;">
+          <sc-for list="{{sel.stack}}" as="t" hint-placeholder-count="4">
+            <div class="anton" style="font-size: 12px; background: #1e1e25; border: 2px solid #32323b; padding: 5px 9px;">{{t.name}}</div>
+          </sc-for>
+        </div>
+
+        <div class="anton" style="font-size: 12px; letter-spacing: 0.16em; color: #f0c000; margin-bottom: 10px;">OBJECTIVES</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <sc-for list="{{sel.bullets}}" as="b" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start;">
+              <div class="anton" style="font-size: 13px; color: {{accent}}; background: #1e1e25; text-align: center; padding: 3px 0;">{{b.n}}</div>
+              <div class="arch" style="font-size: 13px; line-height: 1.55; color: #d8d4c8; text-wrap: pretty;">{{b.text}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- RECORDS -->
+    <sc-if value="{{isRecords}}" hint-placeholder-val="{{false}}">
+    <div class="sect" style="padding: 20px 16px 28px;">
+      <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">RECORDS</div>
+      <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 18px;"></div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: #131318; border: 2px solid #26262d; padding: 16px;">
+          <div class="anton" style="font-size: 13px; background: #f0c000; color: #0b0b0d; padding: 4px 8px; display: inline-block; margin-bottom: 10px;">MAY – AUG 2025 · REMOTE</div>
+          <div class="anton" style="font-size: 21px; line-height: 1.1;">FULL-STACK DEVELOPER INTERN</div>
+          <div class="anton" style="font-size: 15px; color: {{accent}}; margin: 6px 0 12px;">SAMSKRITA BHARATI</div>
+          <div class="arch" style="font-size: 13px; line-height: 1.55; color: #cfcbc0; text-wrap: pretty;">
+            Built and shipped features for Sanskrit Pictionary, a browser-based word-game platform for online game-show events. Developed responsive interface components in JavaScript and HTML5/CSS3, resolving cross-device layout defects tracked in Jira. Integrated front-end views with REST API endpoints for game state and content. Collaborated through GitHub feature branching, pull requests, and peer code review within an Agile delivery cycle.
+          </div>
+        </div>
+
+        <div style="background: #131318; border: 2px solid #26262d; padding: 16px;">
+          <div class="anton" style="font-size: 13px; background: #f0c000; color: #0b0b0d; padding: 4px 8px; display: inline-block; margin-bottom: 10px;">JUN – DEC 2023 · MISSISSAUGA</div>
+          <div class="anton" style="font-size: 21px; line-height: 1.1;">HELP DESK TECHNICIAN</div>
+          <div class="anton" style="font-size: 15px; color: {{accent}}; margin: 6px 0 12px;">PEARSON MANUFACTURING</div>
+          <div class="arch" style="font-size: 13px; line-height: 1.55; color: #cfcbc0; text-wrap: pretty;">
+            Installed, configured, and maintained 10+ workstations and wireless network devices supporting 100+ end users. Resolved hardware, software, and network incidents through ticketing and remote desktop tools, escalating with documented steps. Administered Active Directory user accounts — password resets, group membership, and permissions — plus software imaging. Applied firewall rules, deployed security patches, and automated recurring administrative tasks with PowerShell and Bash.
+          </div>
+        </div>
+
+        <div style="background: {{accent}}; color: #f2ede1; padding: 16px; border: 2px solid #0b0b0d;">
+          <div class="anton" style="font-size: 12px; letter-spacing: 0.2em; opacity: 0.85; margin-bottom: 6px;">EDUCATION</div>
+          <div class="anton" style="font-size: 19px; line-height: 1.15;">SHERIDAN COLLEGE — HONOURS BSc COMPUTER SCIENCE</div>
+          <div class="arch" style="font-size: 13px; margin-top: 8px; opacity: 0.92; line-height: 1.5;">Cloud Architecture · DevOps · Networking · Information Security · Database Design</div>
+          <div class="anton" style="font-size: 13px; margin-top: 10px; background: #0b0b0d; color: #f0c000; padding: 5px 10px; display: inline-block;">JAN 2023 – AUG 2026 · GPA 3.5 / 4.0</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ARSENAL -->
+    <sc-if value="{{isArsenal}}" hint-placeholder-val="{{false}}">
+    <div class="sect" style="padding: 20px 16px 28px;">
+      <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">ARSENAL</div>
+      <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 8px;"></div>
+      <div class="arch" style="font-size: 13px; color: #8a8a94; margin-bottom: 16px;">Technical skills — tap a category to filter</div>
+
+      <div onClick="{{onCat}}" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+        <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+          <div class="tap pop pop-dark anton" data-cat="{{c.key}}" style="min-height: 44px; display: flex; align-items: center; padding: 0 14px; font-size: 14px; letter-spacing: 0.05em; background: {{c.bg}}; color: {{c.fg}}; border: 2px solid {{c.border}};">{{c.label}}</div>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <sc-for list="{{chips}}" as="k" hint-placeholder-count="18">
+          <div class="arch pop pop-dark" style="font-size: 13px; font-weight: 500; padding: 9px 12px; background: #16161c; color: #e2ded2; border: 2px solid #2c2c34; border-bottom: 4px solid {{k.edge}};">{{k.name}}</div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top: 24px; border-left: 4px solid {{accent}}; padding: 10px 0 10px 14px;">
+        <div class="anton" style="font-size: 15px; margin-bottom: 5px;">CERTIFICATION TRACK</div>
+        <div class="arch" style="font-size: 13px; color: #9a9aa4; line-height: 1.5;">AWS Certified Solutions Architect – Associate, exam scheduled September 2026</div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- CONTACT -->
+    <sc-if value="{{isContact}}" hint-placeholder-val="{{false}}">
+    <div class="sect" style="position: relative; min-height: 100%; padding: 20px 16px 28px; box-sizing: border-box;">
+      <div style="position: absolute; inset: 0; background: {{accent}}; clip-path: polygon(0 0, 100% 0, 100% 36%, 0 22%);"></div>
+      <div style="position: relative; z-index: 2;">
+        <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">CONTACT</div>
+        <div class="wipe" style="height: 4px; background: #0b0b0d; margin: 8px 0 22px;"></div>
+
+        <div style="background: #0b0b0d; border: 3px solid #f2ede1; padding: 20px;">
+          <div class="anton" style="font-size: 12px; letter-spacing: 0.22em; color: #f0c000; margin-bottom: 10px;">CALLING CARD</div>
+          <div class="anton" style="font-size: 46px; line-height: 0.88;">LET'S<br>TALK.</div>
+          <div class="arch" style="font-size: 13px; line-height: 1.6; color: #b8b4a8; margin: 14px 0 18px; text-wrap: pretty;">Open to entry-level Computer Science and IT roles across the GTA — support, systems administration, and cloud.</div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="mailto:singkamal670@gmail.com" class="arch pop" style="min-height: 50px; display: flex; align-items: center; background: #f2ede1; color: #0b0b0d; padding: 0 14px; font-size: 14px; font-weight: 600;">singkamal670@gmail.com</a>
+            <a href="tel:+12262000963" class="arch pop pop-dark" style="min-height: 50px; display: flex; align-items: center; color: #f2ede1; padding: 0 14px; font-size: 14px; font-weight: 600; border: 2px solid #3a3a42;">(226) 200-0963</a>
+            <a href="https://www.linkedin.com/in/kamaldeep-multani-singh/" class="arch pop pop-dark" style="min-height: 50px; display: flex; align-items: center; color: #f2ede1; padding: 0 14px; font-size: 14px; font-weight: 600; border: 2px solid #3a3a42;">linkedin.com/in/kamaldeep-multani-singh</a>
+            <a href="https://github.com/KamalSinghMultani" class="arch pop pop-dark" style="min-height: 50px; display: flex; align-items: center; color: #f2ede1; padding: 0 14px; font-size: 14px; font-weight: 600; border: 2px solid #3a3a42;">github.com/KamalSinghMultani</a>
+          </div>
+          <div class="arch" style="font-size: 12px; color: #6e6e78; margin-top: 12px;">Brampton, ON · open to GTA and remote</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+
+  <!-- bottom nav -->
+  <sc-if value="{{showChrome}}" hint-placeholder-val="{{true}}">
+  <div onClick="{{onNav}}" style="flex-shrink: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: #101014; border-top: 3px solid {{accent}};">
+    <sc-for list="{{navItems}}" as="n" hint-placeholder-count="5">
+      <div class="tap pop" data-nav="{{n.key}}" style="min-height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: {{n.bg}}; color: {{n.fg}}; border-top: 3px solid {{n.edge}};">
+        <div class="anton" style="font-size: 10px; opacity: 0.6;">{{n.num}}</div>
+        <div class="anton" style="font-size: 13px; letter-spacing: 0.04em;">{{n.label}}</div>
+        <span class="{{n.pulse}}" style="width: 16px; height: 3px; background: {{n.tick}};"></span>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#d92020","options":["#d92020","#f0c000","#2fb8c6","#8b2fd8"],"section":"Theme"},"heat":{"editor":"enum","options":["FULL","CALM"],"default":"FULL","section":"Theme"},"motion":{"editor":"enum","options":["FULL","REDUCED"],"default":"FULL","section":"Theme"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { section: 'title', mission: 'ad', cat: 'ALL' };
+  }
+
+  setVar(name, value) {
+    try { document.documentElement.style.setProperty(name, value); } catch (e) {}
+  }
+
+  syncTheme() {
+    this.setVar('--accent', this.props.accent || '#d92020');
+    this.setVar('--sk', this.props.heat === 'CALM' ? '0deg' : '-7deg');
+    this.setVar('--amp', this.props.motion === 'REDUCED' ? '0' : '1');
+  }
+
+  componentDidMount() {
+    var self = this;
+    this.syncTheme();
+    // scroll-driven depth: --sy is 0 at the top of the pane, 1 one screen down
+    this.onScroll = function (e) {
+      var el = e.target;
+      if (!el || typeof el.scrollTop !== 'number') return;
+      var h = window.innerHeight || 844;
+      self.setVar('--sy', Math.min(2, el.scrollTop / h).toFixed(4));
+    };
+    document.addEventListener('scroll', this.onScroll, true);
+  }
+
+  componentDidUpdate() { this.syncTheme(); }
+
+  componentWillUnmount() {
+    if (this.onScroll) document.removeEventListener('scroll', this.onScroll, true);
+  }
+
+  data() {
+    return {
+      nav: [
+        { key: 'status',  num: '01', label: 'STATUS' },
+        { key: 'targets', num: '02', label: 'TARGETS' },
+        { key: 'records', num: '03', label: 'RECORDS' },
+        { key: 'arsenal', num: '04', label: 'ARSENAL' },
+        { key: 'contact', num: '05', label: 'CONTACT' }
+      ],
+      stats: [
+        { name: 'DIRECTORY SERVICES', rank: 5, note: 'Multi-domain-controller AD forest, FSMO role placement, multi-site replication, OU-scoped Group Policy' },
+        { name: 'SCRIPTING & AUTOMATION', rank: 4, note: 'PowerShell and Bash automation of recurring admin tasks; Git/GitHub, GitHub Actions, Infrastructure as Code' },
+        { name: 'NETWORKING', rank: 4, note: 'Routed three-subnet GNS3 topology, subnetting, VPN, firewall configuration, remote desktop support' },
+        { name: 'CLOUD & VIRTUALIZATION', rank: 4, note: 'AWS EC2, S3, IAM, VPC, CloudWatch; Azure Entra ID, VMs, Blob Storage; Hyper-V and Docker' },
+        { name: 'DEVELOPMENT', rank: 3, note: 'Shipped React and ASP.NET MVC applications, REST API integration, SQL Server data modelling' }
+      ],
+      missions: [
+        {
+          id: 'ad', num: '01', kind: 'INFRASTRUCTURE',
+          title: 'WINDOWS SERVER 2022 AD INFRASTRUCTURE',
+          subtitle: 'A multi-site Active Directory forest built and validated end to end in a routed lab topology.',
+          stack: ['Windows Server 2022', 'PowerShell', 'Hyper-V', 'GNS3'],
+          bullets: [
+            'Deployed a multi-domain-controller AD forest with integrated DNS and global catalog across a routed three-subnet GNS3 topology; performed controlled DC demotion and repromotion, verifying FSMO role placement with netdom',
+            'Configured multi-site replication through AD Sites and Services — sites, subnets, and cost-weighted site links — validating convergence with repadmin /showrepl and /replsummary and joining Windows 11 clients across site boundaries',
+            'Authored and linked OU-scoped GPOs for user rights assignment and desktop policy, tracing object distinguished names and replication metadata across the schema, configuration, and domain naming contexts using ADSI Edit'
+          ]
+        },
+        {
+          id: 'hive', num: '02', kind: 'FULL-STACK',
+          title: 'HIVEMIND — COLLABORATIVE WORKSPACE',
+          subtitle: 'A team workspace with real-time task tracking, scoped access control, and a containerized deployment.',
+          stack: ['React', 'Next.js', 'Firebase', 'Docker'],
+          bullets: [
+            'Built a team workspace with real-time task tracking and role-based access control scoped per workspace',
+            'Integrated AI-generated activity summaries and a repository-backed sandbox for automated code validation',
+            'Containerized the application with Docker for consistent local and deployed environments'
+          ]
+        },
+        {
+          id: 'flex', num: '03', kind: 'FULL-STACK',
+          title: 'FLEXIFIT — GYM MEMBERSHIP PLATFORM',
+          subtitle: 'A server-rendered MVC application covering memberships, class schedules, and registrations.',
+          stack: ['ASP.NET MVC', 'C#', 'SQL Server'],
+          bullets: [
+            'Developed a full-stack MVC application with role-based access control separating member and administrator permissions',
+            'Modeled and queried a SQL Server database backing membership plans, class schedules, and registrations',
+            'Implemented workout browsing, plan purchase, and class registration flows with server-side validation'
+          ]
+        }
+      ],
+      cats: [
+        { key: 'ALL', label: 'ALL' },
+        { key: 'dir', label: 'DIRECTORY' },
+        { key: 'cloud', label: 'CLOUD' },
+        { key: 'net', label: 'NETWORKING' },
+        { key: 'auto', label: 'AUTOMATION' },
+        { key: 'dev', label: 'DEVELOPMENT' }
+      ],
+      skills: [
+        ['Active Directory DS', 'dir'], ['Group Policy (GPMC)', 'dir'], ['Sites & Services', 'dir'],
+        ['ADSI Edit', 'dir'], ['FSMO Roles', 'dir'], ['OU Design', 'dir'], ['DNS', 'dir'],
+        ['DHCP', 'dir'], ['Windows Server 2022', 'dir'], ['Windows 10/11', 'dir'],
+        ['AWS EC2', 'cloud'], ['AWS S3', 'cloud'], ['AWS IAM', 'cloud'], ['AWS VPC', 'cloud'],
+        ['CloudWatch', 'cloud'], ['Azure Entra ID', 'cloud'], ['Azure VMs', 'cloud'],
+        ['Blob Storage', 'cloud'], ['App Service', 'cloud'], ['Hyper-V', 'cloud'], ['Docker', 'cloud'],
+        ['TCP/IP', 'net'], ['Subnetting', 'net'], ['Routing', 'net'], ['VPN', 'net'],
+        ['Firewall Configuration', 'net'], ['Remote Desktop', 'net'], ['GNS3', 'net'],
+        ['PowerShell', 'auto'], ['Bash', 'auto'], ['Python', 'auto'], ['Git/GitHub', 'auto'],
+        ['GitHub Actions', 'auto'], ['Infrastructure as Code', 'auto'],
+        ['Jira', 'dev'], ['ServiceNow', 'dev'], ['C#', 'dev'], ['JavaScript/TypeScript', 'dev'],
+        ['SQL', 'dev'], ['React', 'dev'], ['Next.js', 'dev'], ['ASP.NET MVC', 'dev'],
+        ['Node.js', 'dev'], ['REST APIs', 'dev']
+      ]
+    };
+  }
+
+  renderVals() {
+    var self = this;
+    var d = this.data();
+    var accent = this.props.accent || '#d92020';
+    var calm = this.props.heat === 'CALM';
+    var sec = this.state.section;
+    var edge = { dir: accent, cloud: '#f0c000', net: '#2fb8c6', auto: '#8b8bf0', dev: '#7a7a86' };
+
+    var navItems = d.nav.map(function (n) {
+      var on = sec === n.key;
+      return {
+        key: n.key, num: n.num, label: n.label,
+        bg: on ? accent : '#101014',
+        fg: on ? '#f2ede1' : '#8a8a94',
+        edge: on ? '#f0c000' : 'transparent',
+        tick: on ? '#f0c000' : 'transparent',
+        pulse: on ? 'pulse' : ''
+      };
+    });
+
+    var pick = function (attr, key) {
+      return function (e) {
+        var node = e && e.target ? e.target : null;
+        var hit = node && node.closest ? node.closest('[' + attr + ']') : null;
+        if (!hit) return;
+        var patch = {};
+        patch[key] = hit.getAttribute(attr);
+        self.setState(patch);
+      };
+    };
+
+    var stepClass = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8'];
+    var stats = d.stats.map(function (s, i) {
+      return { name: s.name, rank: s.rank, note: s.note, width: (s.rank * 20) + '%', delay: stepClass[i + 1] || 'd8' };
+    });
+
+    var missions = d.missions.map(function (m) {
+      var on = self.state.mission === m.id;
+      return {
+        id: m.id, num: m.num, kind: m.kind, title: m.title,
+        bg: on ? accent : '#131318',
+        fg: on ? '#f2ede1' : '#cfcbc0',
+        border: on ? '#0b0b0d' : '#26262d',
+        tagBg: on ? '#0b0b0d' : '#1e1e25',
+        tagFg: on ? '#f0c000' : '#8a8a94'
+      };
+    });
+
+    var found = d.missions[0];
+    for (var i = 0; i < d.missions.length; i++) {
+      if (d.missions[i].id === self.state.mission) found = d.missions[i];
+    }
+    var sel = {
+      title: found.title,
+      subtitle: found.subtitle,
+      stack: found.stack.map(function (t) { return { name: t }; }),
+      bullets: found.bullets.map(function (b, idx) { return { n: String(idx + 1), text: b }; })
+    };
+
+    var cats = d.cats.map(function (c) {
+      var on = self.state.cat === c.key;
+      return {
+        key: c.key,
+        label: c.label,
+        bg: on ? accent : 'transparent',
+        fg: on ? '#f2ede1' : '#9a9aa4',
+        border: on ? accent : '#2c2c34'
+      };
+    });
+
+    var chips = d.skills
+      .filter(function (s) { return self.state.cat === 'ALL' || s[1] === self.state.cat; })
+      .map(function (s) { return { name: s[0], edge: edge[s[1]] }; });
+
+    return {
+      accent: accent,
+      sk: calm ? '0deg' : '-7deg',
+      unsk: calm ? '0deg' : '7deg',
+      dots: calm ? 0.035 : 0.085,
+      showChrome: sec !== 'title',
+      isTitle: sec === 'title',
+      isStatus: sec === 'status',
+      isTargets: sec === 'targets',
+      isRecords: sec === 'records',
+      isArsenal: sec === 'arsenal',
+      isContact: sec === 'contact',
+      goTitle: function () { self.setState({ section: 'title' }); },
+      goStatus: function () { self.setState({ section: 'status' }); },
+      onNav: pick('data-nav', 'section'),
+      onMission: pick('data-mission', 'mission'),
+      onCat: pick('data-cat', 'cat'),
+      navItems: navItems,
+      stats: stats,
+      missions: missions,
+      sel: sel,
+      cats: cats,
+      chips: chips
+    };
+  }
+}
+</script>
+</body>
+</html>
