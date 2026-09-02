@@ -11,7 +11,12 @@ Live canvas: published as a private Claude artifact (link in the chat that made 
 ## Layout
 
 ```
-canvas/            the source artboards — this is what you edit
+site/              THE WEBSITE — start here
+  index.src.html       the page you edit: markup, CSS, JS (~42 KB, readable)
+  build.py             inlines the figures -> index.html
+  index.html           the built, self-contained site (do not hand-edit)
+
+canvas/            the Claude Design artboards — the design source
   Main.dc.html         desktop prototype, 1440x900, all interaction lives here
   Mobile.dc.html       390x844, same content, scroll-driven depth
   CallingCard.dc.html  1200x630 graphic for a LinkedIn banner / README header
@@ -22,6 +27,32 @@ assets/figures/    the five background silhouettes (SVG)
 tools/             the Sketch -> SVG extractor used to build them
 dist/              the seeded canvas — open it in a browser to view offline
 ```
+
+## Working on the site
+
+Open the repo folder in VS Code. Everything you edit lives in `site/index.src.html` —
+one file, plain HTML + CSS + vanilla JS, no framework, no npm.
+
+```bash
+# see your changes
+open site/index.html          # macOS
+start site\index.html         # Windows
+
+# after editing index.src.html, rebuild
+python3 site/build.py
+```
+
+`index.html` is generated — it is `index.src.html` with the five figure SVGs inlined.
+Edit the `.src` file, run the build, refresh the browser. That is the whole loop.
+
+The content lives in JS arrays near the bottom of `index.src.html`: `STATS`,
+`MISSIONS`, `CATS`, `SKILLS`. Change a project or a skill there, not in the markup.
+
+### Publishing it
+
+Put `site/index.html` anywhere that serves static files. For GitHub Pages:
+**Settings > Pages > Deploy from a branch > main > /root**, with `index.html` at the
+repo root (copy it up, or set Pages to serve from `/site`).
 
 ## The design system
 

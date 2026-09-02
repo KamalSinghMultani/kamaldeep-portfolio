@@ -1,0 +1,627 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamaldeep Singh</title>
+<style>
+  :root{
+    --ink:#0b0b0d; --bone:#f2ede1; --crimson:#d92020; --acid:#f0c000;
+    --panel:#131318; --rule:#26262d; --muted:#9a9aa4; --dim:#6e6e78;
+    --px:0; --py:0; --amp:1;
+    --rail:260px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--ink); color:var(--bone);
+    font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+    overflow-x:hidden;
+  }
+  a{color:var(--acid);text-decoration:none}
+  a:hover{color:#ffe066}
+  .anton{font-family:"Anton",Impact,"Arial Black",sans-serif;font-weight:400}
+  .arch{font-family:"Archivo","Helvetica Neue",Arial,sans-serif}
+
+  /* ---------- depth ---------- */
+  .lyr{transition:transform .5s cubic-bezier(.2,.8,.3,1);will-change:transform}
+  .z0{transform:translate3d(calc(var(--px)*var(--amp)*-52px),calc(var(--py)*var(--amp)*-33px),0)}
+  .z0b{transform:translate3d(calc(var(--px)*var(--amp)*-36px),calc(var(--py)*var(--amp)*-23px),0)}
+  .z1{transform:translate3d(calc(var(--px)*var(--amp)*-24px),calc(var(--py)*var(--amp)*-15px),0)}
+  .z2{transform:translate3d(calc(var(--px)*var(--amp)*-17px),calc(var(--py)*var(--amp)*-11px),0)}
+  .z3{transform:translate3d(calc(var(--px)*var(--amp)*-28px),calc(var(--py)*var(--amp)*-17px),0)}
+  .z4{transform:translate3d(calc(var(--px)*var(--amp)*11px),calc(var(--py)*var(--amp)*6px),0)}
+  .z5{transform:translate3d(calc(var(--px)*var(--amp)*6px),calc(var(--py)*var(--amp)*4px),0)}
+  .z6{transform:translate3d(calc(var(--px)*var(--amp)*3px),calc(var(--py)*var(--amp)*2px),0)}
+
+  .lent{position:relative}
+  .lent-ghost,.lent-shadow{position:absolute;left:0;top:0;right:0;pointer-events:none;
+    transition:transform .5s cubic-bezier(.2,.8,.3,1)}
+  .lent-ghost{opacity:.8;transform:translate3d(calc(var(--px)*var(--amp)*-10px),calc(var(--py)*var(--amp)*-4px),0)}
+  .lent-shadow{transform:translate3d(calc(var(--px)*var(--amp)*7px + 5px),calc(var(--py)*var(--amp)*3px + 5px),0)}
+  .lent-face{position:relative}
+
+  .tilt{transform:rotateY(calc(var(--px)*var(--amp)*3deg)) rotateX(calc(var(--py)*var(--amp)*-2deg));
+    transition:transform .45s cubic-bezier(.2,.8,.3,1),box-shadow .18s ease}
+  .stage{perspective:1200px;perspective-origin:50% 45%}
+
+  /* ---------- hover language ---------- */
+  .pop{transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s ease,background .16s ease,color .16s ease,border-color .16s ease;cursor:pointer}
+  .pop:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+  .pop-dark:hover{box-shadow:7px 7px 0 var(--crimson)}
+  .pop-tilt:hover{transform:translate(-4px,-4px) rotateY(calc(var(--px)*var(--amp)*3deg)) rotateX(calc(var(--py)*var(--amp)*-2deg));box-shadow:10px 10px 0 var(--ink)}
+  .pop-skew{transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s ease,background .16s ease,color .16s ease,border-color .16s ease;cursor:pointer}
+  .pop-skew:hover{transform:translate(-4px,-4px) skewX(-7deg);box-shadow:8px 8px 0 var(--crimson)}
+  .pop-skew-ink:hover{box-shadow:8px 8px 0 var(--ink)}
+
+  /* ---------- reveal ---------- */
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .6s cubic-bezier(.16,.9,.28,1),transform .6s cubic-bezier(.16,.9,.28,1)}
+  .rv.in{opacity:1;transform:none}
+  .rv.s1{transition-delay:.06s}.rv.s2{transition-delay:.12s}.rv.s3{transition-delay:.18s}
+  .rv.s4{transition-delay:.24s}.rv.s5{transition-delay:.3s}.rv.s6{transition-delay:.36s}
+  .wipe{transform:scaleX(0);transform-origin:left center;transition:transform .6s .1s cubic-bezier(.2,.85,.25,1)}
+  .wipe.in{transform:scaleX(1)}
+  .fill{transform:scaleX(0);transform-origin:left center;transition:transform .85s cubic-bezier(.2,.85,.25,1)}
+  .fill.in{transform:scaleX(1)}
+
+  /* ---------- ambient ---------- */
+  .halftone{background-image:radial-gradient(var(--bone) 1.15px,transparent 1.2px);background-size:7px 7px;
+    pointer-events:none;animation:drift 34s linear infinite}
+  @keyframes drift{to{background-position:140px 84px}}
+  .sheen{position:relative;overflow:hidden}
+  .sheen::after{content:"";position:absolute;top:-40%;bottom:-40%;left:-40%;width:22%;
+    background:linear-gradient(100deg,transparent,rgba(242,237,225,.28),transparent);
+    transform:skewX(-18deg);animation:sweep 7s 1.4s ease-in-out infinite;pointer-events:none}
+  @keyframes sweep{0%,62%{left:-40%}78%,100%{left:128%}}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  /* gloss only survives on the red grounds, where it reads as light not a stray line */
+  .gloss{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .gloss::after{content:"";position:absolute;top:-60%;bottom:-60%;width:18%;
+    background:linear-gradient(100deg,transparent,rgba(242,237,225,.14),transparent);
+    left:calc(50% + var(--px)*var(--amp)*40% - 9%);
+    transition:left .5s cubic-bezier(.2,.8,.3,1);transform:skewX(-14deg)}
+
+  /* ---------- rail ---------- */
+  .rail{position:fixed;left:0;top:0;bottom:0;width:var(--rail);background:#101014;
+    border-right:3px solid var(--crimson);display:flex;flex-direction:column;z-index:40}
+  .rail-head{display:flex;align-items:center;gap:13px;padding:24px 20px;border-bottom:2px solid #232329}
+  .mono{width:50px;height:50px;background:var(--crimson);display:flex;align-items:center;justify-content:center;
+    font-size:23px;transform:skewX(-7deg);flex-shrink:0}
+  .nav{display:flex;flex-direction:column;gap:8px;padding:20px 0 20px 16px}
+  .nav a{height:58px;display:flex;align-items:center;gap:13px;padding:0 16px;background:#16161c;color:var(--muted);
+    transform:skewX(-7deg);border-left:5px solid #2c2c34}
+  .nav a>span{transform:skewX(7deg);display:flex;align-items:center;gap:13px;width:100%}
+  .nav a.on{background:var(--crimson);color:var(--bone);border-left-color:var(--acid)}
+  .nav .num{font-size:13px;opacity:.55;font-weight:400}
+  .nav .nlabel{font-size:21px;font-weight:400;white-space:nowrap}
+  .nav .tick{margin-left:auto;width:5px;height:22px;background:transparent}
+  .nav a.on .tick{background:var(--acid)}
+  .rail-foot{margin-top:auto;padding:18px 20px;border-top:2px solid #232329}
+
+  main{margin-left:var(--rail)}
+  section{position:relative;padding:96px 56px;overflow:hidden}
+  .bgart{position:absolute;inset:-110px;overflow:hidden;pointer-events:none;z-index:0}
+  .bgnum{font-family:"Anton",Impact,"Arial Black",sans-serif;line-height:.8;letter-spacing:-.03em;color:#1b1b24}
+  .bgfig{position:absolute;width:auto;opacity:.17}
+  .inner{position:relative;z-index:2;max-width:1180px}
+  .head{display:flex;align-items:flex-end;gap:18px;margin-bottom:6px}
+  .head h2{font-size:clamp(38px,5vw,64px);line-height:.9;margin:0;letter-spacing:.01em}
+  .head .bar{height:5px;flex-grow:1;background:var(--crimson);margin-bottom:12px}
+  .sub{font-size:15px;color:#8a8a94;margin:0 0 30px;letter-spacing:.04em}
+
+  /* ---------- hero ---------- */
+  #title{min-height:100vh;display:flex;align-items:center;padding:0;background:var(--ink)}
+  .hero-red{position:absolute;inset:-40px;background:var(--crimson);clip-path:polygon(0 0,100% 0,100% 63%,0 85%)}
+  .hero-yel{position:absolute;left:-40px;right:-40px;bottom:-40px;height:290px;background:var(--acid);
+    clip-path:polygon(0 74%,100% 22%,100% 100%,0 100%)}
+  .hero-in{position:relative;z-index:2;padding:96px 72px;width:100%}
+  .kicker{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+  .kicker i{width:52px;height:4px;background:var(--ink);display:block}
+  .kicker span{font-size:15px;font-weight:700;letter-spacing:.3em;color:var(--ink)}
+  .name{font-size:clamp(56px,10.5vw,138px);line-height:.82;letter-spacing:-.015em}
+  .chips{display:flex;flex-wrap:wrap;gap:0;margin-top:32px}
+  .chips div{padding:11px 20px;font-size:17px;letter-spacing:.1em;transform:skewX(-7deg)}
+  .chips div span{display:block;transform:skewX(7deg)}
+  .lede{max-width:620px;margin-top:28px;font-size:16px;line-height:1.6;color:var(--ink);font-weight:500;text-wrap:pretty}
+  .cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:34px}
+  .cta a{padding:17px 32px;font-size:21px;letter-spacing:.08em;border:3px solid;display:flex;align-items:center;gap:12px}
+  .badge{position:absolute;top:40px;right:56px;z-index:3;background:var(--ink);color:var(--acid);
+    padding:13px 19px;font-size:15px;letter-spacing:.08em;line-height:1.35;text-align:right;border-right:5px solid var(--crimson)}
+
+  /* ---------- status ---------- */
+  .status-grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:28px;align-items:start}
+  .idcard{background:var(--panel);border:3px solid var(--rule);padding:24px;display:flex;flex-direction:column;gap:18px}
+  .idmono{position:relative;height:144px;background:var(--crimson);display:flex;align-items:center;justify-content:center;
+    font-size:76px;letter-spacing:-.03em;clip-path:polygon(0 0,100% 0,100% 86%,0 100%)}
+  .lbl{font-size:12px;letter-spacing:.2em;color:var(--dim);font-weight:700;margin-bottom:6px}
+  .stat{background:var(--panel);border-left:4px solid var(--crimson);padding:15px 18px}
+  .stat .top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:10px}
+  .track{position:relative;height:12px;background:var(--rule);margin-bottom:10px}
+  .track .seg{position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+  .track .seg i{border-right:2px solid var(--ink)}
+  .track .seg i:last-child{border:0}
+  .note{font-size:14px;color:var(--muted);line-height:1.45;text-wrap:pretty}
+
+  /* ---------- targets ---------- */
+  .missions{display:flex;flex-direction:column;gap:14px}
+  .mcard{position:relative;background:var(--panel);color:#cfcbc0;border:3px solid var(--rule);padding:20px;width:100%;
+    text-align:left;font:inherit}
+  .mcard.on{background:var(--crimson);color:var(--bone);border-color:var(--ink)}
+  .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .kind{font-size:13px;letter-spacing:.1em;background:#1e1e25;color:#8a8a94;padding:5px 10px}
+  .mcard.on .kind{background:var(--ink);color:var(--acid)}
+  .brief{overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.2,.8,.3,1)}
+  .brief-in{background:var(--panel);border:3px solid var(--rule);border-top:6px solid var(--crimson);padding:26px 28px;margin-top:14px}
+  .obj{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start;margin-bottom:14px}
+  .obj i{font-size:15px;color:var(--crimson);background:#1e1e25;text-align:center;padding:4px 0;font-style:normal}
+
+  /* ---------- records ---------- */
+  .recs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-bottom:24px}
+  .rec{position:relative;background:var(--panel);border:3px solid var(--rule);padding:24px;display:flex;flex-direction:column;gap:15px}
+  .when{font-size:13px;letter-spacing:.06em;background:var(--acid);color:var(--ink);padding:6px 10px;white-space:nowrap}
+  .bul{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;margin-bottom:11px}
+  .bul i{height:8px;width:8px;background:var(--crimson);margin-top:7px;display:block}
+  .edu{position:relative;background:var(--crimson);padding:22px 26px;display:grid;
+    grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;border:3px solid var(--ink)}
+
+  /* ---------- arsenal ---------- */
+  .cats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+  .cats button{min-height:44px;display:flex;align-items:center;padding:0 18px;font-size:16px;letter-spacing:.06em;
+    background:transparent;color:var(--muted);border:3px solid #2c2c34;transform:skewX(-7deg);font-family:inherit}
+  .cats button span{display:block;transform:skewX(7deg)}
+  .cats button.on{background:var(--crimson);color:var(--bone);border-color:var(--crimson)}
+  .kit{display:flex;flex-wrap:wrap;gap:10px}
+  .kit div{font-size:15px;font-weight:500;padding:11px 16px;background:#16161c;color:#e2ded2;border:2px solid #2c2c34;border-bottom:4px solid}
+  .facts{margin-top:32px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .facts div{border-left:4px solid;padding:12px 0 12px 16px}
+
+  /* ---------- contact ---------- */
+  #contact{background:var(--ink)}
+  .c-red{position:absolute;inset:-40px;background:var(--crimson);clip-path:polygon(0 0,100% 0,100% 100%,0 74%)}
+  .card{position:relative;background:var(--ink);border:4px solid var(--bone);padding:40px 44px;
+    box-shadow:16px 16px 0 rgba(11,11,13,.55);display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:40px;align-items:center}
+  .rows{display:flex;flex-direction:column;gap:12px}
+  .rows a{display:flex;align-items:center;gap:14px;min-height:56px;padding:0 18px;border:3px solid #3a3a42;color:var(--bone);
+    font-family:"Archivo",Arial,sans-serif;font-size:15px;font-weight:600}
+  .rows a:first-child{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+  footer{padding:26px 56px;border-top:2px solid var(--rule);font-size:13px;color:var(--dim);letter-spacing:.04em}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1100px){
+    .status-grid{grid-template-columns:1fr}
+    .recs{grid-template-columns:1fr}
+    .card{grid-template-columns:1fr;gap:28px}
+    .facts{grid-template-columns:1fr}
+    .badge{position:static;display:inline-block;text-align:left;margin-bottom:22px}
+  }
+  @media (max-width:860px){
+    :root{--rail:0px}
+    .rail{top:auto;bottom:0;right:0;width:100%;height:64px;flex-direction:row;border-right:0;border-top:3px solid var(--crimson)}
+    .rail-head,.rail-foot{display:none}
+    .nav{flex-direction:row;padding:0;gap:0;width:100%}
+    .nav a{flex:1;height:64px;transform:none;border-left:0;border-top:3px solid transparent;padding:0;
+      justify-content:center;background:#101014}
+    .nav a>span{transform:none;flex-direction:column;gap:3px;justify-content:center;align-items:center}
+    .nav a.on{border-top-color:var(--acid)}
+    .nav a{overflow:hidden}
+    .nav .num{font-size:10px;opacity:.6}
+    .nav .nlabel{font-size:11px;letter-spacing:.02em}
+    .hero-red{clip-path:polygon(0 0,100% 0,100% 80%,0 93%)}
+    .hero-in .halftone,#title .halftone{clip-path:polygon(0 0,100% 0,100% 80%,0 93%)}
+    .hero-yel{height:180px}
+    .cta a{font-size:18px;padding:15px 20px}
+    .nav .tick{display:none}
+    main{margin-left:0;padding-bottom:64px}
+    section{padding:64px 20px}
+    .hero-in{padding:64px 20px}
+    .edu{grid-template-columns:1fr;gap:14px}
+    .edu .right{text-align:left}
+    .cta a{flex:1;justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .lyr,.lent-ghost,.lent-shadow,.tilt,.gloss::after{transform:none!important}
+    .halftone,.sheen::after,.pulse{animation:none!important}
+    .rv{opacity:1;transform:none;transition:none}
+    .wipe,.fill{transform:scaleX(1);transition:none}
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap">
+
+<nav class="rail">
+  <a class="rail-head pop pop-dark" href="#title" style="text-decoration:none;color:inherit">
+    <div class="mono anton"><span style="transform:skewX(7deg)">KS</span></div>
+    <div>
+      <div class="anton" style="font-size:18px;line-height:1">KAMALDEEP</div>
+      <div class="anton" style="font-size:18px;line-height:1.1;color:var(--acid)">SINGH</div>
+    </div>
+  </a>
+  <div class="nav">
+    <a href="#status"  data-nav="status"><span><b class="anton num">01</b><b class="anton nlabel">STATUS</b><i class="tick"></i></span></a>
+    <a href="#targets" data-nav="targets"><span><b class="anton num">02</b><b class="anton nlabel">TARGETS</b><i class="tick"></i></span></a>
+    <a href="#records" data-nav="records"><span><b class="anton num">03</b><b class="anton nlabel">RECORDS</b><i class="tick"></i></span></a>
+    <a href="#arsenal" data-nav="arsenal"><span><b class="anton num">04</b><b class="anton nlabel">ARSENAL</b><i class="tick"></i></span></a>
+    <a href="#contact" data-nav="contact"><span><b class="anton num">05</b><b class="anton nlabel">CONTACT</b><i class="tick"></i></span></a>
+  </div>
+  <div class="rail-foot">
+    <div style="font-size:13px;letter-spacing:.16em;color:var(--dim);font-weight:600">CURRENTLY SEEKING</div>
+    <div class="anton" style="font-size:17px;color:var(--acid);line-height:1.2;margin-top:8px">ENTRY-LEVEL<br>CS / IT ROLES</div>
+    <div style="font-size:14px;color:#8a8a94;margin-top:6px">Brampton, ON</div>
+  </div>
+</nav>
+
+<main>
+  <!-- ============ TITLE ============ -->
+  <section id="title" class="stage">
+    <div class="lyr z2 hero-red"></div>
+    <div class="halftone lyr z1" style="position:absolute;inset:-40px;opacity:.085;clip-path:polygon(0 0,100% 0,100% 63%,0 85%)"></div>
+    <div class="lyr z3 hero-yel"></div>
+
+    <div class="hero-in">
+      <div class="badge anton lyr z5">AWS SOLUTIONS ARCHITECT<br><span style="color:var(--bone)">ASSOCIATE — EXAM SEPT 2026</span></div>
+
+      <div class="kicker lyr z3 rv"><i></i><span>PORTFOLIO — 2026</span></div>
+
+      <div class="lent lyr z4">
+        <div class="anton lent-shadow name" style="color:var(--ink)">KAMALDEEP</div>
+        <div class="anton lent-ghost name" style="color:var(--acid)">KAMALDEEP</div>
+        <div class="anton lent-face name sheen rv s1" style="color:var(--bone)">KAMALDEEP</div>
+      </div>
+      <div class="lent lyr z4" style="margin-left:7vw">
+        <div class="anton lent-ghost name" style="color:var(--bone);opacity:.4;line-height:.96">SINGH</div>
+        <div class="anton lent-face name rv s2" style="color:var(--ink);line-height:.96">SINGH</div>
+      </div>
+
+      <div class="lyr z5">
+        <div class="chips rv s3">
+          <div class="anton pop-skew pop-skew-ink" style="background:var(--ink);color:var(--bone)"><span>COMPUTER SCIENCE</span></div>
+          <div class="anton pop-skew pop-skew-ink" style="background:var(--bone);color:var(--ink)"><span>CLOUD COMPUTING</span></div>
+          <div class="anton pop-skew pop-skew-ink" style="background:var(--crimson);color:var(--bone);border:2px solid var(--ink)"><span>BRAMPTON, ON</span></div>
+        </div>
+        <p class="arch lede rv s4">Computer Science graduate specializing in cloud computing, with hands-on Windows Server and Active Directory administration and prior IT help desk experience supporting 100+ end users.</p>
+      </div>
+
+      <div class="lyr z6">
+        <div class="cta rv s5">
+          <a class="pop anton" href="#status" style="background:var(--ink);color:var(--bone);border-color:var(--ink)">
+            BEGIN <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l13 8-13 8z" fill="var(--acid)"/></svg>
+          </a>
+          <a class="pop anton" href="mailto:singkamal670@gmail.com" style="background:var(--bone);color:var(--ink);border-color:var(--bone)">GET IN TOUCH</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATUS ============ -->
+  <section id="status" class="stage">
+    <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
+    <div class="bgart">
+      <!--FIG:status-->
+      <div class="lyr z0b" style="position:absolute;right:40px;bottom:-120px"><div class="bgnum" style="font-size:min(600px,42vw)">01</div></div>
+    </div>
+    <div class="inner">
+      <div class="head"><h2 class="anton sheen">STATUS</h2><div class="bar wipe"></div></div>
+      <p class="arch sub rv">Sheridan College — Honours Bachelor of Computer Science, Specialty in Cloud Computing</p>
+
+      <div class="status-grid">
+        <div class="rv s1"><div class="idcard tilt">
+          <div class="idmono anton">KS<span class="gloss"></span></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div><div class="lbl">PROGRAM</div><div class="arch" style="font-size:15px;line-height:1.45">Honours BSc Computer Science<br>Cloud Computing specialty</div></div>
+            <div style="height:2px;background:var(--rule)"></div>
+            <div><div class="lbl">TERM</div><div class="arch" style="font-size:15px">Jan 2023 – Aug 2026 · Oakville, ON</div></div>
+            <div style="height:2px;background:var(--rule)"></div>
+            <div><div class="lbl">GPA</div><div class="anton" style="font-size:34px;color:var(--acid);line-height:1">3.5<span style="font-size:17px;color:#8a8a94"> / 4.0</span></div></div>
+          </div>
+        </div></div>
+
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div class="rv" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div class="anton" style="font-size:22px;letter-spacing:.06em;color:var(--acid)">PROFICIENCY</div>
+            <div class="arch" style="font-size:13px;color:var(--dim)">self-assessed — evidence noted under each</div>
+          </div>
+          <div id="stats"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TARGETS ============ -->
+  <section id="targets" class="stage">
+    <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
+    <div class="bgart">
+      <!--FIG:targets-->
+      <div class="lyr z0b" style="position:absolute;right:30px;bottom:-130px"><div class="bgnum" style="font-size:min(600px,42vw)">02</div></div>
+    </div>
+    <div class="inner">
+      <div class="head"><h2 class="anton sheen">TARGETS</h2><div class="bar wipe"></div></div>
+      <p class="arch sub rv">Technical projects — select one for the full briefing</p>
+      <div class="missions" id="missions"></div>
+    </div>
+  </section>
+
+  <!-- ============ RECORDS ============ -->
+  <section id="records" class="stage">
+    <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
+    <div class="bgart">
+      <!--FIG:records-->
+      <div class="lyr z0b" style="position:absolute;left:60px;bottom:-125px"><div class="bgnum" style="font-size:min(560px,40vw)">03</div></div>
+    </div>
+    <div class="inner">
+      <div class="head"><h2 class="anton sheen">RECORDS</h2><div class="bar wipe"></div></div>
+      <p class="arch sub rv">Work history — two roles, one internship and one help desk post</p>
+
+      <div class="recs">
+        <div class="rv s1"><div class="rec tilt pop pop-tilt">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap">
+            <div>
+              <div class="anton" style="font-size:25px;line-height:1.05">FULL-STACK<br>DEVELOPER INTERN</div>
+              <div class="anton" style="font-size:17px;color:var(--crimson);margin-top:8px;letter-spacing:.04em">SAMSKRITA BHARATI</div>
+            </div>
+            <div class="anton when">MAY – AUG 2025</div>
+          </div>
+          <div class="arch" style="font-size:13px;color:var(--dim);letter-spacing:.06em">REMOTE</div>
+          <div style="height:2px;background:var(--rule)"></div>
+          <div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Built and shipped features for Sanskrit Pictionary, a browser-based word-game platform for online game-show events</div></div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Developed responsive interface components in JavaScript and HTML5/CSS3, resolving cross-device layout defects tracked in Jira</div></div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Integrated front-end views with REST API endpoints for game state and content, handling loading and error conditions</div></div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Collaborated through GitHub feature branching, pull requests, and peer code review within an Agile delivery cycle</div></div>
+          </div>
+        </div></div>
+
+        <div class="rv s2"><div class="rec tilt pop pop-tilt">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap">
+            <div>
+              <div class="anton" style="font-size:25px;line-height:1.05">HELP DESK<br>TECHNICIAN</div>
+              <div class="anton" style="font-size:17px;color:var(--crimson);margin-top:8px;letter-spacing:.04em">PEARSON MANUFACTURING</div>
+            </div>
+            <div class="anton when">JUN – DEC 2023</div>
+          </div>
+          <div class="arch" style="font-size:13px;color:var(--dim);letter-spacing:.06em">MISSISSAUGA, ON</div>
+          <div style="height:2px;background:var(--rule)"></div>
+          <div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Installed, configured, and maintained 10+ workstations and wireless network devices supporting 100+ end users</div></div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Resolved hardware, software, and network incidents through ticketing and remote desktop tools, escalating with documented steps</div></div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Administered Active Directory user accounts — password resets, group membership, and permissions — plus software imaging</div></div>
+            <div class="bul"><i></i><div class="arch note" style="color:#cfcbc0">Applied firewall rules, deployed security patches, and automated recurring administrative tasks with PowerShell and Bash</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="rv s3"><div class="edu pop"><span class="gloss"></span>
+        <div>
+          <div class="anton" style="font-size:15px;letter-spacing:.2em;opacity:.8;margin-bottom:8px">EDUCATION</div>
+          <div class="anton" style="font-size:clamp(20px,2.4vw,27px);line-height:1.1">SHERIDAN COLLEGE — HONOURS BSc COMPUTER SCIENCE</div>
+          <div class="arch" style="font-size:14px;margin-top:8px;opacity:.92">Cloud Architecture · DevOps · Networking · Information Security · Database Design</div>
+        </div>
+        <div class="right" style="text-align:right">
+          <div class="anton" style="font-size:19px;letter-spacing:.04em">JAN 2023 – AUG 2026</div>
+          <div class="anton" style="font-size:15px;margin-top:6px;background:var(--ink);color:var(--acid);padding:7px 12px;display:inline-block">GPA 3.5 / 4.0</div>
+        </div>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ ARSENAL ============ -->
+  <section id="arsenal" class="stage">
+    <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
+    <div class="bgart">
+      <!--FIG:arsenal-->
+      <div class="lyr z0b" style="position:absolute;left:70px;bottom:-130px"><div class="bgnum" style="font-size:min(620px,44vw)">04</div></div>
+    </div>
+    <div class="inner">
+      <div class="head"><h2 class="anton sheen">ARSENAL</h2><div class="bar wipe"></div></div>
+      <p class="arch sub rv">Technical skills — filter by category</p>
+      <div class="cats rv s1" id="cats"></div>
+      <div class="kit rv s2" id="kit"></div>
+      <div class="facts rv s3">
+        <div style="border-color:var(--crimson)">
+          <div class="anton" style="font-size:17px;margin-bottom:6px">CERTIFICATION TRACK</div>
+          <div class="arch note">AWS Certified Solutions Architect – Associate, exam scheduled September 2026</div>
+        </div>
+        <div style="border-color:var(--acid)">
+          <div class="anton" style="font-size:17px;margin-bottom:6px">STRONGEST GROUND</div>
+          <div class="arch note">Directory services, networking, and PowerShell automation</div>
+        </div>
+        <div style="border-color:#4a4a54">
+          <div class="anton" style="font-size:17px;margin-bottom:6px">PLATFORMS</div>
+          <div class="arch note">Windows Server 2022, Windows 10/11, AWS, Azure, Hyper-V, Docker</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="stage">
+    <div class="lyr z2 c-red"></div>
+    <div class="halftone lyr z1" style="position:absolute;inset:-40px;opacity:.085;clip-path:polygon(0 0,100% 0,100% 100%,0 74%)"></div>
+    <div class="bgart"><!--FIG:contact--></div>
+    <div class="inner" style="max-width:1180px">
+      <div class="rv"><div class="card tilt"><span class="gloss"></span>
+        <div>
+          <div class="anton" style="font-size:15px;letter-spacing:.24em;color:var(--acid);margin-bottom:14px">CALLING CARD</div>
+          <div class="lent">
+            <div class="anton lent-ghost" style="font-size:clamp(48px,7vw,86px);line-height:.86;color:var(--crimson)">LET'S<br>TALK.</div>
+            <div class="anton lent-face sheen" style="font-size:clamp(48px,7vw,86px);line-height:.86;color:var(--bone)">LET'S<br>TALK.</div>
+          </div>
+          <p class="arch" style="font-size:16px;line-height:1.6;color:#b8b4a8;margin:22px 0 0;max-width:480px;text-wrap:pretty">
+            Open to entry-level Computer Science and IT roles across the GTA — support, systems administration, and cloud.</p>
+        </div>
+        <div class="rows">
+          <a class="pop" href="mailto:singkamal670@gmail.com">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><rect x="2" y="5" width="20" height="14"/><path d="M2 6l10 7 10-7"/></svg>
+            singkamal670@gmail.com</a>
+          <a class="pop pop-dark" href="tel:+12262000963">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--acid)" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M6 3h4l2 5-3 2a13 13 0 006 6l2-3 5 2v4a2 2 0 01-2 2A17 17 0 014 5a2 2 0 012-2z"/></svg>
+            (226) 200-0963</a>
+          <a class="pop pop-dark" href="https://www.linkedin.com/in/kamaldeep-multani-singh/" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--acid)" stroke-width="2" stroke-linecap="square" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><path d="M7 10v7M7 7v.5M12 17v-4a2 2 0 014 0v4"/></svg>
+            kamaldeep-multani-singh</a>
+          <a class="pop pop-dark" href="https://github.com/KamalSinghMultani" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--acid)" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 00-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0019.9 5a4.9 4.9 0 00-.1-3.6s-1.2-.3-3.9 1.5a13.4 13.4 0 00-7 0C6.2 1.1 5 1.4 5 1.4A4.9 4.9 0 004.9 5 5.2 5.2 0 003.5 8.8c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 00-.9 2.6V22"/></svg>
+            KamalSinghMultani</a>
+          <div class="arch" style="font-size:14px;color:var(--dim);margin-top:6px;letter-spacing:.04em">Brampton, ON · open to GTA and remote</div>
+        </div>
+      </div></div>
+    </div>
+  </section>
+
+  <footer class="arch">
+    Kamaldeep Singh · Brampton, ON · Figures from <a href="https://www.openpeeps.com/" target="_blank" rel="noopener">Open Peeps</a> by Pablo Stanley
+  </footer>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- data ---------- */
+  var STATS = [
+    ['DIRECTORY SERVICES',5,'Multi-domain-controller AD forest, FSMO role placement, multi-site replication, and OU-scoped Group Policy'],
+    ['SCRIPTING & AUTOMATION',4,'PowerShell and Bash automation of recurring admin tasks; Git/GitHub, GitHub Actions, Infrastructure as Code'],
+    ['NETWORKING',4,'Routed three-subnet GNS3 topology, subnetting, VPN, firewall configuration, and remote desktop support'],
+    ['CLOUD & VIRTUALIZATION',4,'AWS EC2, S3, IAM, VPC and CloudWatch; Azure Entra ID, VMs and Blob Storage; Hyper-V and Docker'],
+    ['DEVELOPMENT',3,'Shipped React and ASP.NET MVC applications, REST API integration, SQL Server data modelling']
+  ];
+  var MISSIONS = [
+    {n:'01',kind:'INFRASTRUCTURE',title:'WINDOWS SERVER 2022 AD INFRASTRUCTURE',
+     sub:'A multi-site Active Directory forest built and validated end to end in a routed lab topology.',
+     stack:['Windows Server 2022','PowerShell','Hyper-V','GNS3'],
+     bullets:['Deployed a multi-domain-controller AD forest with integrated DNS and global catalog across a routed three-subnet GNS3 topology; performed controlled DC demotion and repromotion, verifying FSMO role placement with netdom',
+              'Configured multi-site replication through AD Sites and Services — sites, subnets, and cost-weighted site links — validating convergence with repadmin /showrepl and /replsummary and joining Windows 11 clients across site boundaries',
+              'Authored and linked OU-scoped GPOs for user rights assignment and desktop policy, tracing object distinguished names and replication metadata across the schema, configuration, and domain naming contexts using ADSI Edit']},
+    {n:'02',kind:'FULL-STACK',title:'HIVEMIND — COLLABORATIVE WORKSPACE PLATFORM',
+     sub:'A team workspace with real-time task tracking, scoped access control, and a containerized deployment.',
+     stack:['React','Next.js','Firebase','Docker'],
+     bullets:['Built a team workspace with real-time task tracking and role-based access control scoped per workspace',
+              'Integrated AI-generated activity summaries and a repository-backed sandbox for automated code validation',
+              'Containerized the application with Docker for consistent local and deployed environments']},
+    {n:'03',kind:'FULL-STACK',title:'FLEXIFIT — GYM MEMBERSHIP PLATFORM',
+     sub:'A server-rendered MVC application covering memberships, class schedules, and registrations.',
+     stack:['ASP.NET MVC','C#','SQL Server'],
+     bullets:['Developed a full-stack MVC application with role-based access control separating member and administrator permissions',
+              'Modeled and queried a SQL Server database backing membership plans, class schedules, and registrations',
+              'Implemented workout browsing, plan purchase, and class registration flows with server-side validation']}
+  ];
+  var CATS = [['ALL','ALL'],['dir','DIRECTORY SERVICES'],['cloud','CLOUD & VIRTUALIZATION'],['net','NETWORKING'],['auto','SCRIPTING & AUTOMATION'],['dev','SUPPORT & DEVELOPMENT']];
+  var EDGE = {dir:'#d92020',cloud:'#f0c000',net:'#2fb8c6',auto:'#8b8bf0',dev:'#7a7a86'};
+  var SKILLS = [['Active Directory DS','dir'],['Group Policy (GPMC)','dir'],['Sites & Services','dir'],['ADSI Edit','dir'],['FSMO Roles','dir'],['OU Design','dir'],['DNS','dir'],['DHCP','dir'],['Windows Server 2022','dir'],['Windows 10/11','dir'],
+    ['AWS EC2','cloud'],['AWS S3','cloud'],['AWS IAM','cloud'],['AWS VPC','cloud'],['CloudWatch','cloud'],['Azure Entra ID','cloud'],['Azure VMs','cloud'],['Blob Storage','cloud'],['App Service','cloud'],['Hyper-V','cloud'],['Docker','cloud'],
+    ['TCP/IP','net'],['Subnetting','net'],['Routing','net'],['VPN','net'],['Firewall Configuration','net'],['Remote Desktop','net'],['GNS3','net'],
+    ['PowerShell','auto'],['Bash','auto'],['Python','auto'],['Git/GitHub','auto'],['GitHub Actions','auto'],['Infrastructure as Code','auto'],
+    ['Jira','dev'],['ServiceNow','dev'],['C#','dev'],['JavaScript/TypeScript','dev'],['SQL','dev'],['React','dev'],['Next.js','dev'],['ASP.NET MVC','dev'],['Node.js','dev'],['REST APIs','dev']];
+
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+  /* ---------- stats ---------- */
+  var sw = document.getElementById('stats');
+  STATS.forEach(function(s,i){
+    var w = el('div','rv s'+Math.min(i+1,6));
+    w.innerHTML = '<div class="stat pop pop-dark">'
+      + '<div class="top"><div class="anton" style="font-size:19px;letter-spacing:.05em">'+s[0]+'</div>'
+      + '<div class="anton" style="font-size:15px;color:var(--acid);letter-spacing:.08em">RANK '+s[1]+'</div></div>'
+      + '<div class="track"><div class="fill" style="position:absolute;left:0;top:0;bottom:0;width:'+(s[1]*20)+'%;background:var(--crimson)"></div>'
+      + '<div class="seg"><i></i><i></i><i></i><i></i><i></i></div></div>'
+      + '<div class="arch note">'+s[2]+'</div></div>';
+    w.style.marginBottom = '18px';
+    sw.appendChild(w);
+  });
+
+  /* ---------- missions ---------- */
+  var mw = document.getElementById('missions'), open = 0;
+  MISSIONS.forEach(function(m,i){
+    var wrap = el('div','rv s'+Math.min(i+1,6));
+    var btn = el('button','mcard tilt pop pop-tilt');
+    btn.type = 'button';
+    btn.setAttribute('aria-expanded', i===0?'true':'false');
+    btn.innerHTML = '<span class="gloss"></span>'
+      + '<div class="mtop"><div class="anton" style="font-size:30px;line-height:1;opacity:.45">'+m.n+'</div>'
+      + '<div class="anton kind">'+m.kind+'</div></div>'
+      + '<div class="anton" style="font-size:clamp(17px,2vw,21px);line-height:1.1">'+m.title+'</div>'
+      + '<div class="arch" style="font-size:13px;margin-top:8px;opacity:.75">'+m.stack.join(' · ')+'</div>';
+    var panel = el('div','brief');
+    panel.innerHTML = '<div class="brief-in">'
+      + '<div class="anton" style="font-size:13px;letter-spacing:.22em;color:var(--crimson);margin-bottom:12px">BRIEFING</div>'
+      + '<div class="arch" style="font-size:15px;color:var(--muted);margin-bottom:20px">'+m.sub+'</div>'
+      + '<div class="anton" style="font-size:15px;letter-spacing:.16em;color:var(--acid);margin-bottom:12px">LOADOUT</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">'
+      + m.stack.map(function(t){return '<div class="anton pop pop-dark" style="font-size:14px;background:#1e1e25;border:2px solid #32323b;padding:7px 12px">'+t+'</div>';}).join('')
+      + '</div><div class="anton" style="font-size:15px;letter-spacing:.16em;color:var(--acid);margin-bottom:14px">OBJECTIVES</div>'
+      + m.bullets.map(function(b,j){return '<div class="obj"><i class="anton">'+(j+1)+'</i><div class="arch note" style="color:#d8d4c8;font-size:15px">'+b+'</div></div>';}).join('')
+      + '</div>';
+    btn.addEventListener('click', function(){
+      var isOpen = panel.style.maxHeight && panel.style.maxHeight !== '0px';
+      mw.querySelectorAll('.brief').forEach(function(p){ p.style.maxHeight = '0px'; });
+      mw.querySelectorAll('.mcard').forEach(function(c){ c.classList.remove('on'); c.setAttribute('aria-expanded','false'); });
+      if(!isOpen){ panel.style.maxHeight = panel.scrollHeight + 'px'; btn.classList.add('on'); btn.setAttribute('aria-expanded','true'); }
+    });
+    wrap.appendChild(btn); wrap.appendChild(panel);
+    mw.appendChild(wrap);
+    if(i===0){ btn.classList.add('on'); setTimeout(function(){ panel.style.maxHeight = panel.scrollHeight+'px'; }, 400); }
+  });
+  window.addEventListener('resize', function(){
+    mw.querySelectorAll('.brief').forEach(function(p){ if(p.style.maxHeight && p.style.maxHeight!=='0px') p.style.maxHeight = p.scrollHeight+'px'; });
+  });
+
+  /* ---------- skills ---------- */
+  var cw = document.getElementById('cats'), kw = document.getElementById('kit'), cat = 'ALL';
+  function paint(){
+    kw.innerHTML = '';
+    SKILLS.filter(function(s){ return cat==='ALL' || s[1]===cat; }).forEach(function(s){
+      var d = el('div','arch pop pop-dark', s[0]);
+      d.style.borderBottomColor = EDGE[s[1]];
+      kw.appendChild(d);
+    });
+    cw.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.cat===cat); });
+  }
+  CATS.forEach(function(c){
+    var b = el('button','anton pop-skew','<span>'+c[1]+'</span>');
+    b.type='button'; b.dataset.cat=c[0];
+    b.addEventListener('click', function(){ cat=c[0]; paint(); });
+    cw.appendChild(b);
+  });
+  paint();
+
+  /* ---------- reveal on scroll ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:.05});
+  document.querySelectorAll('.rv,.wipe,.fill').forEach(function(n){ io.observe(n); });
+
+  /* ---------- active section in the rail ---------- */
+  var links = [].slice.call(document.querySelectorAll('.nav a'));
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      links.forEach(function(a){ a.classList.toggle('on', a.dataset.nav === e.target.id); });
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  ['status','targets','records','arsenal','contact'].forEach(function(id){
+    var s = document.getElementById(id); if(s) spy.observe(s);
+  });
+
+  /* ---------- pointer depth ---------- */
+  if(!reduce && window.matchMedia('(hover: hover)').matches){
+    var last = 0, raf = null;
+    window.addEventListener('mousemove', function(e){
+      var x = Math.max(-1, Math.min(1, (e.clientX / window.innerWidth) * 2 - 1));
+      var y = Math.max(-1, Math.min(1, (e.clientY / window.innerHeight) * 2 - 1));
+      root.style.setProperty('--px', x.toFixed(4));
+      root.style.setProperty('--py', y.toFixed(4));
+      last = Date.now();
+    }, {passive:true});
+    (function tick(){
+      if(Date.now() - last > 2500){
+        var t = Date.now()/1000;
+        root.style.setProperty('--px', (Math.sin(t*0.32)*0.55).toFixed(4));
+        root.style.setProperty('--py', (Math.cos(t*0.23)*0.4).toFixed(4));
+      }
+      raf = requestAnimationFrame(tick);
+    })();
+  } else {
+    root.style.setProperty('--amp','0');
+  }
+})();
+</script>
