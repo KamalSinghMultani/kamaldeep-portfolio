@@ -11,3 +11,17 @@ __pycache__/
 *.pyc
 _p*.html
 peek*.png
+
+# Generated release files (rebuild with python site/build.py)
+/dist/site/
+/site/index.html
+/site/quick.html
+/site/kamaldeep-singh-resume.pdf
+
+# Local Python environments and tooling
+.venv/
+venv/
+.pytest_cache/
+.env
+.env.*
+!.env.example
