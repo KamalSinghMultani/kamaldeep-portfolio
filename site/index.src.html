@@ -1,17 +1,34 @@
+<!doctype html>
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kamaldeep Singh</title>
+<title>Kamaldeep Singh — Interactive Portfolio</title>
+<meta property="og:title" content="Kamaldeep Singh — Systems, Cloud &amp; Development">
+<meta property="og:description" content="Explore my projects and experience through an interactive comic, or scan the quick résumé.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Kamaldeep Singh — Computer Science graduate specializing in cloud computing, systems administration, and development. Explore projects, experience, and technical labs.">
 <style>
+  @property --lx{syntax:'<number>';inherits:true;initial-value:0}
+  @property --w0{syntax:'<number>';inherits:true;initial-value:1}
+  @property --w1{syntax:'<number>';inherits:true;initial-value:0}
+  @property --w2{syntax:'<number>';inherits:true;initial-value:0}
+  @property --w3{syntax:'<number>';inherits:true;initial-value:0}
   :root{
     --ink:#0b0b0d; --bone:#f2ede1; --crimson:#d92020; --acid:#f0c000;
     --panel:#131318; --rule:#26262d; --muted:#9a9aa4; --dim:#6e6e78;
     --px:0; --py:0; --amp:1;
+    --lx:0; --lens:14px;
     --rail:260px;
+    transition:--lx .35s cubic-bezier(.2,.8,.3,1),
+      --w0 .35s cubic-bezier(.2,.8,.3,1), --w1 .35s cubic-bezier(.2,.8,.3,1),
+      --w2 .35s cubic-bezier(.2,.8,.3,1), --w3 .35s cubic-bezier(.2,.8,.3,1);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
+  html{background:var(--ink)}
   body{
-    margin:0; background:var(--ink); color:var(--bone);
+    margin:0; background:transparent; color:var(--bone);
     font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
     overflow-x:hidden;
   }
@@ -30,6 +47,44 @@
   .z4{transform:translate3d(calc(var(--px)*var(--amp)*11px),calc(var(--py)*var(--amp)*6px),0)}
   .z5{transform:translate3d(calc(var(--px)*var(--amp)*6px),calc(var(--py)*var(--amp)*4px),0)}
   .z6{transform:translate3d(calc(var(--px)*var(--amp)*3px),calc(var(--py)*var(--amp)*2px),0)}
+
+  /* ---------- lenticular plate ---------- */
+  /* Four frames of one character stacked, interleaved the way a lenticular
+     sheet actually works: the lens period is divided into four bands, one per
+     frame, and each band's WIDTH is that frame's weight. The weights are a
+     triangular kernel written by JS, so only two are ever non-zero and the
+     bands always tile the period exactly — the plate walks a -> b -> c -> d
+     across the pointer instead of cross-fading two stills. */
+  /* The 3D layer. Only STATUS/TARGETS/RECORDS/ARSENAL have no ground of their
+     own, so the hologram reads through exactly those four; the hero and contact
+     stay opaque by design and bookend it. */
+  #holo{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
+  /* Once it is up the CSS plates step aside — but keep their box, because the
+     hologram positions itself from their rects. */
+  .holo-on #status .lent-plate,.holo-on #targets .lent-plate,
+  .holo-on #records .lent-plate,.holo-on #arsenal .lent-plate{opacity:0}
+  .lent-plate{position:absolute;aspect-ratio:520/640;height:var(--ph);opacity:var(--po,.14);pointer-events:none}
+  .lent-plate>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .lf{--a:calc(var(--o) * var(--lens));--z:calc((var(--o) + var(--w)) * var(--lens));
+    -webkit-mask-image:repeating-linear-gradient(90deg,transparent 0 var(--a),#000 var(--a) var(--z),transparent var(--z) var(--lens));
+    mask-image:repeating-linear-gradient(90deg,transparent 0 var(--a),#000 var(--a) var(--z),transparent var(--z) var(--lens))}
+  .lf-0{--w:var(--w0);--o:0}
+  .lf-1{--w:var(--w1);--o:var(--w0)}
+  .lf-2{--w:var(--w2);--o:calc(var(--w0) + var(--w1))}
+  .lf-3{--w:var(--w3);--o:calc(var(--w0) + var(--w1) + var(--w2))}
+  /* the lens itself: a dark ridge valley, a bone highlight, and a crimson/acid
+     fringe at the ridge edges — the chromatic split real lenticular plastic has */
+  .lent-lens{position:absolute;inset:0;pointer-events:none;overflow:hidden;mix-blend-mode:screen;
+    background:repeating-linear-gradient(90deg,
+      rgba(217,32,32,.11) 0 1px,
+      rgba(11,11,13,.44) 1px 2px,
+      rgba(242,237,225,.10) 2px 3px,
+      rgba(240,192,0,.07) 3px 4px,
+      transparent 4px var(--lens))}
+  .lent-lens::after{content:"";position:absolute;top:0;bottom:0;width:28%;
+    background:linear-gradient(100deg,transparent,rgba(242,237,225,.19),transparent);
+    left:calc(50% + var(--px)*var(--amp)*52% - 14%);
+    transition:left .5s cubic-bezier(.2,.8,.3,1);transform:skewX(-10deg)}
 
   .lent{position:relative}
   .lent-ghost,.lent-shadow{position:absolute;left:0;top:0;right:0;pointer-events:none;
@@ -81,12 +136,14 @@
 
   /* ---------- rail ---------- */
   .rail{position:fixed;left:0;top:0;bottom:0;width:var(--rail);background:#101014;
-    border-right:3px solid var(--crimson);display:flex;flex-direction:column;z-index:40}
-  .rail-head{display:flex;align-items:center;gap:13px;padding:24px 20px;border-bottom:2px solid #232329}
+    border-right:3px solid var(--crimson);display:flex;flex-direction:column;z-index:40;
+    overflow-y:auto;scrollbar-width:thin}
+  .rail-head{display:flex;align-items:center;gap:13px;padding:24px 20px;border-bottom:2px solid #232329;
+    flex-shrink:0}
   .mono{width:50px;height:50px;background:var(--crimson);display:flex;align-items:center;justify-content:center;
     font-size:23px;transform:skewX(-7deg);flex-shrink:0}
-  .nav{display:flex;flex-direction:column;gap:8px;padding:20px 0 20px 16px}
-  .nav a{height:58px;display:flex;align-items:center;gap:13px;padding:0 16px;background:#16161c;color:var(--muted);
+  .nav{display:flex;flex-direction:column;gap:8px;padding:20px 8px 20px 20px}
+  .nav a{height:58px;flex-shrink:0;display:flex;align-items:center;gap:13px;padding:0 16px;background:#16161c;color:var(--muted);
     transform:skewX(-7deg);border-left:5px solid #2c2c34}
   .nav a>span{transform:skewX(7deg);display:flex;align-items:center;gap:13px;width:100%}
   .nav a.on{background:var(--crimson);color:var(--bone);border-left-color:var(--acid)}
@@ -94,13 +151,13 @@
   .nav .nlabel{font-size:21px;font-weight:400;white-space:nowrap}
   .nav .tick{margin-left:auto;width:5px;height:22px;background:transparent}
   .nav a.on .tick{background:var(--acid)}
-  .rail-foot{margin-top:auto;padding:18px 20px;border-top:2px solid #232329}
+  .rail-foot{margin-top:auto;flex-shrink:0;padding:18px 20px;border-top:2px solid #232329}
 
   main{margin-left:var(--rail)}
   section{position:relative;padding:96px 56px;overflow:hidden}
-  .bgart{position:absolute;inset:-110px;overflow:hidden;pointer-events:none;z-index:0}
+  .bgart{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
   .bgnum{font-family:"Anton",Impact,"Arial Black",sans-serif;line-height:.8;letter-spacing:-.03em;color:#1b1b24}
-  .bgfig{position:absolute;width:auto;opacity:.17}
+  .bgnum-pos{position:absolute;bottom:calc(var(--n) * -.42)}
   .inner{position:relative;z-index:2;max-width:1180px}
   .head{display:flex;align-items:flex-end;gap:18px;margin-bottom:6px}
   .head h2{font-size:clamp(38px,5vw,64px);line-height:.9;margin:0;letter-spacing:.01em}
@@ -123,7 +180,7 @@
   .lede{max-width:620px;margin-top:28px;font-size:16px;line-height:1.6;color:var(--ink);font-weight:500;text-wrap:pretty}
   .cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:34px}
   .cta a{padding:17px 32px;font-size:21px;letter-spacing:.08em;border:3px solid;display:flex;align-items:center;gap:12px}
-  .badge{position:absolute;top:40px;right:56px;z-index:3;background:var(--ink);color:var(--acid);
+  .badge{position:absolute;top:40px;right:72px;z-index:3;background:var(--ink);color:var(--acid);
     padding:13px 19px;font-size:15px;letter-spacing:.08em;line-height:1.35;text-align:right;border-right:5px solid var(--crimson)}
 
   /* ---------- status ---------- */
@@ -184,6 +241,63 @@
   .rows a:first-child{background:var(--bone);color:var(--ink);border-color:var(--bone)}
   footer{padding:26px 56px;border-top:2px solid var(--rule);font-size:13px;color:var(--dim);letter-spacing:.04em}
 
+  /* ---------- project demo clip ---------- */
+  /* aspect-ratio is set before the file loads, so the accordion's max-height
+     is right on the first measure and the panel does not jump when it opens. */
+  .demo{position:relative;margin:0 0 24px;background:var(--ink);border:3px solid var(--rule)}
+  .demo video{display:block;width:100%;aspect-ratio:16/9;height:auto;background:var(--ink)}
+  .demo-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 14px;
+    border-top:2px solid var(--rule);background:#131318}
+  .demo-btn{min-height:44px;display:flex;align-items:center;gap:9px;padding:0 16px;
+    background:transparent;color:var(--bone);border:3px solid #2c2c34;font-family:inherit;
+    font-size:14px;letter-spacing:.08em;cursor:pointer}
+  .demo-btn:hover{background:var(--crimson);border-color:var(--crimson)}
+  .demo-cap{font-size:13px;color:var(--dim);letter-spacing:.04em}
+
+  /* ---------- proficiency lab overlay ---------- */
+  /* Full-screen viewer for a skill. The panel borrows .brief-in's anatomy —
+     panel ground, 3px rule, 6px crimson top edge — so it reads as the same
+     family as the TARGETS briefings rather than a new kind of surface. */
+  #lab{position:fixed;inset:0;z-index:60;display:none}
+  #lab.on{display:block}
+  .lab-scrim{position:absolute;inset:0;background:rgba(11,11,13,.975)}
+  .lab-wrap{position:absolute;inset:0;overflow-y:auto;display:flex;align-items:flex-start;
+    justify-content:center;padding:36px 22px 60px}
+  .lab-panel{position:relative;width:min(1020px,100%);background:var(--panel);
+    border:3px solid var(--rule);border-top:6px solid var(--crimson);padding:28px 32px 32px;
+    animation:labin .34s cubic-bezier(.16,.9,.28,1) both}
+  @keyframes labin{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  .lab-head{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap}
+  .lab-title{font-size:clamp(28px,4vw,44px);line-height:.95;margin:0}
+  .lab-rank{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .lab-rank .track{width:200px;margin:0}
+  .lab-close{flex-shrink:0;min-height:44px;display:flex;align-items:center;gap:10px;
+    padding:0 16px;background:transparent;color:var(--muted);border:3px solid #2c2c34;
+    font-family:inherit;font-size:15px;letter-spacing:.08em;cursor:pointer}
+  .lab-close:hover{background:var(--crimson);color:var(--bone);border-color:var(--crimson)}
+  .lab-lead{max-width:70ch;margin:16px 0 0;font-size:16px;line-height:1.6;color:#cfcbc0;text-wrap:pretty}
+  /* the diagram keeps its drawn size and scrolls rather than shrinking to
+     illegibility on a narrow screen — the page itself never scrolls sideways */
+  .lab-dg{margin:22px 0 24px;background:var(--ink);border:2px solid var(--rule);
+    padding:14px;overflow-x:auto}
+  .lab-dg svg{display:block;width:100%;min-width:720px;height:auto}
+  .lab-notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .lab-note h4{margin:0 0 6px;font-size:17px;letter-spacing:.03em}
+  .lab-note p{margin:0;font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty}
+  .lab-note{border-left:4px solid var(--crimson);padding-left:14px}
+  .lab-foot{margin-top:24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+  .lab-cmd{background:var(--ink);border:2px solid var(--rule);padding:14px 16px}
+  .lab-cmd code{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:13px;
+    color:var(--acid);word-break:break-word}
+  .lab-why{border-left:4px solid var(--acid);padding-left:14px}
+  .stat-open{margin-top:12px;display:inline-flex;align-items:center;gap:9px;font-size:13px;
+    letter-spacing:.14em;color:var(--acid)}
+  button.stat{display:block;width:100%;text-align:left;font:inherit;color:inherit}
+  @media (max-width:760px){
+    .lab-notes,.lab-foot{grid-template-columns:1fr}
+    .lab-panel{padding:22px 18px 26px}
+  }
+
   /* ---------- responsive ---------- */
   @media (max-width:1100px){
     .status-grid{grid-template-columns:1fr}
@@ -194,9 +308,10 @@
   }
   @media (max-width:860px){
     :root{--rail:0px}
-    .rail{top:auto;bottom:0;right:0;width:100%;height:64px;flex-direction:row;border-right:0;border-top:3px solid var(--crimson)}
+    .rail{top:auto;bottom:0;right:0;width:100%;height:64px;flex-direction:row;border-right:0;border-top:3px solid var(--crimson);overflow:hidden}
     .rail-head,.rail-foot{display:none}
     .nav{flex-direction:row;padding:0;gap:0;width:100%}
+    .nav a{flex-shrink:1}
     .nav a{flex:1;height:64px;transform:none;border-left:0;border-top:3px solid transparent;padding:0;
       justify-content:center;background:#101014}
     .nav a>span{transform:none;flex-direction:column;gap:3px;justify-content:center;align-items:center}
@@ -215,6 +330,7 @@
     .edu{grid-template-columns:1fr;gap:14px}
     .edu .right{text-align:left}
     .cta a{flex:1;justify-content:center}
+    .lent-plate{--ph:58vw;--po:.11}
   }
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -222,12 +338,46 @@
     .halftone,.sheen::after,.pulse{animation:none!important}
     .rv{opacity:1;transform:none;transition:none}
     .wipe,.fill{transform:scaleX(1);transition:none}
+    /* The flip only moves when the visitor moves, so it stays — it just goes
+       instant instead of eased. Parallax and the idle drift are off (--amp:0),
+       which is what actually makes the page still. */
+    :root{transition:none}
+    .lent-lens::after{transition:none}
+    .lab-panel{animation:none}
   }
 </style>
+<!--DUALITY_STYLE-->
+<!--GAME_STYLE-->
+<!--MOVIE_STYLE-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap">
 
+<div id="game" hidden>
+  <canvas id="alley-stage" role="img" aria-label="Red Dot: an interactive comic film. A signal in a bedroom leads through a bank robbery, city chase, garage confrontation and rooftop twist. Résumé interactions advance the story."></canvas>
+  <div class="alley-shade" aria-hidden="true"></div>
+  <header class="game-header"><a href="#about" class="game-brand">KAMALDEEP SINGH<span>DEVELOPER / SYSTEMS BUILDER</span></a><a class="quick-entry" href="quick.html">QUICK RÉSUMÉ ↗</a><span class="game-location">RED DOT / A PLAYABLE PORTFOLIO</span><button class="game-back" type="button">← ABOUT</button></header>
+  <nav class="game-nav" aria-label="Portfolio sections">
+    <a href="#about" data-screen="status" aria-label="About"><span class="game-number">01</span><span class="menu-word">ABOUT</span></a>
+    <a href="#skills" data-screen="arsenal" aria-label="Skills"><span class="game-number">02</span><span class="menu-word">SKILLS</span></a>
+    <a href="#projects" data-screen="targets" aria-label="Projects"><span class="game-number">03</span><span class="menu-word">PROJECTS</span></a>
+    <a href="#experience" data-screen="records" aria-label="Experience"><span class="game-number">04</span><span class="menu-word">EXPERIENCE</span></a>
+    <a href="#contact" data-screen="contact" aria-label="Contact"><span class="game-number">05</span><span class="menu-word">CONTACT</span></a>
+  </nav>
+  <div id="movie-location" aria-hidden="true">BEDROOM / 00:17</div>
+  <section class="movie-controls" aria-label="Film controls">
+    <div class="alley-beat"><span id="alley-beat-number">01</span><b id="alley-beat-name">RED DOT</b></div>
+    <nav id="movie-chapters" aria-label="Film scenes"></nav>
+    <p id="movie-description">Rain against the glass. A city asleep.</p>
+    <aside class="movie-hint" id="movie-guide" aria-label="Portfolio guide"><strong id="movie-guide-step">YOUR NEXT MOVE</strong><span id="movie-guide-text" aria-live="polite">Click WATCH THE MAP below to begin.</span><button type="button" id="movie-guide-find" hidden>Show resume action</button><button type="button" id="tutorial-restart">RESTART TUTORIAL</button></aside>
+    <div class="movie-transport"><button type="button" id="movie-previous" aria-label="Previous beat">← BACK</button><button type="button" id="movie-next">WATCH THE MAP →</button><span id="movie-beat-count">01 / 33</span></div>
+  </section>
+
+  <div class="game-announcement" id="movie-announcement" aria-live="polite"></div>
+  <main id="game-scene" tabindex="-1" aria-label="Selected portfolio section"></main>
+  <footer class="game-footer"><span class="game-key-help">↑ ↓ SELECT · ENTER OPEN</span><span id="game-scene-count">01 / 05</span><button type="button" id="alley-menu-toggle" aria-expanded="false" aria-label="Open section menu">SECTIONS</button><button type="button" id="movie-sound" aria-pressed="false">SOUND OFF</button><button type="button" id="movie-guide-toggle" aria-pressed="true">GUIDE ON</button><button type="button" id="alley-motion" aria-pressed="true">PAUSE MOTION</button></footer>
+  <div class="game-announcement" aria-live="polite" id="game-announcement"></div>
+</div>
 <nav class="rail">
   <a class="rail-head pop pop-dark" href="#title" style="text-decoration:none;color:inherit">
     <div class="mono anton"><span style="transform:skewX(7deg)">KS</span></div>
@@ -250,54 +400,76 @@
   </div>
 </nav>
 
+<canvas id="holo" aria-hidden="true"></canvas>
+
+<!-- The diagrams live in templates and are CLONED on open, so each SVG's own
+     entrance animation replays every time rather than having run at page load. -->
+<!--DIAGRAMS-->
+<!--DEMOS-->
+
+<div id="lab" role="dialog" aria-modal="true" aria-labelledby="lab-title" hidden>
+  <div class="lab-scrim" data-close></div>
+  <div class="lab-wrap" data-close>
+    <div class="lab-panel" id="lab-panel"></div>
+  </div>
+</div>
+
 <main>
   <!-- ============ TITLE ============ -->
-  <section id="title" class="stage">
-    <div class="lyr z2 hero-red"></div>
-    <div class="halftone lyr z1" style="position:absolute;inset:-40px;opacity:.085;clip-path:polygon(0 0,100% 0,100% 63%,0 85%)"></div>
-    <div class="lyr z3 hero-yel"></div>
-
-    <div class="hero-in">
-      <div class="badge anton lyr z5">AWS SOLUTIONS ARCHITECT<br><span style="color:var(--bone)">ASSOCIATE — EXAM SEPT 2026</span></div>
-
-      <div class="kicker lyr z3 rv"><i></i><span>PORTFOLIO — 2026</span></div>
-
-      <div class="lent lyr z4">
-        <div class="anton lent-shadow name" style="color:var(--ink)">KAMALDEEP</div>
-        <div class="anton lent-ghost name" style="color:var(--acid)">KAMALDEEP</div>
-        <div class="anton lent-face name sheen rv s1" style="color:var(--bone)">KAMALDEEP</div>
-      </div>
-      <div class="lent lyr z4" style="margin-left:7vw">
-        <div class="anton lent-ghost name" style="color:var(--bone);opacity:.4;line-height:.96">SINGH</div>
-        <div class="anton lent-face name rv s2" style="color:var(--ink);line-height:.96">SINGH</div>
-      </div>
-
-      <div class="lyr z5">
-        <div class="chips rv s3">
-          <div class="anton pop-skew pop-skew-ink" style="background:var(--ink);color:var(--bone)"><span>COMPUTER SCIENCE</span></div>
-          <div class="anton pop-skew pop-skew-ink" style="background:var(--bone);color:var(--ink)"><span>CLOUD COMPUTING</span></div>
-          <div class="anton pop-skew pop-skew-ink" style="background:var(--crimson);color:var(--bone);border:2px solid var(--ink)"><span>BRAMPTON, ON</span></div>
+  <section id="title" class="stage duality-hero">
+    <div class="duality-ground" aria-hidden="true">
+      <div class="ground-word">DUALITY</div>
+      <div class="ground-slash"></div>
+      <div class="ground-lines"></div>
+      <div class="ground-orbit"></div>
+    </div>
+    <div class="hero-edition arch"><span><i></i> PORTFOLIO / 2026</span><span>BRAMPTON, ON</span></div>
+    <div class="hero-composition">
+      <div class="hero-copy">
+        <div class="hero-eyebrow arch"><span>CS GRADUATE</span><b> / </b><span>CLOUD &amp; SYSTEMS</span></div>
+        <h1 class="hero-name anton"><span>KAMALDEEP</span><span class="surname">SINGH<span class="name-period">.</span></span></h1>
+        <div class="hero-rule" aria-hidden="true"><span></span><b>01 — 05</b></div>
+        <p class="arch hero-intro">Building systems.<br><em>Connecting the pieces.</em></p>
+        <p class="arch hero-summary">Computer Science graduate specializing in cloud computing. Hands-on with Windows Server, Active Directory, and IT support for 100+ end users.</p>
+        <div class="hero-actions">
+          <a class="anton hero-primary" href="#targets"><span>EXPLORE MY WORK</span><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></a>
+          <a class="arch hero-contact" href="mailto:singkamal670@gmail.com">Get in touch <span aria-hidden="true">↗</span></a>
         </div>
-        <p class="arch lede rv s4">Computer Science graduate specializing in cloud computing, with hands-on Windows Server and Active Directory administration and prior IT help desk experience supporting 100+ end users.</p>
+        <div class="hero-availability arch"><span aria-hidden="true"></span> OPEN TO ENTRY-LEVEL CS / IT ROLES</div>
       </div>
-
-      <div class="lyr z6">
-        <div class="cta rv s5">
-          <a class="pop anton" href="#status" style="background:var(--ink);color:var(--bone);border-color:var(--ink)">
-            BEGIN <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l13 8-13 8z" fill="var(--acid)"/></svg>
-          </a>
-          <a class="pop anton" href="mailto:singkamal670@gmail.com" style="background:var(--bone);color:var(--ink);border-color:var(--bone)">GET IN TOUCH</a>
+      <div class="duality-stage" id="duality-stage">
+        <div class="plate-shadow" aria-hidden="true"></div>
+        <div class="plate-underlay" aria-hidden="true"></div>
+        <div class="duality-card" id="duality-card">
+          <div class="plate-top arch"><span>二面性 / DUALITY</span><span>ED. 01</span></div>
+          <div class="duality-art" id="duality-art" role="img" aria-label="Lenticular anime artwork changing between Kakashi Hatake and Obito Uchiha">
+            <div class="duality-frame frame-a" aria-hidden="true"></div>
+            <div class="duality-frame frame-b" aria-hidden="true"></div>
+            <canvas id="duality-canvas" aria-hidden="true"></canvas>
+            <div class="plate-ridges" aria-hidden="true"></div>
+            <div class="plate-foil" aria-hidden="true"></div>
+            <div class="plate-glare" aria-hidden="true"></div>
+            <span class="plate-corner corner-tl" aria-hidden="true"></span><span class="plate-corner corner-br" aria-hidden="true"></span>
+            <div class="plate-caption"><span class="arch">TWO SIDES. ONE STORY.</span><strong class="anton" id="duality-identity">KAKASHI</strong></div>
+          </div>
+          <div class="plate-bottom arch"><span>光 / LIGHT</span><div class="plate-meter" aria-hidden="true"><i id="duality-meter"></i></div><span>影 / SHADOW</span></div>
+        </div>
+        <div class="duality-controls">
+          <label class="arch" for="duality-angle"><span class="duality-hint">MOVE YOUR CURSOR TO SHIFT</span><span aria-hidden="true">↔</span></label>
+          <input id="duality-angle" type="range" min="0" max="100" value="0" aria-label="Artwork viewing angle" aria-valuetext="Kakashi" disabled>
+          <div class="duality-ends arch"><button type="button" data-identity="0" aria-pressed="true" disabled>KAKASHI</button><span>DRAG TO EXPLORE</span><button type="button" data-identity="1" aria-pressed="false" disabled>OBITO</button></div>
         </div>
       </div>
     </div>
+    <div class="hero-bottom arch"><a href="#status"><span class="scroll-line" aria-hidden="true"></span>SCROLL TO DISCOVER</a><span>CLOUD COMPUTING <b>×</b> CREATIVE THINKING</span><button type="button" id="motion-toggle" aria-pressed="false" disabled>MOTION ON <span aria-hidden="true">◉</span></button></div>
   </section>
 
   <!-- ============ STATUS ============ -->
   <section id="status" class="stage">
     <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
     <div class="bgart">
-      <!--FIG:status-->
-      <div class="lyr z0b" style="position:absolute;right:40px;bottom:-120px"><div class="bgnum" style="font-size:min(600px,42vw)">01</div></div>
+      <!--LENT:status-->
+      <div class="lyr z0b bgnum-pos" style="right:4%;--n:min(600px,42vw)"><div class="bgnum" style="font-size:var(--n)">01</div></div>
     </div>
     <div class="inner">
       <div class="head"><h2 class="anton sheen">STATUS</h2><div class="bar wipe"></div></div>
@@ -320,7 +492,7 @@
             <div class="anton" style="font-size:22px;letter-spacing:.06em;color:var(--acid)">PROFICIENCY</div>
             <div class="arch" style="font-size:13px;color:var(--dim)">self-assessed — evidence noted under each</div>
           </div>
-          <div id="stats"></div>
+          <div id="stats" style="display:flex;flex-direction:column;gap:18px"></div>
         </div>
       </div>
     </div>
@@ -330,8 +502,8 @@
   <section id="targets" class="stage">
     <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
     <div class="bgart">
-      <!--FIG:targets-->
-      <div class="lyr z0b" style="position:absolute;right:30px;bottom:-130px"><div class="bgnum" style="font-size:min(600px,42vw)">02</div></div>
+      <!--LENT:targets-->
+      <div class="lyr z0b bgnum-pos" style="right:5%;--n:min(600px,42vw)"><div class="bgnum" style="font-size:var(--n)">02</div></div>
     </div>
     <div class="inner">
       <div class="head"><h2 class="anton sheen">TARGETS</h2><div class="bar wipe"></div></div>
@@ -344,8 +516,8 @@
   <section id="records" class="stage">
     <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
     <div class="bgart">
-      <!--FIG:records-->
-      <div class="lyr z0b" style="position:absolute;left:60px;bottom:-125px"><div class="bgnum" style="font-size:min(560px,40vw)">03</div></div>
+      <!--LENT:records-->
+      <div class="lyr z0b bgnum-pos" style="left:3%;--n:min(560px,40vw)"><div class="bgnum" style="font-size:var(--n)">03</div></div>
     </div>
     <div class="inner">
       <div class="head"><h2 class="anton sheen">RECORDS</h2><div class="bar wipe"></div></div>
@@ -407,8 +579,8 @@
   <section id="arsenal" class="stage">
     <div class="halftone" style="position:absolute;inset:0;opacity:.085"></div>
     <div class="bgart">
-      <!--FIG:arsenal-->
-      <div class="lyr z0b" style="position:absolute;left:70px;bottom:-130px"><div class="bgnum" style="font-size:min(620px,44vw)">04</div></div>
+      <!--LENT:arsenal-->
+      <div class="lyr z0b bgnum-pos" style="left:4%;--n:min(620px,44vw)"><div class="bgnum" style="font-size:var(--n)">04</div></div>
     </div>
     <div class="inner">
       <div class="head"><h2 class="anton sheen">ARSENAL</h2><div class="bar wipe"></div></div>
@@ -436,7 +608,7 @@
   <section id="contact" class="stage">
     <div class="lyr z2 c-red"></div>
     <div class="halftone lyr z1" style="position:absolute;inset:-40px;opacity:.085;clip-path:polygon(0 0,100% 0,100% 100%,0 74%)"></div>
-    <div class="bgart"><!--FIG:contact--></div>
+    <div class="bgart"><!--LENT:contact--></div>
     <div class="inner" style="max-width:1180px">
       <div class="rv"><div class="card tilt"><span class="gloss"></span>
         <div>
@@ -468,14 +640,23 @@
   </section>
 
   <footer class="arch">
-    Kamaldeep Singh · Brampton, ON · Figures from <a href="https://www.openpeeps.com/" target="_blank" rel="noopener">Open Peeps</a> by Pablo Stanley
+    Kamaldeep Singh · Brampton, ON · Background art drawn for this site
   </footer>
 </main>
 
+<!--THREE-->
+<!--HOLOGRAM-->
+<!--DUALITY_SCRIPT-->
 <script>
 (function(){
   var root = document.documentElement;
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    || root.classList.contains('motion-paused');
+  window.addEventListener('portfolio-motion-change', function(e){
+    reduce = e.detail.paused;
+    root.style.setProperty('--amp', reduce ? '0' : '1');
+    applyLens();
+  });
 
   /* ---------- data ---------- */
   var STATS = [
@@ -485,20 +666,143 @@
     ['CLOUD & VIRTUALIZATION',4,'AWS EC2, S3, IAM, VPC and CloudWatch; Azure Entra ID, VMs and Blob Storage; Hyper-V and Docker'],
     ['DEVELOPMENT',3,'Shipped React and ASP.NET MVC applications, REST API integration, SQL Server data modelling']
   ];
+  /* Each entry opens a full-screen viewer for that skill. Only skills listed
+     here are clickable — the rest keep their plain stat card. */
+  var LABS = {
+    'DIRECTORY SERVICES': {
+      dg: 'directory',
+      lead: 'The lab this rank is built on: a two-site Active Directory forest running on '
+          + 'Windows Server 2022, replicating over a cost-weighted site link, with policy '
+          + 'scoped to organisational units rather than sprayed across the domain.',
+      notes: [
+        ['TWO SITES, TWO DCs',
+         'Each site is its own subnet with a domain controller holding integrated DNS and a '
+         + 'global catalog, so authentication stays local instead of crossing the link.'],
+        ['COST-WEIGHTED SITE LINK',
+         'Sites, subnets and site links configured in AD Sites and Services. The cost is what '
+         + 'decides which path replication takes when more than one exists.'],
+        ['FSMO ROLES SIT ON ONE DC',
+         'Five single-master roles cannot be shared. Demoting and repromoting a DC is the test '
+         + 'that proves you know where they live and how to move them.'],
+        ['POLICY SCOPED TO AN OU',
+         'The desktop GPO is linked at the workstations OU, not the domain root, so servers '
+         + 'never inherit a policy written for desktops.']
+      ],
+      cmd: 'repadmin /replsummary  ·  repadmin /showrepl  ·  netdom query fsmo',
+      why: 'Rank 5 because this one was built, deliberately broken and rebuilt — a controlled '
+         + 'DC demotion and repromotion, with role placement and replication convergence '
+         + 'verified from the command line rather than taken on trust from the console.'
+    },
+    'NETWORKING': {
+      dg: 'networking',
+      lead: 'A routed three-subnet topology built in GNS3: one router carrying static routes '
+          + 'between the segments, a firewall on the link to the server subnet, and a remote '
+          + 'client reaching it over a VPN.',
+      notes: [
+        ['THREE SUBNETS, ONE ROUTER',
+         'Each segment is its own broadcast domain. Nothing reaches another subnet without the '
+         + 'router deciding it may, which is the whole point of routing rather than switching.'],
+        ['SUBNETTING DONE BY HAND',
+         'The /24 boundaries were planned, not generated — knowing which addresses belong to '
+         + 'which segment is what makes the routing table readable.'],
+        ['A FIREWALL ON THE SERVER LINK',
+         'Rules applied on the path into the server subnet, so reachability is a decision '
+         + 'rather than a side effect of being on the same wire.'],
+        ['VPN FOR OFF-NETWORK ACCESS',
+         'The same lab reachable from outside, which is how the remote desktop support work '
+         + 'was actually done.']
+      ],
+      cmd: 'Windows 11 clients joined across subnet boundaries  ·  routing verified between all three',
+      why: 'Rank 4 because the topology was designed, addressed and routed from scratch and then '
+         + 'actually used — the AD forest replicated across it. Not a lab that only had to ping.'
+    },
+    'CLOUD & VIRTUALIZATION': {
+      dg: 'cloud',
+      lead: 'A VPC split into public and private subnets with EC2 in each, CloudWatch reading '
+          + 'their metrics, and IAM standing between the instances and S3 — plus the Hyper-V and '
+          + 'Docker layer the rest of the labs actually ran on.',
+      notes: [
+        ['PUBLIC AND PRIVATE ARE DIFFERENT JOBS',
+         'The web tier is reachable; the app tier is not. Splitting them is the first real '
+         + 'security decision you make in a VPC.'],
+        ['IAM IS A GATE, NOT A BOX',
+         'Nothing reaches S3 because it is nearby. It reaches S3 because a policy says the '
+         + 'instance role may.'],
+        ['CLOUDWATCH CLOSES THE LOOP',
+         'Metrics and alarms off both instances — the difference between running something and '
+         + 'knowing whether it is healthy.'],
+        ['HYPER-V AND DOCKER UNDERNEATH',
+         'The AD forest ran on Hyper-V VMs; HiveMind shipped in Docker so local and deployed '
+         + 'were the same image.']
+      ],
+      cmd: 'AWS EC2 · S3 · IAM · VPC · CloudWatch    Azure Entra ID · VMs · Blob Storage',
+      why: 'Rank 4 rather than 5: broad hands-on across both clouds and the virtualisation under '
+         + 'them, with the AWS Solutions Architect – Associate exam booked for September 2026 — '
+         + 'but not yet certified, and not yet run at production scale.'
+    },
+    'SCRIPTING & AUTOMATION': {
+      dg: 'automation',
+      lead: 'The habit rather than a single project: recurring administrative work written down '
+          + 'as PowerShell and Bash, triggered by a commit through GitHub Actions instead of by '
+          + 'someone remembering to run it.',
+      notes: [
+        ['A COMMIT STARTS THE WORK',
+         'The pipeline runs on push. Nothing depends on a person being at a keyboard, which is '
+         + 'what makes it repeatable.'],
+        ['THE TASK IS WRITTEN DOWN',
+         'PowerShell and Bash for the recurring admin work — user and permission changes, '
+         + 'patching, the jobs that otherwise get done slightly differently each time.'],
+        ['ONE TEMPLATE, IDENTICAL HOSTS',
+         'Infrastructure as Code means the machines are stamped from a definition that lives in '
+         + 'the repository, so they cannot quietly drift apart.'],
+        ['GIT IS THE RECORD',
+         'Feature branching, pull requests and peer review — every change has an author, a '
+         + 'reason and a way back.']
+      ],
+      cmd: 'PowerShell · Bash · Git/GitHub · GitHub Actions · Infrastructure as Code',
+      why: 'Rank 4 because it is how the other work got done — the AD lab was built with '
+         + 'PowerShell rather than clicking through wizards — but the pipelines have been for '
+         + 'lab and coursework projects, not a production estate.'
+    },
+    'DEVELOPMENT': {
+      dg: 'development',
+      lead: 'A server-rendered request loop: the controller routes and checks the role, the model '
+          + 'holds the rules, SQL Server holds the data, and a view comes back — with a React '
+          + 'front end talking to the same system across a REST boundary.',
+      notes: [
+        ['THE CONTROLLER GUARDS THE DOOR',
+         'Role-based access separating member from administrator is enforced server-side, where '
+         + 'it cannot be bypassed by the browser.'],
+        ['THE SCHEMA WAS MODELLED',
+         'Membership plans, class schedules and registrations designed as tables and '
+         + 'relationships in SQL Server before any page was written.'],
+        ['VALIDATION ON THE SERVER',
+         'Browse, purchase and registration flows validate on the way in — the client-side '
+         + 'checks are a convenience, not the defence.'],
+        ['REST ACROSS THE BOUNDARY',
+         'React views bound to endpoints for state and content, with loading and error paths '
+         + 'handled rather than assumed.']
+      ],
+      cmd: 'C# · ASP.NET MVC · React · Next.js · SQL Server · REST APIs',
+      why: 'Rank 3 — the lowest here, honestly. Full applications shipped end to end in a team, '
+         + 'but development is the supporting skill rather than the one the rest is built on.'
+    }
+  };
+
   var MISSIONS = [
-    {n:'01',kind:'INFRASTRUCTURE',title:'WINDOWS SERVER 2022 AD INFRASTRUCTURE',
+    {id:'ad',n:'01',kind:'INFRASTRUCTURE',title:'WINDOWS SERVER 2022 AD INFRASTRUCTURE',
      sub:'A multi-site Active Directory forest built and validated end to end in a routed lab topology.',
      stack:['Windows Server 2022','PowerShell','Hyper-V','GNS3'],
      bullets:['Deployed a multi-domain-controller AD forest with integrated DNS and global catalog across a routed three-subnet GNS3 topology; performed controlled DC demotion and repromotion, verifying FSMO role placement with netdom',
               'Configured multi-site replication through AD Sites and Services — sites, subnets, and cost-weighted site links — validating convergence with repadmin /showrepl and /replsummary and joining Windows 11 clients across site boundaries',
               'Authored and linked OU-scoped GPOs for user rights assignment and desktop policy, tracing object distinguished names and replication metadata across the schema, configuration, and domain naming contexts using ADSI Edit']},
-    {n:'02',kind:'FULL-STACK',title:'HIVEMIND — COLLABORATIVE WORKSPACE PLATFORM',
+    {id:'hive',n:'02',kind:'FULL-STACK',title:'HIVEMIND — COLLABORATIVE WORKSPACE PLATFORM',
      sub:'A team workspace with real-time task tracking, scoped access control, and a containerized deployment.',
      stack:['React','Next.js','Firebase','Docker'],
      bullets:['Built a team workspace with real-time task tracking and role-based access control scoped per workspace',
               'Integrated AI-generated activity summaries and a repository-backed sandbox for automated code validation',
               'Containerized the application with Docker for consistent local and deployed environments']},
-    {n:'03',kind:'FULL-STACK',title:'FLEXIFIT — GYM MEMBERSHIP PLATFORM',
+    {id:'flex',n:'03',kind:'FULL-STACK',title:'FLEXIFIT — GYM MEMBERSHIP PLATFORM',
      sub:'A server-rendered MVC application covering memberships, class schedules, and registrations.',
      stack:['ASP.NET MVC','C#','SQL Server'],
      bullets:['Developed a full-stack MVC application with role-based access control separating member and administrator permissions',
@@ -517,17 +821,192 @@
 
   /* ---------- stats ---------- */
   var sw = document.getElementById('stats');
+  /* `grown` skips the scroll-reveal: .fill sits at scaleX(0) until the observer
+     adds .in, and a bar built inside the overlay is never observed, so it would
+     stay empty. */
+  function rankBar(n, grown){
+    return '<div class="track"><div class="fill' + (grown ? ' in' : '')
+      + '" style="position:absolute;left:0;top:0;bottom:0;width:'
+      + (n*20) + '%;background:var(--crimson)"></div>'
+      + '<div class="seg"><i></i><i></i><i></i><i></i><i></i></div></div>';
+  }
   STATS.forEach(function(s,i){
     var w = el('div','rv s'+Math.min(i+1,6));
-    w.innerHTML = '<div class="stat pop pop-dark">'
-      + '<div class="top"><div class="anton" style="font-size:19px;letter-spacing:.05em">'+s[0]+'</div>'
+    var lab = LABS[s[0]];
+    /* A skill with a lab becomes a real button — the plain <div> it used to be
+       was not reachable by keyboard at all. */
+    var tag = lab ? 'button' : 'div';
+    var body = '<div class="top"><div class="anton" style="font-size:19px;letter-spacing:.05em">'+s[0]+'</div>'
       + '<div class="anton" style="font-size:15px;color:var(--acid);letter-spacing:.08em">RANK '+s[1]+'</div></div>'
-      + '<div class="track"><div class="fill" style="position:absolute;left:0;top:0;bottom:0;width:'+(s[1]*20)+'%;background:var(--crimson)"></div>'
-      + '<div class="seg"><i></i><i></i><i></i><i></i><i></i></div></div>'
-      + '<div class="arch note">'+s[2]+'</div></div>';
-    w.style.marginBottom = '18px';
+      + rankBar(s[1])
+      + '<div class="arch note">'+s[2]+'</div>'
+      + (lab ? '<div class="anton stat-open">OPEN THE LAB'
+             + '<svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">'
+             + '<path d="M5 4l13 8-13 8z" fill="var(--acid)"/></svg></div>' : '');
+    w.innerHTML = '<' + tag + ' class="stat pop pop-dark"' + (lab ? ' type="button"' : '') + '>'
+      + body + '</' + tag + '>';
+    if(lab){
+      var b = w.querySelector('.stat');
+      b.setAttribute('aria-haspopup','dialog');
+      b.addEventListener('click', function(){ openLab(s[0], b); });
+    }
     sw.appendChild(w);
   });
+
+  /* ---------- proficiency lab overlay ---------- */
+  var labEl = document.getElementById('lab');
+  var labPanel = document.getElementById('lab-panel');
+  var labKeys = STATS.map(function(s){ return s[0]; }).filter(function(n){ return LABS[n]; });
+  var labOpener = null, labNow = null;
+
+  function labFocusables(){
+    return [].slice.call(labPanel.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+      .filter(function(n){ return n.offsetParent !== null; });
+  }
+
+  function renderLab(name){
+    var s = null;
+    for(var i = 0; i < STATS.length; i++) if(STATS[i][0] === name) s = STATS[i];
+    var lab = LABS[name];
+    if(!s || !lab) return;
+    labNow = name;
+
+    labPanel.innerHTML =
+      '<div class="lab-head"><div>'
+      + '<h2 class="anton lab-title" id="lab-title">' + name + '</h2>'
+      + '<div class="lab-rank"><div class="anton" style="font-size:15px;color:var(--acid);'
+      + 'letter-spacing:.08em">RANK ' + s[1] + '</div>' + rankBar(s[1], true) + '</div>'
+      + '</div>'
+      + '<button type="button" class="anton lab-close" data-close>CLOSE'
+      + '<svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">'
+      + '<path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3"/></svg></button>'
+      + '</div>'
+      + '<p class="arch lab-lead">' + lab.lead + '</p>'
+      + '<div class="lab-dg" id="lab-dg"></div>'
+      + '<div class="lab-notes">'
+      + lab.notes.map(function(n){
+          return '<div class="lab-note"><h4 class="anton">' + n[0] + '</h4>'
+               + '<p class="arch">' + n[1] + '</p></div>';
+        }).join('')
+      + '</div>'
+      + '<div class="lab-foot">'
+      + '<div class="lab-cmd"><div class="arch" style="font-size:11px;letter-spacing:.2em;'
+      + 'color:var(--dim);margin-bottom:8px">VERIFIED WITH</div><code>' + lab.cmd + '</code></div>'
+      + '<div class="lab-why"><div class="anton" style="font-size:15px;letter-spacing:.06em;'
+      + 'margin-bottom:6px">WHY THIS RANK</div>'
+      + '<p class="arch" style="margin:0;font-size:14px;line-height:1.5;color:var(--muted)">'
+      + lab.why + '</p></div>'
+      + '</div>';
+
+    /* clone the template so the diagram's own animation runs from the start */
+    var tpl = document.getElementById('dg-' + lab.dg);
+    if(tpl) document.getElementById('lab-dg').appendChild(tpl.content.cloneNode(true));
+  }
+
+  function openLab(name, opener){
+    labOpener = opener || null;
+    var game = document.getElementById('game'); if(game && !game.hidden) game.inert = true;
+    renderLab(name);
+    /* lock the page without letting it jump sideways as the scrollbar goes */
+    var gap = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    if(gap > 0) document.body.style.paddingRight = gap + 'px';
+    labEl.hidden = false;
+    labEl.classList.add('on');
+    var f = labFocusables();
+    (f[0] || labPanel).focus();
+  }
+
+  function closeLab(){
+    var game = document.getElementById('game'); if(game) game.inert = false;
+    labEl.classList.remove('on');
+    labEl.hidden = true;
+    labNow = null;
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    if(labOpener) labOpener.focus();
+    labOpener = null;
+  }
+
+  function stepLab(dir){
+    if(!labNow || labKeys.length < 2) return;
+    var i = labKeys.indexOf(labNow);
+    renderLab(labKeys[(i + dir + labKeys.length) % labKeys.length]);
+    var f = labFocusables();
+    (f[0] || labPanel).focus();
+  }
+
+  labEl.addEventListener('click', function(e){
+    /* the scrim and the wrapper close; a click inside the panel must not */
+    if(e.target.hasAttribute('data-close') || e.target.closest('button[data-close]')) closeLab();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(labEl.hidden) return;
+    if(e.key === 'Escape'){ e.preventDefault(); closeLab(); return; }
+    if(e.key === 'ArrowRight'){ e.preventDefault(); stepLab(1); return; }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); stepLab(-1); return; }
+    if(e.key !== 'Tab') return;
+    /* keep Tab inside the dialog */
+    var f = labFocusables();
+    if(!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+
+  /* ---------- project demo clips ---------- */
+  /* build.py writes DEMOS from whatever actually sits in site/media/, so a
+     mission with no clip yet simply renders no slot rather than a broken box. */
+  var DEMOS = window.DEMOS || {};
+
+  function demoMarkup(m){
+    var d = DEMOS[m.id];
+    if(!d) return '';
+    return '<figure class="demo">'
+      + '<video class="demo-v" muted loop playsinline preload="none"'
+      + (d.poster ? ' poster="' + d.poster + '"' : '')
+      + ' data-src="' + d.src + '" aria-label="Screen demo of ' + m.title + '"></video>'
+      + '<figcaption class="demo-bar">'
+      + '<button type="button" class="anton demo-btn" data-demo-btn>PLAY'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">'
+      + '<path d="M5 4l13 8-13 8z" fill="var(--acid)"/></svg></button>'
+      + '<span class="arch demo-cap">screen demo &middot; no sound</span>'
+      + '</figcaption></figure>';
+  }
+
+  /* The file is only fetched when someone asks for it — never on page load,
+     even for the briefing that starts open. */
+  function demoLoad(v){
+    if(!v.src && v.dataset.src) v.src = v.dataset.src;
+  }
+
+  function demoPlay(v, btn){
+    demoLoad(v);
+    var p = v.play();
+    if(p && p.catch) p.catch(function(){ /* blocked: the poster stays */ });
+    if(btn) btn.childNodes[0].nodeValue = 'PAUSE';
+  }
+
+  function demoPause(v, btn){
+    v.pause();
+    if(btn) btn.childNodes[0].nodeValue = 'PLAY';
+  }
+
+  function wireDemo(panel){
+    var v = panel.querySelector('.demo-v');
+    if(!v) return null;
+    var btn = panel.querySelector('[data-demo-btn]');
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(v.paused) demoPlay(v, btn); else demoPause(v, btn);
+    });
+    v.addEventListener('click', function(){
+      if(v.paused) demoPlay(v, btn); else demoPause(v, btn);
+    });
+    return { v: v, btn: btn };
+  }
 
   /* ---------- missions ---------- */
   var mw = document.getElementById('missions'), open = 0;
@@ -545,17 +1024,32 @@
     panel.innerHTML = '<div class="brief-in">'
       + '<div class="anton" style="font-size:13px;letter-spacing:.22em;color:var(--crimson);margin-bottom:12px">BRIEFING</div>'
       + '<div class="arch" style="font-size:15px;color:var(--muted);margin-bottom:20px">'+m.sub+'</div>'
+      + demoMarkup(m)
       + '<div class="anton" style="font-size:15px;letter-spacing:.16em;color:var(--acid);margin-bottom:12px">LOADOUT</div>'
       + '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">'
       + m.stack.map(function(t){return '<div class="anton pop pop-dark" style="font-size:14px;background:#1e1e25;border:2px solid #32323b;padding:7px 12px">'+t+'</div>';}).join('')
       + '</div><div class="anton" style="font-size:15px;letter-spacing:.16em;color:var(--acid);margin-bottom:14px">OBJECTIVES</div>'
       + m.bullets.map(function(b,j){return '<div class="obj"><i class="anton">'+(j+1)+'</i><div class="arch note" style="color:#d8d4c8;font-size:15px">'+b+'</div></div>';}).join('')
       + '</div>';
+    var demo = wireDemo(panel);
     btn.addEventListener('click', function(){
       var isOpen = panel.style.maxHeight && panel.style.maxHeight !== '0px';
       mw.querySelectorAll('.brief').forEach(function(p){ p.style.maxHeight = '0px'; });
       mw.querySelectorAll('.mcard').forEach(function(c){ c.classList.remove('on'); c.setAttribute('aria-expanded','false'); });
-      if(!isOpen){ panel.style.maxHeight = panel.scrollHeight + 'px'; btn.classList.add('on'); btn.setAttribute('aria-expanded','true'); }
+      /* whatever was playing belongs to a panel that is now shut */
+      mw.querySelectorAll('.demo-v').forEach(function(o){
+        o.pause();
+        var b = o.parentNode.querySelector('[data-demo-btn]');
+        if(b) b.childNodes[0].nodeValue = 'PLAY';
+      });
+      if(!isOpen){
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        btn.classList.add('on');
+        btn.setAttribute('aria-expanded','true');
+        /* Opening a briefing is a deliberate act, so the clip rolls with it —
+           but never under reduced motion, where it waits for PLAY. */
+        if(demo && !reduce) demoPlay(demo.v, demo.btn);
+      }
     });
     wrap.appendChild(btn); wrap.appendChild(panel);
     mw.appendChild(wrap);
@@ -602,26 +1096,143 @@
     var s = document.getElementById(id); if(s) spy.observe(s);
   });
 
-  /* ---------- pointer depth ---------- */
-  if(!reduce && window.matchMedia('(hover: hover)').matches){
-    var last = 0, raf = null;
+  /* ---------- pointer depth and the lens ---------- */
+  /* --px / --py drive the depth planes and are pointer-only: parallax should not
+     follow the scroll wheel. --lx and the four frame weights drive the
+     lenticular, and those blend the pointer WITH the scroll position so the
+     plate keeps walking while you read. Nothing here hijacks scrolling. */
+  var hover = window.matchMedia('(hover: hover)').matches;
+  var ptrX = 0, ptrY = 0, scrX = 0, moved = false;
+
+  function applyLens(){
+    /* Until the mouse has actually moved, scroll owns the whole range —
+       blending against a pointer resting at 0 would cap the walk at the middle
+       two frames and the ends would be unreachable on load. */
+    var x = (hover && moved) ? ptrX * 0.62 + scrX * 0.38 : scrX;
+    if(reduce) x = -1;
+    x = Math.max(-1, Math.min(1, x));
+    root.style.setProperty('--lx', x.toFixed(4));
+    /* triangular kernel over the four frames: only the two neighbours of the
+       current phase are non-zero, and the weights always sum to 1, so the
+       mask bands tile the lens period exactly */
+    var p = (x + 1) * 1.5, ws = [0, 0, 0, 0];
+    for(var k = 0; k < 4; k++){
+      var w = 1 - Math.abs(p - k);
+      ws[k] = w > 0 ? w : 0;
+      root.style.setProperty('--w' + k, ws[k] ? ws[k].toFixed(4) : '0');
+    }
+    if(holo){ holo.set(reduce ? 0 : x, ws, reduce ? 0 : ptrY); holoDirty = true; }
+  }
+
+  /* Reduced motion keeps the flip — it responds to the visitor, it does not
+     animate on its own — but loses the parallax and the idle drift. */
+  if(reduce) root.style.setProperty('--amp', '0');
+
+  if(hover && !document.getElementById('game')){
+    var last = 0;
     window.addEventListener('mousemove', function(e){
       var x = Math.max(-1, Math.min(1, (e.clientX / window.innerWidth) * 2 - 1));
       var y = Math.max(-1, Math.min(1, (e.clientY / window.innerHeight) * 2 - 1));
-      root.style.setProperty('--px', x.toFixed(4));
-      root.style.setProperty('--py', y.toFixed(4));
+      if(!reduce){
+        root.style.setProperty('--px', x.toFixed(4));
+        root.style.setProperty('--py', y.toFixed(4));
+      }
+      ptrX = x; ptrY = y; moved = true;
+      applyLens();
       last = Date.now();
     }, {passive:true});
-    (function tick(){
-      if(Date.now() - last > 2500){
-        var t = Date.now()/1000;
-        root.style.setProperty('--px', (Math.sin(t*0.32)*0.55).toFixed(4));
-        root.style.setProperty('--py', (Math.cos(t*0.23)*0.4).toFixed(4));
-      }
-      raf = requestAnimationFrame(tick);
-    })();
+
+    if(!reduce){
+      (function tick(){
+        if(!reduce && Date.now() - last > 2500){
+          var t = Date.now() / 1000;
+          var dx = Math.sin(t * 0.32) * 0.55;
+          root.style.setProperty('--px', dx.toFixed(4));
+          root.style.setProperty('--py', (Math.cos(t * 0.23) * 0.4).toFixed(4));
+          ptrX = dx;
+          applyLens();
+        }
+        requestAnimationFrame(tick);
+      })();
+    }
   } else {
-    root.style.setProperty('--amp','0');
+    root.style.setProperty('--amp', '0');
   }
+
+  /* ---------- the 3D hologram ---------- */
+  /* An enhancement layered over the CSS plates, never a replacement: it mounts
+     only with a WebGL context and a wide enough viewport, and if anything here
+     fails the plates are simply left alone. It answers the pointer and the
+     scroll exactly as the CSS lens does and never animates on its own, which is
+     why reduced motion keeps it — same reasoning as the flip. */
+  var holo = null, holoDirty = false;
+
+  function hasWebGL(){
+    try {
+      var c = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext &&
+        (c.getContext('webgl') || c.getContext('experimental-webgl')));
+    } catch(e){ return false; }
+  }
+
+  (function(){
+    var canvas = document.getElementById('holo');
+    if(document.getElementById('game')) return;
+    var src = document.getElementById('three-src');
+    if(!canvas || !src || window.innerWidth <= 860 || !hasWebGL()) return;
+    if(typeof mountHologram !== 'function') return;
+
+    var secs = ['status','targets','records','arsenal'].map(function(id){
+      var sec = document.getElementById(id);
+      /* The 3D plate is a background like the CSS one, so it sits at a
+         comparable weight — the barrier that once justified a brighter plate
+         is gone, and anything louder fights the body copy. */
+      return sec && { el: sec.querySelector('.lent-plate'), section: sec, opacity: 0.19 };
+    }).filter(function(x){ return x && x.el; });
+    if(!secs.length) return;
+
+    var url;
+    try { url = URL.createObjectURL(new Blob([src.textContent], {type:'text/javascript'})); }
+    catch(e){ return; }
+
+    import(url).then(function(THREE){
+      holo = mountHologram(THREE, {
+        canvas: canvas, sections: secs,
+        onPlate: function(){ holoDirty = true; }
+      });
+      applyLens();
+      holoDirty = true;
+      (function loop(){
+        if(holoDirty){ holoDirty = false; holo.render(); }
+        requestAnimationFrame(loop);
+      })();
+      window.addEventListener('resize', function(){ holoDirty = true; }, {passive:true});
+    }).catch(function(){ /* no hologram; the CSS plates carry it */ });
+  })();
+
+  /* Scroll feeds the lens on every device — one full walk per 1.5 screens. */
+  var pending = false;
+  function onScroll(){
+    if(pending) return;
+    pending = true;
+    requestAnimationFrame(function(){
+      pending = false;
+      scrX = Math.cos(window.scrollY / (window.innerHeight * 0.75) * Math.PI);
+      holoDirty = true;
+      applyLens();
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  applyLens();
+  window.PORTFOLIO = { missions: MISSIONS, stats: STATS, labs: LABS, skills: SKILLS,
+    categories: CATS, openLab: openLab, demos: DEMOS };
+
 })();
 </script>
+<!--MOVIE_AUDIO_SCRIPT-->
+<!--ALLEY_SCRIPT-->
+<!--MOVIE_NAV_SCRIPT-->
+<!--TUTORIAL_SCRIPT-->
+<!--GAME_SCRIPT-->
+<!--AUDIO_SCRIPT-->
