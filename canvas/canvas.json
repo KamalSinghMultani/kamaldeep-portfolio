@@ -1,18 +1,95 @@
 {
   "artboards": [
-    { "file": "Main.dc.html", "title": "Portfolio — Desktop", "x": 0, "y": 0, "w": 1440, "h": 900, "is_interactive": true, "expand": "fit" },
-    { "file": "Mobile.dc.html", "title": "Portfolio — Mobile", "x": 1560, "y": 0, "w": 390, "h": 844, "is_interactive": true, "expand": "fit" },
-    { "file": "CallingCard.dc.html", "title": "Calling Card — LinkedIn / README banner", "x": 0, "y": 1060, "w": 1200, "h": 630 },
-    { "file": "StyleKit.dc.html", "title": "Style Kit", "x": 1320, "y": 1060, "w": 900, "h": 1540 }
+    {
+      "file": "Main.dc.html",
+      "title": "Portfolio — Desktop",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "is_interactive": true,
+      "expand": "fit"
+    },
+    {
+      "file": "Mobile.dc.html",
+      "title": "Portfolio — Mobile",
+      "x": 1560,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "is_interactive": true,
+      "expand": "fit"
+    },
+    {
+      "file": "CallingCard.dc.html",
+      "title": "Calling Card — LinkedIn / README banner",
+      "x": 0,
+      "y": 1060,
+      "w": 1200,
+      "h": 630
+    },
+    {
+      "file": "StyleKit.dc.html",
+      "title": "Style Kit",
+      "x": 1320,
+      "y": 1060,
+      "w": 900,
+      "h": 1540
+    }
   ],
   "annotations": [
-    { "id": "note-nav", "x": 0, "y": -190, "w": 700, "text": "PORTFOLIO — KAMALDEEP SINGH\nEverything here is from your resume; nothing invented. Click BEGIN on the title screen, then move through STATUS / TARGETS / RECORDS / ARSENAL / CONTACT in the left rail. Project cards and skill filters are live." },
-    { "id": "note-ranks", "x": 2010, "y": 0, "w": 420, "text": "CHECK THESE: the RANK 1-5 bars are the only numbers not on your resume — I set them from what your bullets actually evidence (Directory Services 5, Automation / Networking / Cloud 4, Development 3). Each carries its evidence line underneath. Change any you disagree with." },
-    { "id": "note-tweaks", "x": 2010, "y": 250, "w": 420, "text": "Three levers sit above each artboard: ACCENT swaps the crimson (three alternates included), HEAT set to CALM flattens the skew and thins the halftone, and MOTION set to REDUCED stops the parallax and the ambient loops. The page also honours a viewer's own reduced-motion setting on its own." },
-    { "id": "note-figures", "x": 2010, "y": 900, "w": 420, "text": "FIGURES — one Open Peeps character per section, composed from the Sketch file you sent (body + head + face), flattened to a bone silhouette and dropped to 17%. They sit on the deepest plane, so they travel furthest as you move the mouse. Open Peeps is by Pablo Stanley and is free for commercial use — no attribution required, but crediting him costs nothing.\n\nSwapping one is easy: name the pose, hair and expression you want and I will recompose it." },
-    { "id": "note-motion", "x": 2010, "y": 560, "w": 420, "text": "MOTION — move the mouse across the desktop artboard. The background planes slide against the pointer while the foreground barely moves, so the whole thing reads as depth without the buttons wandering off under your cursor. The name carries a three-copy colour split that separates as you tilt. Leave it alone for a couple of seconds and a slow drift keeps it breathing. Sections burst in behind speed lines. On mobile the same depth is driven by scrolling instead." },
-    { "id": "note-card", "x": 0, "y": 1740, "w": 1200, "text": "The calling card is sized 1200x630 — export it as a PNG for a LinkedIn banner or a GitHub profile README header." },
-    { "id": "note-kit", "x": 1320, "y": 2650, "w": 900, "text": "The style kit is the reference for building the hosted version — palette, type ramp, component anatomy, the motion timings and depth ladder, and the rules the design follows." }
+    {
+      "id": "note-nav",
+      "x": 0,
+      "y": -190,
+      "w": 700,
+      "text": "PORTFOLIO — KAMALDEEP SINGH\nEverything here is from your resume; nothing invented. Click BEGIN on the title screen, then move through STATUS / TARGETS / RECORDS / ARSENAL / CONTACT in the left rail. Project cards and skill filters are live, and the background character flips as you move the mouse."
+    },
+    {
+      "id": "note-ranks",
+      "x": 2010,
+      "y": 0,
+      "w": 420,
+      "text": "CHECK THESE: the RANK 1-5 bars are the only numbers not on your resume — I set them from what your bullets actually evidence (Directory Services 5, Automation / Networking / Cloud 4, Development 3). Change any you disagree with.\n\nEVERY skill now opens a lab. Click one and a full-artboard panel shows a diagram of what you actually built — the two-site forest, the routed three-subnet GNS3 topology, the VPC with IAM gating S3, the commit-to-hosts pipeline, the MVC request loop — with four callouts, the tooling or commands behind it, and a line on why the rank is what it is.\n\nThe WHY THIS RANK lines are the ones to read closely: they say plainly where each rank stops, including that Cloud is a 4 because the AWS exam is booked but not passed, and Development is the lowest of the five. Reword any that undersell or oversell you."
+    },
+    {
+      "id": "note-tweaks",
+      "x": 2010,
+      "y": 250,
+      "w": 420,
+      "text": "Four levers sit above each artboard: ACCENT swaps the crimson (three alternates included), HEAT set to CALM flattens the skew and thins the halftone, MOTION set to REDUCED stops the parallax and the ambient loops, and LENS sets the lenticular pitch — FINE, COARSE, or OFF to rest the plate on frame a.\n\nThe plate still answers the pointer under MOTION: REDUCED, and under a visitor's own reduced-motion setting. It responds to you rather than animating on its own, so it is the parallax and the idle drift that stop, not the walk."
+    },
+    {
+      "id": "note-figures",
+      "x": 2010,
+      "y": 900,
+      "w": 420,
+      "text": "FIGURES — every section carries a LENTICULAR plate instead of a flat silhouette: FOUR frames of the same character stacked, interleaved under a fine striped mask. The lens period is split into four bands whose widths are the frame weights, so the plate WALKS a → b → c → d as you move rather than cross-fading two stills — a motion lenticular, not a flip card.\n\nThe four frames are one continuous move: the head turns, the expression changes, an accessory appears at the halfway beat, and the colour heats up bone → acid → crimson. They are drawn from one face construction by tools/anime.py, so all five sections are the same person. Say the pose, hair or expression you want and I will redraw them.\n\nThe artwork is original, so there is no licence to worry about. To swap in your own — a VRoid Studio export, say — drop four frames into assets/anime/ as anime-<section>-a.svg .. -d.svg."
+    },
+    {
+      "id": "note-motion",
+      "x": 2010,
+      "y": 560,
+      "w": 420,
+      "text": "MOTION — move the mouse across the desktop artboard. The background planes slide against the pointer while the foreground barely moves, so the whole thing reads as depth without the buttons wandering off under your cursor. The name carries a three-copy colour split that separates as you tilt. Leave it alone for a couple of seconds and a slow drift keeps it breathing. Sections burst in behind speed lines. On mobile the same depth is driven by scrolling instead."
+    },
+    {
+      "id": "note-card",
+      "x": 0,
+      "y": 1740,
+      "w": 1200,
+      "text": "The calling card is sized 1200x630 — export it as a PNG for a LinkedIn banner or a GitHub profile README header."
+    },
+    {
+      "id": "note-kit",
+      "x": 1320,
+      "y": 2650,
+      "w": 900,
+      "text": "The style kit is the reference for building the hosted version — palette, type ramp, component anatomy, the motion timings and depth ladder, and the rules the design follows."
+    }
   ],
-  "launch": { "view": "focused", "file": "Main.dc.html" }
+  "launch": {
+    "view": "focused",
+    "file": "Main.dc.html"
+  }
 }

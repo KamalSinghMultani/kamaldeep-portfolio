@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="An AWS VPC with public and private subnets running EC2, CloudWatch reading their metrics, IAM gating access to S3 outside the VPC, and a Hyper-V and Docker stack alongside">
+<style>
+  .an { font-family: "Anton", Impact, "Arial Black", sans-serif; fill: #f2ede1; }
+  .ar { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; fill: #9a9aa4; }
+  .mo { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; fill: #f0c000; }
+  .box { fill: #16161c; stroke: #2c2c34; stroke-width: 3; }
+  .node { fill: #131318; stroke: #d92020; stroke-width: 3; }
+  .lnk { stroke: #2c2c34; stroke-width: 3; fill: none; }
+  .watch { stroke: #f0c000; stroke-width: 2; fill: none; stroke-dasharray: 6 6; }
+
+  .g { opacity: 0; animation: rise .5s cubic-bezier(.16,.9,.28,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); }
+                    to   { opacity: 1; transform: none; } }
+  .d1 { animation-delay: .05s; } .d2 { animation-delay: .15s; }
+  .d3 { animation-delay: .25s; } .d4 { animation-delay: .35s; }
+  .d5 { animation-delay: .45s; } .d6 { animation-delay: .55s; }
+
+  .draw { stroke-dasharray: 400; stroke-dashoffset: 400;
+          animation: draw .7s .3s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .flow { animation: flow 1.2s .9s linear infinite both; }
+  @keyframes flow { to { stroke-dashoffset: -48; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .g, .draw, .flow { animation: none !important; opacity: 1; }
+    .draw { stroke-dashoffset: 0; }
+  }
+</style>
+
+<!-- ================= VPC BOUNDARY ================= -->
+<g class="g d1">
+  <rect x="18" y="20" width="540" height="286" fill="#101014" stroke="#3a3a42"
+        stroke-width="3" stroke-dasharray="12 8"/>
+  <text x="38" y="52" class="an" font-size="20">VPC</text>
+  <text x="86" y="52" class="mo" font-size="13">10.0.0.0/16</text>
+  <text x="38" y="72" class="ar" font-size="12" fill="#6e6e78">routing, subnets and security groups</text>
+</g>
+
+<!-- ================= PUBLIC SUBNET ================= -->
+<g class="g d2">
+  <rect x="38" y="88" width="240" height="106" class="box"/>
+  <text x="56" y="118" class="an" font-size="16">PUBLIC SUBNET</text>
+  <rect x="56" y="132" width="204" height="46" class="node"/>
+  <text x="72" y="161" class="an" font-size="16">EC2 · WEB</text>
+</g>
+
+<!-- ================= PRIVATE SUBNET ================= -->
+<g class="g d3">
+  <rect x="298" y="88" width="240" height="106" class="box"/>
+  <text x="316" y="118" class="an" font-size="16">PRIVATE SUBNET</text>
+  <rect x="316" y="132" width="204" height="46" class="node"/>
+  <text x="332" y="161" class="an" font-size="16">EC2 · APP</text>
+</g>
+
+<!-- ================= CLOUDWATCH ================= -->
+<g class="g d4">
+  <rect x="38" y="216" width="500" height="70" fill="#131318" stroke="#f0c000" stroke-width="3"/>
+  <text x="56" y="248" class="an" font-size="17" fill="#f0c000">CLOUDWATCH</text>
+  <text x="56" y="272" class="ar" font-size="12">metrics and alarms off both instances</text>
+</g>
+<path d="M158 216 L158 178 M418 216 L418 178" class="watch flow"/>
+
+<!-- ================= IAM GATE OUT TO S3 ================= -->
+<path d="M558 152 L620 152" class="lnk draw"/>
+<path d="M700 152 L742 152" class="lnk draw"/>
+<g class="g d5">
+  <rect x="620" y="126" width="80" height="52" fill="#0b0b0d" stroke="#f0c000" stroke-width="3"/>
+  <text x="634" y="158" class="an" font-size="17" fill="#f0c000">IAM</text>
+  <text x="596" y="200" class="ar" font-size="12">policies decide what the</text>
+  <text x="596" y="216" class="ar" font-size="12">instance may reach</text>
+</g>
+
+<!-- ================= S3 ================= -->
+<g class="g d5">
+  <rect x="742" y="112" width="140" height="80" class="box"/>
+  <rect x="742" y="112" width="140" height="6" fill="#d92020"/>
+  <text x="758" y="150" class="an" font-size="18">S3</text>
+  <text x="758" y="172" class="ar" font-size="12">object storage</text>
+</g>
+
+<!-- ================= LOCAL VIRTUALISATION ================= -->
+<g class="g d6">
+  <rect x="596" y="240" width="286" height="66" class="box"/>
+  <text x="614" y="270" class="an" font-size="17">HYPER-V</text>
+  <text x="614" y="292" class="ar" font-size="12">the VMs the AD lab actually ran on</text>
+</g>
+<g class="g d6">
+  <rect x="596" y="316" width="286" height="66" class="box"/>
+  <text x="614" y="346" class="an" font-size="17">DOCKER</text>
+  <text x="614" y="368" class="ar" font-size="12">same image local and deployed</text>
+</g>
+
+<!-- ================= SCOPE ================= -->
+<g class="g d6">
+  <rect x="18" y="316" width="540" height="128" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="38" y="342" class="ar" font-size="11" fill="#6e6e78" letter-spacing="2">WORKED WITH</text>
+  <text x="38" y="368" class="an" font-size="16">AWS</text>
+  <text x="86" y="368" class="mo" font-size="13">EC2 · S3 · IAM · VPC · CloudWatch</text>
+  <text x="38" y="400" class="an" font-size="16">AZURE</text>
+  <text x="104" y="400" class="mo" font-size="13">Entra ID · VMs · Blob Storage</text>
+  <text x="38" y="430" class="ar" font-size="12">certification track: AWS Solutions Architect – Associate, exam Sept 2026</text>
+</g>
+</svg>

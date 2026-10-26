@@ -9,7 +9,18 @@
 <helmet>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap">
   <style>
-    :root { --px: 0; --py: 0; --sk: -7deg; --accent: #d92020; --amp: 1; }
+    @property --lx { syntax: '<number>'; inherits: true; initial-value: 0; }
+    @property --w0 { syntax: '<number>'; inherits: true; initial-value: 1; }
+    @property --w1 { syntax: '<number>'; inherits: true; initial-value: 0; }
+    @property --w2 { syntax: '<number>'; inherits: true; initial-value: 0; }
+    @property --w3 { syntax: '<number>'; inherits: true; initial-value: 0; }
+    :root {
+      --px: 0; --py: 0; --sk: -7deg; --accent: #d92020; --amp: 1;
+      --lx: 0; --lens: 14px;
+      transition: --lx .35s cubic-bezier(.2,.8,.3,1),
+        --w0 .35s cubic-bezier(.2,.8,.3,1), --w1 .35s cubic-bezier(.2,.8,.3,1),
+        --w2 .35s cubic-bezier(.2,.8,.3,1), --w3 .35s cubic-bezier(.2,.8,.3,1);
+    }
 
     body { margin: 0; font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif; }
     a { color: #f0c000; text-decoration: none; }
@@ -31,12 +42,51 @@
     .z0  { transform: translate3d(calc(var(--px) * var(--amp) * -52px), calc(var(--py) * var(--amp) * -33px), 0); }
     .z0b { transform: translate3d(calc(var(--px) * var(--amp) * -36px), calc(var(--py) * var(--amp) * -23px), 0); }
 
-    /* deep background plate — the furthest plane, travels most, never competes with copy */
-    .bgart { position: absolute; inset: -110px; overflow: hidden; pointer-events: none; z-index: 0; }
+    /* deep background plate — the furthest plane, travels most, never competes with copy.
+       Anchored to the section: it used to sit at inset:-110px, so every offset inside
+       it was measured from an edge 110px outside the artboard and the numerals fell
+       most of the way below the fold. */
+    .bgart { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
     .bgnum { font-family: "Anton", Impact, "Arial Black", sans-serif; line-height: .8; letter-spacing: -0.03em; }
-    /* Open Peeps figure on the deepest plane — flat silhouette, well under the copy */
-    .bgfig { position: absolute; width: auto; opacity: .17; }
-    .bgfig-red { opacity: .16; }
+    /* one shared bleed, taken from the numeral's OWN size so all five match */
+    .bgnum-pos { position: absolute; bottom: calc(var(--n) * -.42); }
+
+    /* ---------- lenticular plate ---------- */
+    /* Four frames of one character stacked, interleaved the way a lenticular
+       sheet actually works: the lens period is divided into four bands, one per
+       frame, and each band's WIDTH is that frame's weight. Only two are ever
+       non-zero and the bands always tile the period, so the plate walks
+       a -> b -> c -> d across the pointer instead of cross-fading two stills. */
+    .lent-plate { position: absolute; aspect-ratio: 520 / 640; height: var(--ph); opacity: var(--po, .14); pointer-events: none; }
+    .lent-plate > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .lf {
+      --a: calc(var(--o) * var(--lens));
+      --z: calc((var(--o) + var(--w)) * var(--lens));
+      -webkit-mask-image: repeating-linear-gradient(90deg, transparent 0 var(--a), #000 var(--a) var(--z), transparent var(--z) var(--lens));
+              mask-image: repeating-linear-gradient(90deg, transparent 0 var(--a), #000 var(--a) var(--z), transparent var(--z) var(--lens));
+    }
+    .lf-0 { --w: var(--w0); --o: 0; }
+    .lf-1 { --w: var(--w1); --o: var(--w0); }
+    .lf-2 { --w: var(--w2); --o: calc(var(--w0) + var(--w1)); }
+    .lf-3 { --w: var(--w3); --o: calc(var(--w0) + var(--w1) + var(--w2)); }
+    /* the lens itself: a dark ridge valley, a bone highlight and a crimson/acid
+       fringe at the ridge edges — the chromatic split real lenticular plastic has */
+    .lent-lens {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden; mix-blend-mode: screen;
+      background: repeating-linear-gradient(90deg,
+        rgba(217,32,32,.11) 0 1px,
+        rgba(11,11,13,.44) 1px 2px,
+        rgba(242,237,225,.10) 2px 3px,
+        rgba(240,192,0,.07) 3px 4px,
+        transparent 4px var(--lens));
+    }
+    .lent-lens::after {
+      content: ""; position: absolute; top: 0; bottom: 0; width: 28%;
+      background: linear-gradient(100deg, transparent, rgba(242,237,225,.19), transparent);
+      left: calc(50% + var(--px) * var(--amp) * 52% - 14%);
+      transition: left .5s cubic-bezier(.2,.8,.3,1); transform: skewX(-10deg);
+    }
+    .lens-off .lent-lens { display: none; }
     .z1  { transform: translate3d(calc(var(--px) * var(--amp) * -24px), calc(var(--py) * var(--amp) * -15px), 0); }
     .z2  { transform: translate3d(calc(var(--px) * var(--amp) * -17px), calc(var(--py) * var(--amp) * -11px), 0); }
     .z3  { transform: translate3d(calc(var(--px) * var(--amp) * -28px), calc(var(--py) * var(--amp) * -17px), 0); }
@@ -153,7 +203,14 @@
 
     @media (prefers-reduced-motion: reduce) {
       .plate, .lyr, .lent-ghost, .lent-shadow, .tilt, .gloss::after { transform: none !important; }
-      .halftone, .sheen::after, .pulse, .lines i { animation: none !important; }
+      .halftone, .sheen::after, .pulse { animation: none !important; }
+      /* the speed lines exist ONLY to sweep past: freezing the animation left
+         them parked across the artboard at full opacity, so hide them outright */
+      .lines { display: none; }
+      /* the flip answers the visitor rather than animating on its own,
+         so it stays here — it just goes instant instead of eased */
+      :root { transition: none; }
+      .lent-lens::after { transition: none; }
     }
   </style>
 </helmet>
@@ -162,7 +219,7 @@
 
   <!-- ============ NAV RAIL ============ -->
   <sc-if value="{{showRail}}" hint-placeholder-val="{{true}}">
-  <div style="width: 268px; flex-shrink: 0; background: #101014; border-right: 3px solid {{accent}}; display: flex; flex-direction: column; position: relative; z-index: 3;">
+  <div style="width: 268px; flex-shrink: 0; background: #101014; border-right: 3px solid {{accent}}; display: flex; flex-direction: column; position: relative; z-index: 3; overflow: hidden;">
 
     <div class="pop pop-dark" onClick="{{goTitle}}" style="display: flex; align-items: center; gap: 14px; padding: 26px 22px; border-bottom: 2px solid #232329;">
       <div class="anton" style="width: 52px; height: 52px; background: {{accent}}; color: #f2ede1; display: flex; align-items: center; justify-content: center; font-size: 24px; letter-spacing: -0.02em; transform: skewX({{sk}});">
@@ -174,9 +231,9 @@
       </div>
     </div>
 
-    <div onClick="{{onNav}}" style="display: flex; flex-direction: column; gap: 8px; padding: 22px 0 22px 18px;">
+    <div onClick="{{onNav}}" style="display: flex; flex-direction: column; gap: 8px; padding: 22px 8px 22px 22px;">
       <sc-for list="{{navItems}}" as="n" hint-placeholder-count="5">
-        <div class="pop-skew" data-nav="{{n.key}}" style="height: 62px; display: flex; align-items: center; gap: 14px; padding: 0 18px; background: {{n.bg}}; color: {{n.fg}}; transform: skewX({{sk}}); border-left: 5px solid {{n.edge}};">
+        <div class="pop-skew" data-nav="{{n.key}}" style="height: 62px; flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 0 18px; background: {{n.bg}}; color: {{n.fg}}; transform: skewX({{sk}}); border-left: 5px solid {{n.edge}};">
           <div style="transform: skewX({{unsk}}); display: flex; align-items: center; gap: 14px; width: 100%;">
             <span class="anton" style="font-size: 13px; opacity: 0.55; letter-spacing: 0.06em;">{{n.num}}</span>
             <span class="anton" style="font-size: 22px; letter-spacing: 0.03em;">{{n.label}}</span>
@@ -266,9 +323,15 @@
     <sc-if value="{{isStatus}}" hint-placeholder-val="{{false}}">
     <div class="sect scroller" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box;">
       <div class="bgart">
-        <img class="bgfig lyr z0" src="fig-status.svg" style="height: 285px; left: 165px; bottom: 45px;">
-        <div class="lyr z0b" style="position: absolute; right: 40px; bottom: -120px;">
-          <div class="bgnum" style="font-size: 600px; color: #1b1b24;">01</div>
+        <div class="lent-plate lyr z0" style="--ph: 420px; left: 55px; bottom: 0;">
+          <img class="lf lf-0" src="anime-status-a.svg" alt="">
+          <img class="lf lf-1" src="anime-status-b.svg" alt="">
+          <img class="lf lf-2" src="anime-status-c.svg" alt="">
+          <img class="lf lf-3" src="anime-status-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+        <div class="lyr z0b bgnum-pos" style="right: -40px; --n: 600px;">
+          <div class="bgnum" style="font-size: var(--n); color: #1b1b24;">01</div>
         </div>
       </div>
       <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
@@ -318,7 +381,7 @@
 
             <sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
               <div class="rise {{s.delay}}">
-              <div class="pop pop-dark" style="background: #131318; border-left: 4px solid {{accent}}; padding: 15px 18px;">
+              <div class="pop pop-dark" data-lab="{{s.lab}}" onClick="{{onLab}}" style="background: #131318; border-left: 4px solid {{accent}}; padding: 15px 18px; cursor: {{s.cursor}};">
                 <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 10px;">
                   <div class="anton" style="font-size: 19px; letter-spacing: 0.05em;">{{s.name}}</div>
                   <div class="anton rank-pop" style="font-size: 15px; color: #f0c000; letter-spacing: 0.08em;">RANK {{s.rank}}</div>
@@ -334,6 +397,9 @@
                   </div>
                 </div>
                 <div class="arch" style="font-size: 14px; color: #9a9aa4; line-height: 1.45; text-wrap: pretty;">{{s.note}}</div>
+                <sc-if value="{{s.lab}}" hint-placeholder-val="{{true}}">
+                  <div class="anton" style="margin-top: 10px; font-size: 13px; letter-spacing: 0.14em; color: #f0c000;">{{s.cue}} &#9656;</div>
+                </sc-if>
               </div>
               </div>
             </sc-for>
@@ -347,9 +413,15 @@
     <sc-if value="{{isTargets}}" hint-placeholder-val="{{false}}">
     <div class="sect" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box; display: flex; flex-direction: column;">
       <div class="bgart">
-        <img class="bgfig lyr z0" src="fig-targets.svg" style="height: 250px; left: 440px; bottom: 45px;">
-        <div class="lyr z0b" style="position: absolute; right: 30px; bottom: -130px;">
-          <div class="bgnum" style="font-size: 600px; color: #1b1b24;">02</div>
+        <div class="lent-plate lyr z0" style="--ph: 380px; left: 330px; bottom: 0;">
+          <img class="lf lf-0" src="anime-targets-a.svg" alt="">
+          <img class="lf lf-1" src="anime-targets-b.svg" alt="">
+          <img class="lf lf-2" src="anime-targets-c.svg" alt="">
+          <img class="lf lf-3" src="anime-targets-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+        <div class="lyr z0b bgnum-pos" style="right: -50px; --n: 600px;">
+          <div class="bgnum" style="font-size: var(--n); color: #1b1b24;">02</div>
         </div>
       </div>
       <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
@@ -411,9 +483,15 @@
     <sc-if value="{{isRecords}}" hint-placeholder-val="{{false}}">
     <div class="sect scroller" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box;">
       <div class="bgart">
-        <img class="bgfig lyr z0" src="fig-records.svg" style="height: 190px; right: 300px; bottom: 40px;">
-        <div class="lyr z0b" style="position: absolute; left: 60px;  bottom: -125px;">
-          <div class="bgnum" style="font-size: 560px; color: #1b1b24;">03</div>
+        <div class="lent-plate lyr z0" style="--ph: 330px; right: 190px; bottom: 0;">
+          <img class="lf lf-0" src="anime-records-a.svg" alt="">
+          <img class="lf lf-1" src="anime-records-b.svg" alt="">
+          <img class="lf lf-2" src="anime-records-c.svg" alt="">
+          <img class="lf lf-3" src="anime-records-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+        <div class="lyr z0b bgnum-pos" style="left: -30px; --n: 560px;">
+          <div class="bgnum" style="font-size: var(--n); color: #1b1b24;">03</div>
         </div>
       </div>
       <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
@@ -492,9 +570,15 @@
     <sc-if value="{{isArsenal}}" hint-placeholder-val="{{false}}">
     <div class="sect scroller" style="position: absolute; inset: 0; padding: 44px 52px; box-sizing: border-box;">
       <div class="bgart">
-        <img class="bgfig lyr z0" src="fig-arsenal.svg" style="height: 570px; right: 240px; bottom: 55px;">
-        <div class="lyr z0b" style="position: absolute; left: 70px;  bottom: -130px;">
-          <div class="bgnum" style="font-size: 620px; color: #1b1b24;">04</div>
+        <div class="lent-plate lyr z0" style="--ph: 460px; right: 130px; bottom: 0;">
+          <img class="lf lf-0" src="anime-arsenal-a.svg" alt="">
+          <img class="lf lf-1" src="anime-arsenal-b.svg" alt="">
+          <img class="lf lf-2" src="anime-arsenal-c.svg" alt="">
+          <img class="lf lf-3" src="anime-arsenal-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+        <div class="lyr z0b bgnum-pos" style="left: -20px; --n: 620px;">
+          <div class="bgnum" style="font-size: var(--n); color: #1b1b24;">04</div>
         </div>
       </div>
       <div class="halftone" style="position: absolute; inset: 0; opacity: {{dots}};"></div>
@@ -545,7 +629,13 @@
       <div class="lines"><i></i><i></i><i></i><i></i></div>
       <div class="lyr z2" style="position: absolute; inset: -40px; background: {{accent}}; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 74%);"></div>
       <div class="bgart">
-        <img class="bgfig bgfig-red lyr z0" src="fig-contact.svg" style="height: 195px; right: 190px; top: 135px;">
+        <div class="lent-plate lyr z0" style="--ph: 300px; --po: .2; right: 80px; top: 25px;">
+          <img class="lf lf-0" src="anime-contact-a.svg" alt="">
+          <img class="lf lf-1" src="anime-contact-b.svg" alt="">
+          <img class="lf lf-2" src="anime-contact-c.svg" alt="">
+          <img class="lf lf-3" src="anime-contact-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
       </div>
       <div class="halftone lyr z1" style="position: absolute; inset: -40px; opacity: {{dots}}; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 74%);"></div>
 
@@ -593,14 +683,93 @@
     </sc-if>
 
   </div>
+
+  <!-- ---------- PROFICIENCY LAB ---------- -->
+  <!-- "Full screen" inside a fixed artboard means covering the artboard. The
+       diagram is an <img> of a files entry, so its own entrance animation runs
+       when this layer mounts. -->
+  <sc-if value="{{hasLab}}" hint-placeholder-val="{{false}}">
+  <div style="position: absolute; inset: 0; z-index: 50; background: rgba(11,11,13,.975); display: flex; align-items: center; justify-content: center; padding: 26px; box-sizing: border-box;">
+    <div class="rise" style="width: 100%; max-width: 1180px; max-height: 100%; overflow-y: auto; background: #131318; border: 3px solid #26262d; border-top: 6px solid {{accent}}; padding: 24px 28px 28px; box-sizing: border-box;">
+
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 22px;">
+        <div>
+          <div class="anton" style="font-size: 38px; line-height: .95;">{{lab.name}}</div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+            <div class="anton" style="font-size: 15px; color: #f0c000; letter-spacing: 0.08em;">RANK {{lab.rank}}</div>
+            <div style="position: relative; height: 12px; width: 200px; background: #26262d;">
+              <div style="position: absolute; left: 0; top: 0; bottom: 0; width: {{labWidth}}; background: {{accent}};"></div>
+              <div style="position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));">
+                <div style="border-right: 2px solid #0b0b0d;"></div>
+                <div style="border-right: 2px solid #0b0b0d;"></div>
+                <div style="border-right: 2px solid #0b0b0d;"></div>
+                <div style="border-right: 2px solid #0b0b0d;"></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="anton pop pop-dark" onClick="{{closeLab}}" style="flex-shrink: 0; min-height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 16px; color: #9a9aa4; border: 3px solid #2c2c34; font-size: 15px; letter-spacing: 0.08em; cursor: pointer;">
+          CLOSE
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3"></path></svg>
+        </div>
+      </div>
+
+      <div class="arch" style="max-width: 70ch; margin-top: 16px; font-size: 16px; line-height: 1.6; color: #cfcbc0; text-wrap: pretty;">{{lab.lead}}</div>
+
+      <!-- The runtime resolves an image src by LITERAL filename, so it cannot be
+           bound through a hole: {{lab.img}} would never match a files entry. Each
+           lab therefore gets its own sc-if with the filename written out. -->
+      <div style="margin: 22px 0 24px; background: #0b0b0d; border: 2px solid #26262d; padding: 14px;">
+        <sc-if value="{{labIsDirectory}}" hint-placeholder-val="{{true}}">
+          <img src="diagram-directory.svg" alt="" style="display: block; width: 100%; height: auto;">
+        </sc-if>
+        <sc-if value="{{labIsNetworking}}" hint-placeholder-val="{{false}}">
+          <img src="diagram-networking.svg" alt="" style="display: block; width: 100%; height: auto;">
+        </sc-if>
+        <sc-if value="{{labIsCloud}}" hint-placeholder-val="{{false}}">
+          <img src="diagram-cloud.svg" alt="" style="display: block; width: 100%; height: auto;">
+        </sc-if>
+        <sc-if value="{{labIsAutomation}}" hint-placeholder-val="{{false}}">
+          <img src="diagram-automation.svg" alt="" style="display: block; width: 100%; height: auto;">
+        </sc-if>
+        <sc-if value="{{labIsDevelopment}}" hint-placeholder-val="{{false}}">
+          <img src="diagram-development.svg" alt="" style="display: block; width: 100%; height: auto;">
+        </sc-if>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;">
+        <sc-for list="{{labNotes}}" as="n" hint-placeholder-count="4">
+          <div style="border-left: 4px solid {{accent}}; padding-left: 14px;">
+            <div class="anton" style="font-size: 17px; letter-spacing: 0.03em; margin-bottom: 6px;">{{n.head}}</div>
+            <div class="arch" style="font-size: 14px; line-height: 1.5; color: #9a9aa4; text-wrap: pretty;">{{n.body}}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top: 24px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start;">
+        <div style="background: #0b0b0d; border: 2px solid #26262d; padding: 14px 16px;">
+          <div class="arch" style="font-size: 11px; letter-spacing: 0.2em; color: #6e6e78; margin-bottom: 8px;">VERIFIED WITH</div>
+          <div style="font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: #f0c000; word-break: break-word;">{{lab.cmd}}</div>
+        </div>
+        <div style="border-left: 4px solid #f0c000; padding-left: 14px;">
+          <div class="anton" style="font-size: 15px; letter-spacing: 0.06em; margin-bottom: 6px;">WHY THIS RANK</div>
+          <div class="arch" style="font-size: 14px; line-height: 1.5; color: #9a9aa4; text-wrap: pretty;">{{lab.why}}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
 </div>
 </x-dc>
 
-<script data-dc-script data-props='{"accent":{"editor":"color","default":"#d92020","options":["#d92020","#f0c000","#2fb8c6","#8b2fd8"],"section":"Theme"},"heat":{"editor":"enum","options":["FULL","CALM"],"default":"FULL","section":"Theme"},"motion":{"editor":"enum","options":["FULL","REDUCED"],"default":"FULL","section":"Theme"},"$preview":{"width":1440,"height":900}}'>
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#d92020","options":["#d92020","#f0c000","#2fb8c6","#8b2fd8"],"section":"Theme"},"heat":{"editor":"enum","options":["FULL","CALM"],"default":"FULL","section":"Theme"},"motion":{"editor":"enum","options":["FULL","REDUCED"],"default":"FULL","section":"Theme"},"lens":{"editor":"enum","options":["FINE","COARSE","OFF"],"default":"FINE","section":"Theme"},"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { section: 'title', mission: 'ad', cat: 'ALL' };
+    this.state = { section: 'title', mission: 'ad', cat: 'ALL', lab: null };
     this.pointer = { x: 0, y: 0 };
     this.lastMove = 0;
     this.frame = null;
@@ -615,6 +784,31 @@ class Component extends DCLogic {
     this.setVar('--accent', this.props.accent || '#d92020');
     this.setVar('--sk', this.props.heat === 'CALM' ? '0deg' : '-7deg');
     this.setVar('--amp', this.props.motion === 'REDUCED' ? '0' : '1');
+    var lens = this.props.lens || 'FINE';
+    this.setVar('--lens', lens === 'COARSE' ? '26px' : '14px');
+    // with the lens off, or motion reduced, the plate rests on frame A
+    if (lens === 'OFF' || this.props.motion === 'REDUCED') this.setLens(-1);
+    try {
+      document.documentElement.classList.toggle('lens-off', lens === 'OFF');
+    } catch (e) {}
+  }
+
+  // The lenticular: --lx plus the four frame weights. The weights are a
+  // triangular kernel over the frames, so only the two neighbours of the
+  // current phase are non-zero and they always sum to 1 — which is what makes
+  // the mask bands tile the lens period exactly.
+  setLens(x) {
+    x = Math.max(-1, Math.min(1, x));
+    this.setVar('--lx', x.toFixed(4));
+    var p = (x + 1) * 1.5;
+    for (var k = 0; k < 4; k++) {
+      var w = 1 - Math.abs(p - k);
+      this.setVar('--w' + k, w > 0 ? w.toFixed(4) : '0');
+    }
+  }
+
+  lensLive() {
+    return (this.props.lens || 'FINE') !== 'OFF' && this.props.motion !== 'REDUCED';
   }
 
   componentDidMount() {
@@ -629,6 +823,7 @@ class Component extends DCLogic {
       self.lastMove = Date.now();
       self.setVar('--px', self.pointer.x.toFixed(4));
       self.setVar('--py', self.pointer.y.toFixed(4));
+      if (self.lensLive()) self.setLens(self.pointer.x);
     };
     document.addEventListener('mousemove', this.onMove, { passive: true });
 
@@ -636,8 +831,10 @@ class Component extends DCLogic {
     var tick = function () {
       if (Date.now() - self.lastMove > 2500) {
         var t = Date.now() / 1000;
-        self.setVar('--px', (Math.sin(t * 0.32) * 0.55).toFixed(4));
+        var dx = Math.sin(t * 0.32) * 0.55;
+        self.setVar('--px', dx.toFixed(4));
         self.setVar('--py', (Math.cos(t * 0.23) * 0.4).toFixed(4));
+        if (self.lensLive()) self.setLens(dx);
       }
       self.frame = window.requestAnimationFrame(tick);
     };
@@ -662,12 +859,114 @@ class Component extends DCLogic {
         { key: 'arsenal', num: '04', label: 'ARSENAL' },
         { key: 'contact', num: '05', label: 'CONTACT' }
       ],
+      // Skills with a lab open a full-artboard viewer. Only the ones listed in
+      // `labs` are clickable; the rest keep their plain stat card.
+      labs: {
+        directory: {
+          name: 'DIRECTORY SERVICES', rank: 5, img: 'diagram-directory.svg',
+          lead: 'The lab this rank is built on: a two-site Active Directory forest running on '
+              + 'Windows Server 2022, replicating over a cost-weighted site link, with policy '
+              + 'scoped to organisational units rather than sprayed across the domain.',
+          notes: [
+            ['TWO SITES, TWO DCs', 'Each site is its own subnet with a domain controller holding '
+             + 'integrated DNS and a global catalog, so authentication stays local.'],
+            ['COST-WEIGHTED SITE LINK', 'Sites, subnets and site links configured in AD Sites and '
+             + 'Services. The cost decides which path replication takes.'],
+            ['FSMO ROLES SIT ON ONE DC', 'Five single-master roles cannot be shared. Demoting and '
+             + 'repromoting a DC proves you know where they live.'],
+            ['POLICY SCOPED TO AN OU', 'The desktop GPO is linked at the workstations OU, not the '
+             + 'domain root, so servers never inherit it.']
+          ],
+          cmd: 'repadmin /replsummary  ·  repadmin /showrepl  ·  netdom query fsmo',
+          why: 'Rank 5 because this one was built, deliberately broken and rebuilt — a controlled '
+             + 'DC demotion and repromotion, with role placement and replication convergence '
+             + 'verified from the command line rather than taken on trust from the console.'
+        },
+        networking: {
+          name: 'NETWORKING', rank: 4, img: 'diagram-networking.svg',
+          lead: 'A routed three-subnet topology built in GNS3: one router carrying static routes '
+              + 'between the segments, a firewall on the link to the server subnet, and a remote '
+              + 'client reaching it over a VPN.',
+          notes: [
+            ['THREE SUBNETS, ONE ROUTER', 'Each segment is its own broadcast domain. Nothing '
+             + 'crosses without the router deciding it may.'],
+            ['SUBNETTING DONE BY HAND', 'The /24 boundaries were planned, not generated, which is '
+             + 'what makes the routing table readable.'],
+            ['A FIREWALL ON THE SERVER LINK', 'Reachability becomes a decision rather than a side '
+             + 'effect of being on the same wire.'],
+            ['VPN FOR OFF-NETWORK ACCESS', 'The same lab reachable from outside \u2014 how the remote '
+             + 'desktop support work was actually done.']
+          ],
+          cmd: 'Windows 11 clients joined across subnet boundaries  \u00b7  routing verified between all three',
+          why: 'Rank 4 because the topology was designed, addressed and routed from scratch and '
+             + 'then actually used \u2014 the AD forest replicated across it.'
+        },
+        cloud: {
+          name: 'CLOUD & VIRTUALIZATION', rank: 4, img: 'diagram-cloud.svg',
+          lead: 'A VPC split into public and private subnets with EC2 in each, CloudWatch reading '
+              + 'their metrics, and IAM standing between the instances and S3 \u2014 plus the Hyper-V '
+              + 'and Docker layer the rest of the labs actually ran on.',
+          notes: [
+            ['PUBLIC AND PRIVATE ARE DIFFERENT JOBS', 'The web tier is reachable; the app tier is '
+             + 'not. That split is the first real security decision in a VPC.'],
+            ['IAM IS A GATE, NOT A BOX', 'Nothing reaches S3 because it is nearby \u2014 it reaches S3 '
+             + 'because a policy says the role may.'],
+            ['CLOUDWATCH CLOSES THE LOOP', 'The difference between running something and knowing '
+             + 'whether it is healthy.'],
+            ['HYPER-V AND DOCKER UNDERNEATH', 'The AD forest ran on Hyper-V; HiveMind shipped in '
+             + 'Docker so local and deployed matched.']
+          ],
+          cmd: 'AWS EC2 \u00b7 S3 \u00b7 IAM \u00b7 VPC \u00b7 CloudWatch    Azure Entra ID \u00b7 VMs \u00b7 Blob Storage',
+          why: 'Rank 4 rather than 5: broad hands-on across both clouds and the virtualisation '
+             + 'under them, with the AWS Solutions Architect \u2013 Associate exam booked for '
+             + 'September 2026 \u2014 but not yet certified, and not yet at production scale.'
+        },
+        automation: {
+          name: 'SCRIPTING & AUTOMATION', rank: 4, img: 'diagram-automation.svg',
+          lead: 'The habit rather than a single project: recurring administrative work written '
+              + 'down as PowerShell and Bash, triggered by a commit through GitHub Actions '
+              + 'instead of by someone remembering to run it.',
+          notes: [
+            ['A COMMIT STARTS THE WORK', 'The pipeline runs on push, so nothing depends on a '
+             + 'person being at a keyboard.'],
+            ['THE TASK IS WRITTEN DOWN', 'PowerShell and Bash for the jobs that otherwise get '
+             + 'done slightly differently each time.'],
+            ['ONE TEMPLATE, IDENTICAL HOSTS', 'Infrastructure as Code keeps the definition in the '
+             + 'repository, so machines cannot quietly drift apart.'],
+            ['GIT IS THE RECORD', 'Feature branching, pull requests and peer review \u2014 every '
+             + 'change has an author, a reason and a way back.']
+          ],
+          cmd: 'PowerShell \u00b7 Bash \u00b7 Git/GitHub \u00b7 GitHub Actions \u00b7 Infrastructure as Code',
+          why: 'Rank 4 because it is how the other work got done \u2014 the AD lab was built with '
+             + 'PowerShell rather than clicking through wizards \u2014 but for lab and coursework '
+             + 'projects, not a production estate.'
+        },
+        development: {
+          name: 'DEVELOPMENT', rank: 3, img: 'diagram-development.svg',
+          lead: 'A server-rendered request loop: the controller routes and checks the role, the '
+              + 'model holds the rules, SQL Server holds the data, and a view comes back \u2014 with a '
+              + 'React front end talking to the same system across a REST boundary.',
+          notes: [
+            ['THE CONTROLLER GUARDS THE DOOR', 'Role-based access separating member from '
+             + 'administrator is enforced server-side, where the browser cannot bypass it.'],
+            ['THE SCHEMA WAS MODELLED', 'Plans, schedules and registrations designed as tables '
+             + 'and relationships before any page was written.'],
+            ['VALIDATION ON THE SERVER', 'The client-side checks are a convenience, not the '
+             + 'defence.'],
+            ['REST ACROSS THE BOUNDARY', 'React views bound to endpoints, with loading and error '
+             + 'paths handled rather than assumed.']
+          ],
+          cmd: 'C# \u00b7 ASP.NET MVC \u00b7 React \u00b7 Next.js \u00b7 SQL Server \u00b7 REST APIs',
+          why: 'Rank 3 \u2014 the lowest here, honestly. Full applications shipped end to end in a '
+             + 'team, but development supports the rest rather than carrying it.'
+        }
+      },
       stats: [
-        { name: 'DIRECTORY SERVICES', rank: 5, note: 'Multi-domain-controller AD forest, FSMO role placement, multi-site replication, and OU-scoped Group Policy' },
-        { name: 'SCRIPTING & AUTOMATION', rank: 4, note: 'PowerShell and Bash automation of recurring admin tasks; Git/GitHub, GitHub Actions, Infrastructure as Code' },
-        { name: 'NETWORKING', rank: 4, note: 'Routed three-subnet GNS3 topology, subnetting, VPN, firewall configuration, and remote desktop support' },
-        { name: 'CLOUD & VIRTUALIZATION', rank: 4, note: 'AWS EC2, S3, IAM, VPC and CloudWatch; Azure Entra ID, VMs and Blob Storage; Hyper-V and Docker' },
-        { name: 'DEVELOPMENT', rank: 3, note: 'Shipped React and ASP.NET MVC applications, REST API integration, SQL Server data modelling' }
+        { key: 'directory', name: 'DIRECTORY SERVICES', rank: 5, note: 'Multi-domain-controller AD forest, FSMO role placement, multi-site replication, and OU-scoped Group Policy' },
+        { key: 'automation', name: 'SCRIPTING & AUTOMATION', rank: 4, note: 'PowerShell and Bash automation of recurring admin tasks; Git/GitHub, GitHub Actions, Infrastructure as Code' },
+        { key: 'networking', name: 'NETWORKING', rank: 4, note: 'Routed three-subnet GNS3 topology, subnetting, VPN, firewall configuration, and remote desktop support' },
+        { key: 'cloud', name: 'CLOUD & VIRTUALIZATION', rank: 4, note: 'AWS EC2, S3, IAM, VPC and CloudWatch; Azure Entra ID, VMs and Blob Storage; Hyper-V and Docker' },
+        { key: 'development', name: 'DEVELOPMENT', rank: 3, note: 'Shipped React and ASP.NET MVC applications, REST API integration, SQL Server data modelling' }
       ],
       missions: [
         {
@@ -767,8 +1066,21 @@ class Component extends DCLogic {
     var stepClass = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8'];
 
     var stats = d.stats.map(function (s, i) {
-      return { name: s.name, rank: s.rank, note: s.note, width: (s.rank * 20) + '%', delay: stepClass[i + 2] || 'd8' };
+      var lab = d.labs[s.key];
+      return {
+        name: s.name, rank: s.rank, note: s.note, width: (s.rank * 20) + '%',
+        delay: stepClass[i + 2] || 'd8',
+        // only a skill with a lab advertises itself as openable
+        lab: lab ? s.key : '',
+        cue: lab ? 'OPEN THE LAB' : '',
+        cursor: lab ? 'pointer' : 'default'
+      };
     });
+
+    var openLab = d.labs[self.state.lab] || null;
+    var labNotes = openLab ? openLab.notes.map(function (n) {
+      return { head: n[0], body: n[1] };
+    }) : [];
 
     var missions = d.missions.map(function (m, i) {
       var on = self.state.mission === m.id;
@@ -830,6 +1142,17 @@ class Component extends DCLogic {
       onNav: pick('data-nav', 'section'),
       onMission: pick('data-mission', 'mission'),
       onCat: pick('data-cat', 'cat'),
+      onLab: pick('data-lab', 'lab'),
+      closeLab: function () { self.setState({ lab: null }); },
+      hasLab: !!openLab,
+      lab: openLab || {},
+      labNotes: labNotes,
+      labWidth: openLab ? (openLab.rank * 20) + '%' : '0%',
+      labIsDirectory: self.state.lab === 'directory',
+      labIsNetworking: self.state.lab === 'networking',
+      labIsCloud: self.state.lab === 'cloud',
+      labIsAutomation: self.state.lab === 'automation',
+      labIsDevelopment: self.state.lab === 'development',
       navItems: navItems,
       stats: stats,
       missions: missions,

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="A pipeline running from a commit through GitHub Actions to a PowerShell or Bash task on the hosts, and beneath it one infrastructure-as-code template stamping three identical hosts">
+<style>
+  .an { font-family: "Anton", Impact, "Arial Black", sans-serif; fill: #f2ede1; }
+  .ar { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; fill: #9a9aa4; }
+  .mo { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; fill: #f0c000; }
+  .box { fill: #16161c; stroke: #2c2c34; stroke-width: 3; }
+  .node { fill: #131318; stroke: #d92020; stroke-width: 3; }
+  .lnk { stroke: #2c2c34; stroke-width: 3; fill: none; }
+
+  .g { opacity: 0; animation: rise .5s cubic-bezier(.16,.9,.28,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); }
+                    to   { opacity: 1; transform: none; } }
+  .d1 { animation-delay: .05s; } .d2 { animation-delay: .15s; }
+  .d3 { animation-delay: .25s; } .d4 { animation-delay: .35s; }
+  .d5 { animation-delay: .45s; } .d6 { animation-delay: .55s; }
+
+  .draw { stroke-dasharray: 800; stroke-dashoffset: 800;
+          animation: draw .8s .25s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  /* the run travelling down the pipeline */
+  .token { fill: #f0c000; animation: run 2.6s 1s cubic-bezier(.5,0,.5,1) infinite both; }
+  @keyframes run {
+    0%   { transform: translateX(0); opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { transform: translateX(636px); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .g, .draw, .token { animation: none !important; opacity: 1; }
+    .draw { stroke-dashoffset: 0; }
+    .token { opacity: 0; }
+  }
+</style>
+
+<!-- ================= THE PIPELINE ================= -->
+<path d="M204 118 L246 118 M448 118 L490 118 M692 118 L734 118" class="lnk draw"/>
+
+<g class="g d1">
+  <rect x="18" y="78" width="186" height="80" class="box"/>
+  <text x="36" y="112" class="an" font-size="18">COMMIT</text>
+  <text x="36" y="136" class="ar" font-size="12">Git · feature branch · PR</text>
+</g>
+
+<g class="g d2">
+  <rect x="246" y="78" width="202" height="80" class="node"/>
+  <text x="264" y="112" class="an" font-size="18">GITHUB ACTIONS</text>
+  <text x="264" y="136" class="ar" font-size="12">runs on push, not by hand</text>
+</g>
+
+<g class="g d3">
+  <rect x="490" y="78" width="202" height="80" class="box"/>
+  <text x="508" y="112" class="an" font-size="18">POWERSHELL / BASH</text>
+  <text x="508" y="136" class="ar" font-size="12">the recurring admin task</text>
+</g>
+
+<g class="g d4">
+  <rect x="734" y="78" width="148" height="80" class="box"/>
+  <text x="752" y="112" class="an" font-size="18">HOSTS</text>
+  <text x="752" y="136" class="ar" font-size="12">servers and clients</text>
+</g>
+
+<circle cx="212" cy="118" r="7" class="token"/>
+
+<!-- ================= WHAT IT REPLACES ================= -->
+<g class="g d4">
+  <text x="18" y="198" class="ar" font-size="12" fill="#6e6e78">by hand on every host,</text>
+  <text x="18" y="216" class="ar" font-size="12" fill="#6e6e78">every time — or once, here</text>
+</g>
+
+<!-- ================= INFRASTRUCTURE AS CODE ================= -->
+<g class="g d5">
+  <rect x="18" y="234" width="212" height="96" fill="#131318" stroke="#f0c000" stroke-width="3"/>
+  <text x="36" y="268" class="an" font-size="18" fill="#f0c000">ONE TEMPLATE</text>
+  <text x="36" y="292" class="ar" font-size="12">Infrastructure as Code</text>
+  <text x="36" y="312" class="ar" font-size="12" fill="#6e6e78">checked in beside the code</text>
+</g>
+
+<path d="M230 282 L286 282 M286 220 L286 344 M286 220 L330 220 M286 282 L330 282 M286 344 L330 344"
+      class="lnk draw"/>
+
+<g class="g d6">
+  <rect x="330" y="194" width="222" height="52" class="box"/>
+  <text x="348" y="226" class="an" font-size="16">HOST · IDENTICAL</text>
+  <rect x="330" y="256" width="222" height="52" class="box"/>
+  <text x="348" y="288" class="an" font-size="16">HOST · IDENTICAL</text>
+  <rect x="330" y="318" width="222" height="52" class="box"/>
+  <text x="348" y="350" class="an" font-size="16">HOST · IDENTICAL</text>
+  <text x="330" y="392" class="ar" font-size="12">stamped from the template, so they cannot drift apart</text>
+</g>
+
+<!-- ================= TOOLING ================= -->
+<g class="g d6">
+  <rect x="596" y="194" width="286" height="176" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="616" y="222" class="ar" font-size="11" fill="#6e6e78" letter-spacing="2">TOOLING</text>
+  <text x="616" y="252" class="mo" font-size="13">PowerShell</text>
+  <text x="616" y="278" class="mo" font-size="13">Bash</text>
+  <text x="616" y="304" class="mo" font-size="13">Git / GitHub</text>
+  <text x="616" y="330" class="mo" font-size="13">GitHub Actions</text>
+  <text x="616" y="356" class="mo" font-size="13">Infrastructure as Code</text>
+</g>
+
+<g class="g d6">
+  <rect x="18" y="410" width="864" height="44" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="36" y="438" class="ar" font-size="13">Automation is the habit the AD lab was built with — PowerShell for the repeated work, Git for every change.</text>
+</g>
+</svg>

@@ -9,7 +9,18 @@
 <helmet>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap">
   <style>
-    :root { --sy: 0; --sk: -7deg; --accent: #d92020; --amp: 1; }
+    @property --lx { syntax: '<number>'; inherits: true; initial-value: 0; }
+    @property --w0 { syntax: '<number>'; inherits: true; initial-value: 1; }
+    @property --w1 { syntax: '<number>'; inherits: true; initial-value: 0; }
+    @property --w2 { syntax: '<number>'; inherits: true; initial-value: 0; }
+    @property --w3 { syntax: '<number>'; inherits: true; initial-value: 0; }
+    :root {
+      --sy: 0; --sk: -7deg; --accent: #d92020; --amp: 1;
+      --lx: -1; --lens: 12px;
+      transition: --lx .35s cubic-bezier(.2,.8,.3,1),
+        --w0 .35s cubic-bezier(.2,.8,.3,1), --w1 .35s cubic-bezier(.2,.8,.3,1),
+        --w2 .35s cubic-bezier(.2,.8,.3,1), --w3 .35s cubic-bezier(.2,.8,.3,1);
+    }
 
     body { margin: 0; font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif; }
     a { color: #f0c000; text-decoration: none; }
@@ -23,6 +34,45 @@
     .z2 { transform: translate3d(0, calc(var(--sy) * var(--amp) *  48px), 0); }
     .z3 { transform: translate3d(0, calc(var(--sy) * var(--amp) *  78px), 0); }
     .z4 { transform: translate3d(0, calc(var(--sy) * var(--amp) * -34px), 0); }
+
+    /* ---------- lenticular plate ---------- */
+    /* Four frames of one character stacked, interleaved the way a lenticular
+       sheet actually works: the lens period is divided into four bands, one per
+       frame, and each band's WIDTH is that frame's weight. Only two are ever
+       non-zero and the bands always tile the period, so the plate walks
+       a -> b -> c -> d across the pointer instead of cross-fading two stills. */
+    .lent-plate { position: absolute; aspect-ratio: 520 / 640; height: var(--ph); opacity: var(--po, .13); pointer-events: none; }
+    .lent-plate > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .lf {
+      --a: calc(var(--o) * var(--lens));
+      --z: calc((var(--o) + var(--w)) * var(--lens));
+      -webkit-mask-image: repeating-linear-gradient(90deg, transparent 0 var(--a), #000 var(--a) var(--z), transparent var(--z) var(--lens));
+              mask-image: repeating-linear-gradient(90deg, transparent 0 var(--a), #000 var(--a) var(--z), transparent var(--z) var(--lens));
+    }
+    .lf-0 { --w: var(--w0); --o: 0; }
+    .lf-1 { --w: var(--w1); --o: var(--w0); }
+    .lf-2 { --w: var(--w2); --o: calc(var(--w0) + var(--w1)); }
+    .lf-3 { --w: var(--w3); --o: calc(var(--w0) + var(--w1) + var(--w2)); }
+    /* the lens itself: a dark ridge valley, a bone highlight and a crimson/acid
+       fringe at the ridge edges — the chromatic split real lenticular plastic has */
+    .lent-lens {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden; mix-blend-mode: screen;
+      background: repeating-linear-gradient(90deg,
+        rgba(217,32,32,.11) 0 1px,
+        rgba(11,11,13,.44) 1px 2px,
+        rgba(242,237,225,.10) 2px 3px,
+        rgba(240,192,0,.07) 3px 4px,
+        transparent 4px var(--lens));
+    }
+    .lent-lens::after {
+      content: ""; position: absolute; top: 0; bottom: 0; width: 28%;
+      background: linear-gradient(100deg, transparent, rgba(242,237,225,.19), transparent);
+      left: calc(50% + var(--px) * var(--amp) * 52% - 14%);
+      transition: left .5s cubic-bezier(.2,.8,.3,1); transform: skewX(-10deg);
+    }
+    .lens-off .lent-lens { display: none; }
+    .sect-rel { position: relative; overflow: hidden; }
+    .sect-rel > *:not(.bgart) { position: relative; z-index: 1; }
 
     .lent { position: relative; }
     .lent-ghost {
@@ -96,7 +146,10 @@
 
     @media (prefers-reduced-motion: reduce) {
       .lyr, .lent-ghost, .lent-shadow { transform: none !important; }
-      .halftone, .sheen::after, .pulse, .lines i { animation: none !important; }
+      .halftone, .sheen::after, .pulse { animation: none !important; }
+      /* the speed lines exist ONLY to sweep past: freezing the animation left
+         them parked across the artboard at full opacity, so hide them outright */
+      .lines { display: none; }
     }
   </style>
 </helmet>
@@ -157,7 +210,16 @@
 
     <!-- STATUS -->
     <sc-if value="{{isStatus}}" hint-placeholder-val="{{false}}">
-    <div class="sect" style="padding: 20px 16px 28px;">
+    <div class="sect sect-rel" style="padding: 20px 16px 28px;">
+      <div class="bgart">
+        <div class="lent-plate" style="--ph: 260px; right: -30px; bottom: 0;">
+          <img class="lf lf-0" src="anime-status-a.svg" alt="">
+          <img class="lf lf-1" src="anime-status-b.svg" alt="">
+          <img class="lf lf-2" src="anime-status-c.svg" alt="">
+          <img class="lf lf-3" src="anime-status-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+      </div>
       <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">STATUS</div>
       <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 18px;"></div>
 
@@ -191,7 +253,16 @@
 
     <!-- TARGETS -->
     <sc-if value="{{isTargets}}" hint-placeholder-val="{{false}}">
-    <div class="sect" style="padding: 20px 16px 28px;">
+    <div class="sect sect-rel" style="padding: 20px 16px 28px;">
+      <div class="bgart">
+        <div class="lent-plate" style="--ph: 240px; left: -26px; bottom: 0;">
+          <img class="lf lf-0" src="anime-targets-a.svg" alt="">
+          <img class="lf lf-1" src="anime-targets-b.svg" alt="">
+          <img class="lf lf-2" src="anime-targets-c.svg" alt="">
+          <img class="lf lf-3" src="anime-targets-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+      </div>
       <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">TARGETS</div>
       <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 8px;"></div>
       <div class="arch" style="font-size: 13px; color: #8a8a94; margin-bottom: 16px;">Technical projects — tap for the briefing</div>
@@ -235,7 +306,16 @@
 
     <!-- RECORDS -->
     <sc-if value="{{isRecords}}" hint-placeholder-val="{{false}}">
-    <div class="sect" style="padding: 20px 16px 28px;">
+    <div class="sect sect-rel" style="padding: 20px 16px 28px;">
+      <div class="bgart">
+        <div class="lent-plate" style="--ph: 230px; right: -34px; bottom: 0;">
+          <img class="lf lf-0" src="anime-records-a.svg" alt="">
+          <img class="lf lf-1" src="anime-records-b.svg" alt="">
+          <img class="lf lf-2" src="anime-records-c.svg" alt="">
+          <img class="lf lf-3" src="anime-records-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+      </div>
       <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">RECORDS</div>
       <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 18px;"></div>
 
@@ -270,7 +350,16 @@
 
     <!-- ARSENAL -->
     <sc-if value="{{isArsenal}}" hint-placeholder-val="{{false}}">
-    <div class="sect" style="padding: 20px 16px 28px;">
+    <div class="sect sect-rel" style="padding: 20px 16px 28px;">
+      <div class="bgart">
+        <div class="lent-plate" style="--ph: 270px; left: -30px; bottom: 0;">
+          <img class="lf lf-0" src="anime-arsenal-a.svg" alt="">
+          <img class="lf lf-1" src="anime-arsenal-b.svg" alt="">
+          <img class="lf lf-2" src="anime-arsenal-c.svg" alt="">
+          <img class="lf lf-3" src="anime-arsenal-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+      </div>
       <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">ARSENAL</div>
       <div class="wipe" style="height: 4px; background: {{accent}}; margin: 8px 0 8px;"></div>
       <div class="arch" style="font-size: 13px; color: #8a8a94; margin-bottom: 16px;">Technical skills — tap a category to filter</div>
@@ -296,7 +385,16 @@
 
     <!-- CONTACT -->
     <sc-if value="{{isContact}}" hint-placeholder-val="{{false}}">
-    <div class="sect" style="position: relative; min-height: 100%; padding: 20px 16px 28px; box-sizing: border-box;">
+    <div class="sect sect-rel" style="min-height: 100%; padding: 20px 16px 28px; box-sizing: border-box;">
+      <div class="bgart">
+        <div class="lent-plate" style="--ph: 200px; --po: .2; right: -24px; top: 12px;">
+          <img class="lf lf-0" src="anime-contact-a.svg" alt="">
+          <img class="lf lf-1" src="anime-contact-b.svg" alt="">
+          <img class="lf lf-2" src="anime-contact-c.svg" alt="">
+          <img class="lf lf-3" src="anime-contact-d.svg" alt="">
+          <span class="lent-lens"></span>
+        </div>
+      </div>
       <div style="position: absolute; inset: 0; background: {{accent}}; clip-path: polygon(0 0, 100% 0, 100% 36%, 0 22%);"></div>
       <div style="position: relative; z-index: 2;">
         <div class="anton settle sheen" style="font-size: 40px; line-height: 1;">CONTACT</div>
@@ -337,7 +435,7 @@
 </div>
 </x-dc>
 
-<script data-dc-script data-props='{"accent":{"editor":"color","default":"#d92020","options":["#d92020","#f0c000","#2fb8c6","#8b2fd8"],"section":"Theme"},"heat":{"editor":"enum","options":["FULL","CALM"],"default":"FULL","section":"Theme"},"motion":{"editor":"enum","options":["FULL","REDUCED"],"default":"FULL","section":"Theme"},"$preview":{"width":390,"height":844}}'>
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#d92020","options":["#d92020","#f0c000","#2fb8c6","#8b2fd8"],"section":"Theme"},"heat":{"editor":"enum","options":["FULL","CALM"],"default":"FULL","section":"Theme"},"motion":{"editor":"enum","options":["FULL","REDUCED"],"default":"FULL","section":"Theme"},"lens":{"editor":"enum","options":["FINE","COARSE","OFF"],"default":"FINE","section":"Theme"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -352,6 +450,30 @@ class Component extends DCLogic {
     this.setVar('--accent', this.props.accent || '#d92020');
     this.setVar('--sk', this.props.heat === 'CALM' ? '0deg' : '-7deg');
     this.setVar('--amp', this.props.motion === 'REDUCED' ? '0' : '1');
+    var lens = this.props.lens || 'FINE';
+    this.setVar('--lens', lens === 'COARSE' ? '22px' : '12px');
+    if (lens === 'OFF' || this.props.motion === 'REDUCED') this.setLens(-1);
+    try {
+      document.documentElement.classList.toggle('lens-off', lens === 'OFF');
+    } catch (e) {}
+  }
+
+  // The lenticular: --lx plus the four frame weights. The weights are a
+  // triangular kernel over the frames, so only the two neighbours of the
+  // current phase are non-zero and they always sum to 1 — which is what makes
+  // the mask bands tile the lens period exactly.
+  setLens(x) {
+    x = Math.max(-1, Math.min(1, x));
+    this.setVar('--lx', x.toFixed(4));
+    var p = (x + 1) * 1.5;
+    for (var k = 0; k < 4; k++) {
+      var w = 1 - Math.abs(p - k);
+      this.setVar('--w' + k, w > 0 ? w.toFixed(4) : '0');
+    }
+  }
+
+  lensLive() {
+    return (this.props.lens || 'FINE') !== 'OFF' && this.props.motion !== 'REDUCED';
   }
 
   componentDidMount() {
@@ -362,7 +484,10 @@ class Component extends DCLogic {
       var el = e.target;
       if (!el || typeof el.scrollTop !== 'number') return;
       var h = window.innerHeight || 844;
-      self.setVar('--sy', Math.min(2, el.scrollTop / h).toFixed(4));
+      var sy = Math.min(2, el.scrollTop / h);
+      self.setVar('--sy', sy.toFixed(4));
+      // one full A -> B -> A sweep per 1.5 screens, so the plate flips under the thumb
+      if (self.lensLive()) self.setLens(Math.cos(sy * Math.PI / 0.75));
     };
     document.addEventListener('scroll', this.onScroll, true);
   }

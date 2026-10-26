@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="A routed three-subnet GNS3 lab: one router carrying static routes between three subnets, a firewall on the third link, and a remote client reaching the network over a VPN">
+<style>
+  .an { font-family: "Anton", Impact, "Arial Black", sans-serif; fill: #f2ede1; }
+  .ar { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; fill: #9a9aa4; }
+  .mo { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; fill: #f0c000; }
+  .box { fill: #16161c; stroke: #2c2c34; stroke-width: 3; }
+  .hot { fill: #131318; stroke: #d92020; stroke-width: 3; }
+  .lnk { stroke: #2c2c34; stroke-width: 3; fill: none; }
+  .wire { stroke: #d92020; stroke-width: 4; fill: none; }
+
+  .g { opacity: 0; animation: rise .5s cubic-bezier(.16,.9,.28,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); }
+                    to   { opacity: 1; transform: none; } }
+  .d1 { animation-delay: .05s; } .d2 { animation-delay: .15s; }
+  .d3 { animation-delay: .25s; } .d4 { animation-delay: .35s; }
+  .d5 { animation-delay: .45s; } .d6 { animation-delay: .55s; }
+
+  .draw { stroke-dasharray: 700; stroke-dashoffset: 700;
+          animation: draw .7s .25s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .flow { stroke-dasharray: 14 12; animation: flow 1s .8s linear infinite both; }
+  @keyframes flow { to { stroke-dashoffset: -52; } }
+
+  .tunnel { stroke: #f0c000; stroke-width: 3; fill: none; stroke-dasharray: 10 8;
+            animation: flow 1.4s 1s linear infinite both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .g, .draw, .flow, .tunnel { animation: none !important; opacity: 1; }
+    .draw { stroke-dashoffset: 0; }
+  }
+</style>
+
+<!-- ================= ROUTER ================= -->
+<g class="g d1">
+  <rect x="368" y="26" width="164" height="82" class="hot"/>
+  <text x="388" y="58" class="an" font-size="21">ROUTER</text>
+  <text x="388" y="80" class="ar" font-size="12">static routes</text>
+  <text x="388" y="98" class="ar" font-size="12" fill="#6e6e78">built in GNS3</text>
+</g>
+
+<!-- ================= LINKS: router down to a bus, bus to each subnet ====== -->
+<path d="M450 108 L450 150 M120 150 L780 150 M120 150 L120 196 M450 150 L450 196 M780 150 L780 196"
+      class="lnk draw"/>
+<path d="M450 108 L450 150" class="wire flow"/>
+
+<!-- ================= FIREWALL ON THE THIRD LINK ================= -->
+<g class="g d5">
+  <rect x="712" y="156" width="136" height="30" fill="#0b0b0d" stroke="#f0c000" stroke-width="3"/>
+  <text x="724" y="177" class="an" font-size="14" fill="#f0c000">FIREWALL</text>
+</g>
+
+<!-- ================= THREE SUBNETS ================= -->
+<g class="g d2">
+  <rect x="18" y="196" width="204" height="128" class="box"/>
+  <rect x="18" y="196" width="204" height="6" fill="#d92020"/>
+  <text x="36" y="230" class="an" font-size="18">SUBNET A</text>
+  <text x="36" y="252" class="mo" font-size="13">10.10.10.0/24</text>
+  <rect x="36" y="266" width="168" height="42" fill="#131318" stroke="#3a3a42" stroke-width="2"/>
+  <text x="48" y="293" class="an" font-size="14">WIN 11 CLIENT</text>
+</g>
+
+<g class="g d3">
+  <rect x="348" y="196" width="204" height="128" class="box"/>
+  <rect x="348" y="196" width="204" height="6" fill="#d92020"/>
+  <text x="366" y="230" class="an" font-size="18">SUBNET B</text>
+  <text x="366" y="252" class="mo" font-size="13">10.10.20.0/24</text>
+  <rect x="366" y="266" width="168" height="42" fill="#131318" stroke="#3a3a42" stroke-width="2"/>
+  <text x="378" y="293" class="an" font-size="14">DOMAIN CONTROLLER</text>
+</g>
+
+<g class="g d4">
+  <rect x="678" y="196" width="204" height="128" class="box"/>
+  <rect x="678" y="196" width="204" height="6" fill="#d92020"/>
+  <text x="696" y="230" class="an" font-size="18">SUBNET C</text>
+  <text x="696" y="252" class="mo" font-size="13">10.10.30.0/24</text>
+  <rect x="696" y="266" width="168" height="42" fill="#131318" stroke="#3a3a42" stroke-width="2"/>
+  <text x="708" y="293" class="an" font-size="14">SERVERS</text>
+</g>
+
+<!-- ================= VPN FROM OUTSIDE ================= -->
+<g class="g d6">
+  <rect x="618" y="368" width="264" height="76" class="box"/>
+  <text x="636" y="400" class="an" font-size="17">REMOTE CLIENT</text>
+  <text x="636" y="422" class="ar" font-size="12">off-network, over VPN</text>
+  <text x="636" y="438" class="ar" font-size="12" fill="#6e6e78">remote desktop support</text>
+</g>
+<path d="M750 368 L750 324" class="tunnel"/>
+<g class="g d6">
+  <text x="762" y="350" class="an" font-size="14" fill="#f0c000">VPN</text>
+</g>
+
+<!-- ================= WHAT IT PROVED ================= -->
+<g class="g d6">
+  <rect x="18" y="368" width="564" height="76" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="36" y="392" class="ar" font-size="11" fill="#6e6e78" letter-spacing="2">PROVEN BY</text>
+  <text x="36" y="416" class="an" font-size="16">WINDOWS 11 CLIENTS JOINED ACROSS SUBNET BOUNDARIES</text>
+  <text x="36" y="436" class="ar" font-size="12">subnetting · routing between all three · firewall rules · VPN access</text>
+</g>
+</svg>

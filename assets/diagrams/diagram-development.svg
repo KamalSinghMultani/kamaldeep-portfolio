@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="A server-rendered request loop from browser to controller to model to SQL Server and back through a view, with a React component tree on the client side">
+<style>
+  .an { font-family: "Anton", Impact, "Arial Black", sans-serif; fill: #f2ede1; }
+  .ar { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; fill: #9a9aa4; }
+  .mo { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; fill: #f0c000; }
+  .box { fill: #16161c; stroke: #2c2c34; stroke-width: 3; }
+  .node { fill: #131318; stroke: #d92020; stroke-width: 3; }
+  .lnk { stroke: #2c2c34; stroke-width: 3; fill: none; }
+  .back { stroke: #f0c000; stroke-width: 3; fill: none; }
+
+  .g { opacity: 0; animation: rise .5s cubic-bezier(.16,.9,.28,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); }
+                    to   { opacity: 1; transform: none; } }
+  .d1 { animation-delay: .05s; } .d2 { animation-delay: .15s; }
+  .d3 { animation-delay: .25s; } .d4 { animation-delay: .35s; }
+  .d5 { animation-delay: .45s; } .d6 { animation-delay: .55s; }
+
+  .draw { stroke-dasharray: 900; stroke-dashoffset: 900;
+          animation: draw .8s .25s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .flow { stroke-dasharray: 12 10; animation: flow 1.1s .9s linear infinite both; }
+  @keyframes flow { to { stroke-dashoffset: -44; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .g, .draw, .flow { animation: none !important; opacity: 1; }
+    .draw { stroke-dashoffset: 0; }
+  }
+</style>
+
+<!-- ================= REQUEST PATH ================= -->
+<path d="M204 84 L246 84 M448 84 L490 84 M692 84 L734 84" class="lnk draw"/>
+
+<g class="g d1">
+  <rect x="18" y="44" width="186" height="80" class="box"/>
+  <text x="36" y="78" class="an" font-size="18">BROWSER</text>
+  <text x="36" y="102" class="ar" font-size="12">a request for a page</text>
+</g>
+
+<g class="g d2">
+  <rect x="246" y="44" width="202" height="80" class="node"/>
+  <text x="264" y="78" class="an" font-size="18">CONTROLLER</text>
+  <text x="264" y="102" class="ar" font-size="12">routes it, checks the role</text>
+</g>
+
+<g class="g d3">
+  <rect x="490" y="44" width="202" height="80" class="box"/>
+  <text x="508" y="78" class="an" font-size="18">MODEL</text>
+  <text x="508" y="102" class="ar" font-size="12">the domain and its rules</text>
+</g>
+
+<g class="g d4">
+  <rect x="734" y="44" width="148" height="80" class="box"/>
+  <rect x="734" y="44" width="148" height="6" fill="#d92020"/>
+  <text x="752" y="82" class="an" font-size="17">SQL SERVER</text>
+  <text x="752" y="104" class="ar" font-size="12">modelled schema</text>
+</g>
+
+<!-- ================= RESPONSE PATH ================= -->
+<path d="M808 124 L808 172 L560 172" class="back flow"/>
+<path d="M424 172 L346 172 L346 196" class="back flow"/>
+
+<g class="g d5">
+  <rect x="424" y="146" width="136" height="52" fill="#131318" stroke="#f0c000" stroke-width="3"/>
+  <text x="442" y="178" class="an" font-size="17" fill="#f0c000">VIEW</text>
+</g>
+
+<g class="g d5">
+  <rect x="246" y="196" width="202" height="72" class="box"/>
+  <text x="264" y="228" class="an" font-size="17">RENDERED PAGE</text>
+  <text x="264" y="252" class="ar" font-size="12">server-side validation applied</text>
+</g>
+
+<!-- ================= ROLE GATE ================= -->
+<g class="g d6">
+  <rect x="246" y="288" width="202" height="72" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="264" y="316" class="an" font-size="15">ROLE-BASED ACCESS</text>
+  <text x="264" y="340" class="ar" font-size="12">member and administrator</text>
+  <text x="264" y="356" class="ar" font-size="12" fill="#6e6e78">separated at the controller</text>
+</g>
+
+<!-- ================= REACT TREE ================= -->
+<g class="g d6">
+  <text x="18" y="222" class="an" font-size="17">REACT / NEXT.JS</text>
+  <text x="18" y="244" class="ar" font-size="12" fill="#6e6e78">the client-side half</text>
+
+  <rect x="18" y="260" width="120" height="38" class="box"/>
+  <text x="34" y="285" class="an" font-size="14">APP</text>
+
+  <path d="M42 298 L42 330 L86 330 M42 330 L42 372 L86 372" class="lnk"/>
+
+  <rect x="86" y="312" width="130" height="36" class="box"/>
+  <text x="100" y="336" class="an" font-size="13">COMPONENT</text>
+  <rect x="86" y="354" width="130" height="36" class="box"/>
+  <text x="100" y="378" class="an" font-size="13">COMPONENT</text>
+</g>
+
+<!-- ================= REST BOUNDARY ================= -->
+<g class="g d6">
+  <rect x="490" y="220" width="392" height="140" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="510" y="248" class="ar" font-size="11" fill="#6e6e78" letter-spacing="2">ACROSS THE BOUNDARY</text>
+  <text x="510" y="278" class="an" font-size="16">REST API</text>
+  <text x="510" y="302" class="ar" font-size="12">views bound to endpoints for state and content,</text>
+  <text x="510" y="320" class="ar" font-size="12">with loading and error paths handled</text>
+  <text x="510" y="348" class="mo" font-size="13">C# · ASP.NET MVC · React · Next.js · SQL</text>
+</g>
+
+<!-- ================= SHIPPED ================= -->
+<g class="g d6">
+  <rect x="18" y="410" width="864" height="44" fill="#0b0b0d" stroke="#2c2c34" stroke-width="2"/>
+  <text x="36" y="438" class="ar" font-size="13">Shipped in FlexiFit (ASP.NET MVC, SQL Server) and HiveMind (React, Next.js, Firebase, Docker).</text>
+</g>
+</svg>
