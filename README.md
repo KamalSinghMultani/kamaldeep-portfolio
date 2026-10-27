@@ -1,8 +1,28 @@
-# Red Dot portfolio — current release
+# Portfolio and quick resume animation experiment
 
-The default page is the reversible comic portfolio. **Quick résumé** in its header opens `quick.html`, an ungated scrolling portfolio with all qualifications, project details, experience, skills, education, contact links and a one-page PDF immediately available. Six authored canvas illustrations accompany the content: a rainy city walk, a masked workshop, an operations desk, a selectable utility toolkit, a passing city, and a calling-card gesture. They share the original black, white and crimson art direction. There are no unlock requirements or scroll locks.
+The default page is the reversible comic portfolio. **Quick resume** opens
+`quick.html`, with projects, experience, skills, education, contact links, and a
+one-page PDF available without unlocking anything.
 
-`site/quick-motion.js` is inlined by the quick-page generator. Its visible scenes run at approximately 30 FPS with capped pixel density; hidden and offscreen scenes stop. Pause preserves the current pose, reduced motion starts with still illustrations, and JavaScript failure leaves the résumé readable with the original hero fallback. Scroll entrance effects enhance already-visible content. Toolkit buttons highlight a matching skill group without hiding the others. Character animation uses fixed-length two-bone joints, a side-on contact/pass walk cycle with road-matched planted feet, and eased card placement with a fixed release point. Coats move slightly while torso proportions and limb lengths remain constant. Quick view is silent.
+On `experiment/portfolio-minigame`, the quick view uses one interactive Three.js
+systems workshop with a rigged robot, blended walk/idle/greeting clips, grounded
+shadows, and a small pointer-driven camera response. **Say hello** triggers a
+one-shot greeting; **Replay** restarts the sequence. The interface uses consistent
+type, buttons, spacing, and surfaces. The former six polygon illustrations have
+been replaced by this single scene.
+
+`site/quick-motion.js` handles UI and motion preferences. The locally served
+`site/quick-workshop.mjs` handles rendering, while `quick-workshop-core.mjs` owns
+the choreography and visible-time clock. Reduced motion starts still. Pause,
+offscreen suspension, and hidden-tab suspension retain the current playhead.
+WebGL or model failure leaves a static workshop fallback and the complete resume.
+The scene is silent and pixel density is capped at 1.5.
+
+The character is the credited CC0 RobotExpressive by Tomas Laulhe (Quaternius),
+with modifications by Don McCurdy; the workshop geometry and sequence are local
+code. See [animation research and attribution](design/ANIMATION-RESEARCH.md).
+This branch is a prototype for visual review; the public Pages site stays on
+`main` until it is merged.
 
 The root/index page always loads the cinematic portfolio; quick access is an explicit link, not a remembered default mode. Tutorial discovery progress remains in local storage when switching views.
 
@@ -24,7 +44,7 @@ Pull requests to `main` run the production build, all eight JavaScript checks, a
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for local commands, branch naming, Conventional Commits, deployment setup, and rollback instructions. Generated release files stay out of Git and are rebuilt by CI. Actions use pinned commit SHAs, with weekly Dependabot updates.
 
-Canvas drawing is capped near 30 FPS for narrow scene areas and 60 FPS for wider ones. Weather and the reversible playhead still advance independently. The canvas exposes `data-render-ms` and `data-render-fps` for local profiling. Hidden/offscreen scenes and paused motion suspend rendering and audio.
+The cinematic page canvas drawing is capped near 30 FPS for narrow scene areas and 60 FPS for wider ones. Weather and the reversible playhead still advance independently. The canvas exposes `data-render-ms` and `data-render-fps` for local profiling. Hidden/offscreen scenes and paused motion suspend rendering and audio.
 
 ## Evidence and limits
 

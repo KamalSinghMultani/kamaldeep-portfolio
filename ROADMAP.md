@@ -1,4 +1,14 @@
-# CI/CD and repository workflow ? 26 October 2026
+# Quick resume workshop experiment - 26 October 2026
+
+- [x] Research public portfolio source and creator case studies.
+- [x] Replace polygon character loops with a real skinned and animated character.
+- [x] Add local workshop geometry, lighting, shadows, and a single authored sequence.
+- [x] Unify quick-view typography, spacing, buttons, and panels.
+- [x] Preserve reduced motion, pause, visibility suspension, and factual content.
+- [x] Package local model/modules, credits, and meaningful animation checks.
+- [ ] User visual review of the experimental branch before merging to main.
+
+# CI/CD and repository workflow - 26 October 2026
 
 - [x] Automated production build and all interaction, motion, audio, HTML/link/HTTP/PDF checks.
 - [x] GitHub Pages deployment after successful validation on `main`.
