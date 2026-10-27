@@ -1,5 +1,23 @@
 # Portfolio and quick resume animation experiment
 
+## Phoenix island flight
+
+The experiment now includes `/flight.html`, using the user-selected phoenix and
+island GLBs. Choose **Take flight**, then steer with **WASD / arrows**, hold
+**Shift** to boost or **Space** to slow down. **P / Escape** pauses; **R** returns
+to the starting position. Drag steering and mobile controls are also available.
+The **Island view** button switches the camera perspective.
+
+The flight controller smooths speed, turn, pitch and bank, with a separate damped
+chase camera and geometry-derived terrain clearance. The provided wing clip drives
+the original rig; the island's presentation turntable is disabled. This milestone
+focuses on free flight. Resume landing destinations and landing/takeoff transitions
+come after the flight feel is reviewed.
+
+See [flight setup and controls](design/phoenix-flight/README.md),
+[asset inspection](design/phoenix-flight/ASSET-INSPECTION.md), and
+[actual REA research](design/phoenix-flight/REA-RESEARCH.md).
+
 The default page is the reversible comic portfolio. **Quick resume** opens
 `quick.html`, with projects, experience, skills, education, contact links, and a
 one-page PDF available without unlocking anything.
@@ -40,7 +58,7 @@ Install validation dependencies with `python -m pip install -r requirements-dev.
 
 ## CI/CD and contribution workflow
 
-Pull requests to `main` run the production build, all eight JavaScript checks, and the HTML/link/HTTP/PDF release checks. Passing pushes to `main` deploy `dist/site/` to [GitHub Pages](https://kamalsinghmultani.github.io/kamaldeep-portfolio/). Manual runs from the Actions tab also support deployment from `main`.
+Pull requests to `main` run the production build, all JavaScript checks, and the HTML/link/HTTP/PDF release checks. Passing pushes to `main` deploy `dist/site/` to [GitHub Pages](https://kamalsinghmultani.github.io/kamaldeep-portfolio/). Manual runs from the Actions tab also support deployment from `main`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for local commands, branch naming, Conventional Commits, deployment setup, and rollback instructions. Generated release files stay out of Git and are rebuilt by CI. Actions use pinned commit SHAs, with weekly Dependabot updates.
 

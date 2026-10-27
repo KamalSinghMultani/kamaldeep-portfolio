@@ -1,0 +1,3927 @@
+{
+  "island": {
+    "source_file": "C:\\Users\\kamal\\Downloads\\island.glb",
+    "bytes": 11960316,
+    "sha256": "40832ce056b5cef7d388f19f881a5e63939f0e49f23ea482b780f78ec90526d1",
+    "generator": {
+      "extras": {
+        "author": "St\u00e9phane Agullo (https://sketchfab.com/sa3d)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/island-80036f71b0014f0fbae6732d2465b64d",
+        "title": "ISLAND"
+      },
+      "generator": "Sketchfab-12.68.0",
+      "version": "2.0"
+    },
+    "extensions_used": [],
+    "extensions_required": [],
+    "mesh_count": 22,
+    "vertex_count": 181690,
+    "triangles": 61963,
+    "bounds": {
+      "min": [
+        -373.49037170410156,
+        -275.0846481323242,
+        -374.6240615844727
+      ],
+      "max": [
+        375.0,
+        153.5362720489502,
+        374.6223831176757
+      ],
+      "size": [
+        748.4903717041016,
+        428.6209201812744,
+        749.2464447021484
+      ],
+      "center": [
+        0.7548141479492188,
+        -60.77418804168701,
+        -0.0008392333984943434
+      ]
+    },
+    "meshes": [
+      {
+        "node": 5,
+        "name": "0",
+        "skinned": false,
+        "vertices": 618,
+        "triangles": 206,
+        "bounds": {
+          "min": [
+            -0.6460041552782059,
+            -0.06747739389538764,
+            -0.23850107565522194
+          ],
+          "max": [
+            0.6460043042898178,
+            0.30915588140487665,
+            0.2644464187324047
+          ],
+          "size": [
+            1.2920084595680237,
+            0.3766332753002643,
+            0.5029474943876266
+          ],
+          "center": [
+            7.450580596923828e-08,
+            0.1208392437547445,
+            0.012972671538591385
+          ]
+        },
+        "materials": [
+          "MOUETTE"
+        ]
+      },
+      {
+        "node": 6,
+        "name": "1",
+        "skinned": false,
+        "vertices": 36,
+        "triangles": 12,
+        "bounds": {
+          "min": [
+            -0.014144894666969776,
+            -0.017551090568303996,
+            -0.2988473139703274
+          ],
+          "max": [
+            0.014144977321848273,
+            0.014613736420869881,
+            -0.22958330810070038
+          ],
+          "size": [
+            0.02828987198881805,
+            0.032164826989173875,
+            0.069264005869627
+          ],
+          "center": [
+            4.132743924856186e-08,
+            -0.0014686770737170575,
+            -0.2642153110355139
+          ]
+        },
+        "materials": [
+          "MOUETTE.jaune"
+        ]
+      },
+      {
+        "node": 7,
+        "name": "2",
+        "skinned": false,
+        "vertices": 12,
+        "triangles": 4,
+        "bounds": {
+          "min": [
+            -0.6510075926780701,
+            0.059625329449772814,
+            0.09145027026534082
+          ],
+          "max": [
+            0.651007741689682,
+            0.30915588140487665,
+            0.29884731397032743
+          ],
+          "size": [
+            1.302015334367752,
+            0.24953055195510385,
+            0.20739704370498663
+          ],
+          "center": [
+            7.450580596923828e-08,
+            0.18439060542732474,
+            0.19514879211783412
+          ]
+        },
+        "materials": [
+          "MOUETTE.noir"
+        ]
+      },
+      {
+        "node": 10,
+        "name": "ISLE_17_ile-sable_0",
+        "skinned": false,
+        "vertices": 855,
+        "triangles": 384,
+        "bounds": {
+          "min": [
+            -62.5,
+            -218.75,
+            -62.50000000000005
+          ],
+          "max": [
+            62.5,
+            -174.78137969970703,
+            62.49999999999995
+          ],
+          "size": [
+            125.0,
+            43.96862030029297,
+            125.0
+          ],
+          "center": [
+            0.0,
+            -196.76568984985352,
+            -4.973799150320701e-14
+          ]
+        },
+        "materials": [
+          "ile-sable"
+        ]
+      },
+      {
+        "node": 11,
+        "name": "ISLE_17_ile-herbe_0",
+        "skinned": false,
+        "vertices": 623,
+        "triangles": 209,
+        "bounds": {
+          "min": [
+            -56.25,
+            -218.75,
+            -49.99999523162847
+          ],
+          "max": [
+            43.75000476837158,
+            -179.38865661621094,
+            56.24999999999995
+          ],
+          "size": [
+            100.00000476837158,
+            39.36134338378906,
+            106.24999523162842
+          ],
+          "center": [
+            -6.249997615814209,
+            -199.06932830810547,
+            3.1250023841857413
+          ]
+        },
+        "materials": [
+          "ile-herbe"
+        ]
+      },
+      {
+        "node": 12,
+        "name": "ISLE_17_ile-roc_0",
+        "skinned": false,
+        "vertices": 1120,
+        "triangles": 375,
+        "bounds": {
+          "min": [
+            -50.0,
+            -270.81268310546875,
+            -56.25000000000005
+          ],
+          "max": [
+            56.25,
+            -159.91042137145996,
+            49.99999999999995
+          ],
+          "size": [
+            106.25,
+            110.90226173400879,
+            106.25
+          ],
+          "center": [
+            3.125,
+            -215.36155223846436,
+            -3.1250000000000497
+          ]
+        },
+        "materials": [
+          "ile-roc"
+        ]
+      },
+      {
+        "node": 13,
+        "name": "ISLE_17_roc_0",
+        "skinned": false,
+        "vertices": 25604,
+        "triangles": 8548,
+        "bounds": {
+          "min": [
+            -63.47227096557617,
+            -275.0846481323242,
+            -60.463762283325245
+          ],
+          "max": [
+            65.08935451507568,
+            -158.92526626586914,
+            58.451008796691845
+          ],
+          "size": [
+            128.56162548065186,
+            116.15938186645508,
+            118.91477108001709
+          ],
+          "center": [
+            0.8085417747497559,
+            -217.00495719909668,
+            -1.0063767433167001
+          ]
+        },
+        "materials": [
+          "material"
+        ]
+      },
+      {
+        "node": 14,
+        "name": "ISLE_17_buisson_0",
+        "skinned": false,
+        "vertices": 11040,
+        "triangles": 3680,
+        "bounds": {
+          "min": [
+            -58.325958251953125,
+            -223.3829689025879,
+            -53.354525566101124
+          ],
+          "max": [
+            46.5977144241333,
+            -173.69348526000977,
+            58.61166477203364
+          ],
+          "size": [
+            104.92367267608643,
+            49.689483642578125,
+            111.96619033813477
+          ],
+          "center": [
+            -5.864121913909912,
+            -198.53822708129883,
+            2.628569602966259
+          ]
+        },
+        "materials": [
+          "buisson"
+        ]
+      },
+      {
+        "node": 15,
+        "name": "ISLE_17_maison-toit_0",
+        "skinned": false,
+        "vertices": 1562,
+        "triangles": 896,
+        "bounds": {
+          "min": [
+            -30.7289981842041,
+            -209.80131149291992,
+            -45.591583251953175
+          ],
+          "max": [
+            43.80889892578125,
+            -170.89603424072266,
+            18.656145334243732
+          ],
+          "size": [
+            74.53789710998535,
+            38.905277252197266,
+            64.2477285861969
+          ],
+          "center": [
+            6.539950370788574,
+            -190.3486728668213,
+            -13.467718958854721
+          ]
+        },
+        "materials": [
+          "maison-toit"
+        ]
+      },
+      {
+        "node": 16,
+        "name": "ISLE_17_maison-bois_0",
+        "skinned": false,
+        "vertices": 4080,
+        "triangles": 1880,
+        "bounds": {
+          "min": [
+            -59.593749046325684,
+            -247.99230575561523,
+            -56.78124904632573
+          ],
+          "max": [
+            49.281249046325684,
+            -172.36204147338867,
+            30.09374856948848
+          ],
+          "size": [
+            108.87499809265137,
+            75.63026428222656,
+            86.87499761581421
+          ],
+          "center": [
+            -5.15625,
+            -210.17717361450195,
+            -13.343750238418627
+          ]
+        },
+        "materials": [
+          "maison-bois"
+        ]
+      },
+      {
+        "node": 17,
+        "name": "ISLE_17_maison-light_0",
+        "skinned": false,
+        "vertices": 1136,
+        "triangles": 416,
+        "bounds": {
+          "min": [
+            -59.72226619720459,
+            -244.24530029296875,
+            -56.90976142883306
+          ],
+          "max": [
+            49.40976142883301,
+            -171.6678237915039,
+            30.222265720367385
+          ],
+          "size": [
+            109.1320276260376,
+            72.57747650146484,
+            87.13202714920044
+          ],
+          "center": [
+            -5.156252384185791,
+            -207.95656204223633,
+            -13.343747854232836
+          ]
+        },
+        "materials": [
+          "maison-light"
+        ]
+      },
+      {
+        "node": 18,
+        "name": "ISLE_17_phare-light_0",
+        "skinned": false,
+        "vertices": 48,
+        "triangles": 16,
+        "bounds": {
+          "min": [
+            45.589661598205566,
+            -204.4020652770996,
+            -42.01305389404301
+          ],
+          "max": [
+            48.12654972076416,
+            -202.39110946655273,
+            -39.47616815567021
+          ],
+          "size": [
+            2.5368881225585938,
+            2.010955810546875,
+            2.5368857383728027
+          ],
+          "center": [
+            46.85810565948486,
+            -203.39658737182617,
+            -40.74461102485661
+          ]
+        },
+        "materials": [
+          "phare-light"
+        ]
+      },
+      {
+        "node": 19,
+        "name": "ISLE_17_maison-or_0",
+        "skinned": false,
+        "vertices": 3852,
+        "triangles": 1288,
+        "bounds": {
+          "min": [
+            36.756935119628906,
+            -246.47600173950195,
+            -10.970087051391657
+          ],
+          "max": [
+            40.58829307556152,
+            -244.39680099487305,
+            -7.481766343116815
+          ],
+          "size": [
+            3.831357955932617,
+            2.0792007446289062,
+            3.4883207082748413
+          ],
+          "center": [
+            38.672614097595215,
+            -245.4364013671875,
+            -9.225926697254236
+          ]
+        },
+        "materials": [
+          "maison-or"
+        ]
+      },
+      {
+        "node": 20,
+        "name": "ISLE_17_bato-bois_0",
+        "skinned": false,
+        "vertices": 586,
+        "triangles": 228,
+        "bounds": {
+          "min": [
+            -7.844672799110413,
+            -219.12450790405273,
+            -61.7023897171021
+          ],
+          "max": [
+            40.87909698486328,
+            -209.55829620361328,
+            55.80465793609614
+          ],
+          "size": [
+            48.723769783973694,
+            9.566211700439453,
+            117.50704765319824
+          ],
+          "center": [
+            16.517212092876434,
+            -214.341402053833,
+            -2.9488658905029794
+          ]
+        },
+        "materials": [
+          "bato-bois"
+        ]
+      },
+      {
+        "node": 21,
+        "name": "ISLE_17_bato-voile_0",
+        "skinned": false,
+        "vertices": 504,
+        "triangles": 168,
+        "bounds": {
+          "min": [
+            -4.75639671087265,
+            -216.40117645263672,
+            -60.6763887405396
+          ],
+          "max": [
+            40.398335456848145,
+            -209.55829620361328,
+            53.31826686859126
+          ],
+          "size": [
+            45.154732167720795,
+            6.8428802490234375,
+            113.99465560913086
+          ],
+          "center": [
+            17.820969372987747,
+            -212.979736328125,
+            -3.679060935974171
+          ]
+        },
+        "materials": [
+          "bato-voile"
+        ]
+      },
+      {
+        "node": 22,
+        "name": "ISLE_17_palmier-tronc_0",
+        "skinned": false,
+        "vertices": 44688,
+        "triangles": 14924,
+        "bounds": {
+          "min": [
+            -61.16726875305176,
+            -221.19876861572266,
+            -54.23060417175298
+          ],
+          "max": [
+            46.17844104766846,
+            -164.90482330322266,
+            58.9220523834228
+          ],
+          "size": [
+            107.34570980072021,
+            56.2939453125,
+            113.15265655517578
+          ],
+          "center": [
+            -7.49441385269165,
+            -193.05179595947266,
+            2.345724105834911
+          ]
+        },
+        "materials": [
+          "palmier-tronc"
+        ]
+      },
+      {
+        "node": 23,
+        "name": "ISLE_17_palmier-feuilles_0",
+        "skinned": false,
+        "vertices": 61992,
+        "triangles": 20664,
+        "bounds": {
+          "min": [
+            -65.1264762878418,
+            -216.82497024536133,
+            -59.690942764282276
+          ],
+          "max": [
+            50.31430721282959,
+            -164.5343780517578,
+            63.41151714324946
+          ],
+          "size": [
+            115.44078350067139,
+            52.290592193603516,
+            123.10245990753174
+          ],
+          "center": [
+            -7.4060845375061035,
+            -190.67967414855957,
+            1.8602871894835928
+          ]
+        },
+        "materials": [
+          "palmier-feuilles"
+        ]
+      },
+      {
+        "node": 24,
+        "name": "ISLE_17_ile-o_0",
+        "skinned": false,
+        "vertices": 568,
+        "triangles": 390,
+        "bounds": {
+          "min": [
+            -373.49037170410156,
+            -247.44998931884766,
+            -374.62238311767584
+          ],
+          "max": [
+            375.0,
+            -218.12499999999991,
+            374.6223831176757
+          ],
+          "size": [
+            748.4903717041016,
+            29.32498931884774,
+            749.2447662353516
+          ],
+          "center": [
+            0.7548141479492188,
+            -232.78749465942377,
+            -5.684341886080802e-14
+          ]
+        },
+        "materials": [
+          "ile-o"
+        ]
+      },
+      {
+        "node": 25,
+        "name": "ISLE_17_ile-ecume_0",
+        "skinned": false,
+        "vertices": 431,
+        "triangles": 230,
+        "bounds": {
+          "min": [
+            -71.45237445831299,
+            -247.44998931884766,
+            -65.64458370208744
+          ],
+          "max": [
+            65.07075309753418,
+            -218.12499999999997,
+            63.64130496978755
+          ],
+          "size": [
+            136.52312755584717,
+            29.324989318847685,
+            129.285888671875
+          ],
+          "center": [
+            -3.1908106803894043,
+            -232.78749465942383,
+            -1.0016393661499485
+          ]
+        },
+        "materials": [
+          "ile-ecume"
+        ]
+      },
+      {
+        "node": 26,
+        "name": "ISLE_17_ile-nuage_0",
+        "skinned": false,
+        "vertices": 18360,
+        "triangles": 6120,
+        "bounds": {
+          "min": [
+            -358.0293273925781,
+            -212.15637207031256,
+            -353.2734298706055
+          ],
+          "max": [
+            358.07899475097656,
+            76.63747787475586,
+            358.9680099487304
+          ],
+          "size": [
+            716.1083221435547,
+            288.7938499450684,
+            712.2414398193359
+          ],
+          "center": [
+            0.02483367919921875,
+            -67.75944709777835,
+            2.847290039062443
+          ]
+        },
+        "materials": [
+          "ile-nuage"
+        ]
+      },
+      {
+        "node": 27,
+        "name": "ISLE_17_LUNE_0",
+        "skinned": false,
+        "vertices": 3750,
+        "triangles": 1250,
+        "bounds": {
+          "min": [
+            -372.97794342041016,
+            -198.37142944335932,
+            -374.6240615844727
+          ],
+          "max": [
+            373.2041931152344,
+            153.5362720489502,
+            372.38296508789057
+          ],
+          "size": [
+            746.1821365356445,
+            351.9077014923095,
+            747.0070266723633
+          ],
+          "center": [
+            0.11312484741210938,
+            -22.41757869720456,
+            -1.1205482482910725
+          ]
+        },
+        "materials": [
+          "LUNE"
+        ]
+      },
+      {
+        "node": 28,
+        "name": "ISLE_17_ile-lave_0",
+        "skinned": false,
+        "vertices": 225,
+        "triangles": 75,
+        "bounds": {
+          "min": [
+            -49.22912120819092,
+            -264.12527084350586,
+            -46.54210567474371
+          ],
+          "max": [
+            2.8291356563568115,
+            -260.22193908691406,
+            2.1791923046111474
+          ],
+          "size": [
+            52.05825686454773,
+            3.903331756591797,
+            48.72129797935486
+          ],
+          "center": [
+            -23.199992775917053,
+            -262.17360496520996,
+            -22.18145668506628
+          ]
+        },
+        "materials": [
+          "ile-lave"
+        ]
+      }
+    ],
+    "images": [
+      {
+        "mime": "image/jpeg",
+        "embedded": true,
+        "bytes": 380674,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      {
+        "mime": "image/jpeg",
+        "embedded": true,
+        "bytes": 984156,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      {
+        "mime": "image/jpeg",
+        "embedded": true,
+        "bytes": 405704,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      {
+        "mime": "image/jpeg",
+        "embedded": true,
+        "bytes": 1029792,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      {
+        "mime": "image/jpeg",
+        "embedded": true,
+        "bytes": 140889,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      {
+        "mime": "image/png",
+        "embedded": true,
+        "bytes": 1487611,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "mime": "image/jpeg",
+        "embedded": true,
+        "bytes": 820306,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB"
+      }
+    ],
+    "materials": [
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          0.2177136814,
+          0.2573057854,
+          0.1869694792
+        ],
+        "name": "MOUETTE",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.38613813174,
+            0.13188740699999998,
+            0.24065205791999997,
+            1.0
+          ],
+          "metallicFactor": 0.6,
+          "roughnessFactor": 0.19999999999999996
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          0.1542627969,
+          0.1173828808,
+          0.0790406657
+        ],
+        "name": "MOUETTE.jaune",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.42456075161999995,
+            0.18178943837999997,
+            0.00017638985999999997,
+            1.0
+          ],
+          "metallicFactor": 0.6,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "MOUETTE.noir",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.022745,
+            0.022745,
+            0.022745,
+            1.0
+          ],
+          "metallicFactor": 0.6,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 0
+        },
+        "name": "ile-sable",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 0
+        },
+        "name": "ile-herbe",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 0
+        },
+        "name": "ile-roc",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 1
+        },
+        "name": "material",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 1
+        },
+        "name": "buisson",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 1
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "maison-toit",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "maison-bois",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "maison-light",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "phare-light",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "maison-or",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "roughnessFactor": 0.19999999999999996
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "bato-bois",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "bato-voile",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 3
+        },
+        "name": "palmier-tronc",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 3
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 3
+        },
+        "name": "palmier-feuilles",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 3
+          },
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 4
+        },
+        "name": "ile-o",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.2,
+            0.2,
+            0.2,
+            1.0
+          ],
+          "baseColorTexture": {
+            "index": 4
+          },
+          "metallicFactor": 0.8,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 4
+        },
+        "name": "ile-ecume",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.2,
+            0.2,
+            0.2,
+            1.0
+          ],
+          "baseColorTexture": {
+            "index": 4
+          },
+          "metallicFactor": 0.2,
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "alphaMode": "BLEND",
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 6
+        },
+        "name": "ile-nuage",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 5
+          },
+          "roughnessFactor": 0.4
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "name": "LUNE",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0.0
+        }
+      },
+      {
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 2
+        },
+        "name": "ile-lave",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.4468368902,
+          "roughnessFactor": 0.2909679878
+        }
+      }
+    ],
+    "animations": [
+      {
+        "name": "Base Stack",
+        "duration": 38.400001525878906,
+        "channels": 7,
+        "targets": [
+          {
+            "node": 4,
+            "name": "MOUETTE_DEF",
+            "path": "rotation"
+          },
+          {
+            "node": 9,
+            "name": "ISLE_17",
+            "path": "translation"
+          },
+          {
+            "node": 9,
+            "name": "ISLE_17",
+            "path": "rotation"
+          },
+          {
+            "node": 8,
+            "name": "ROT",
+            "path": "rotation"
+          },
+          {
+            "node": 5,
+            "name": "0",
+            "path": "weights"
+          },
+          {
+            "node": 6,
+            "name": "1",
+            "path": "weights"
+          },
+          {
+            "node": 7,
+            "name": "2",
+            "path": "weights"
+          }
+        ]
+      }
+    ],
+    "joint_counts": [],
+    "cameras": [],
+    "animation_samples": [
+      {
+        "time": 0,
+        "bounds": {
+          "min": [
+            -373.49037170410156,
+            -275.0846481323242,
+            -374.6240615844727
+          ],
+          "max": [
+            375.0,
+            153.5362720489502,
+            374.6223831176757
+          ],
+          "size": [
+            748.4903717041016,
+            428.6209201812744,
+            749.2464447021484
+          ],
+          "center": [
+            0.7548141479492188,
+            -60.77418804168701,
+            -0.0008392333984943434
+          ]
+        },
+        "landmarks": {
+          "ROT": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ISLE_17": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      {
+        "time": 9.6,
+        "bounds": {
+          "min": [
+            -373.7350995803116,
+            -52.985555572474134,
+            -452.7088341811945
+          ],
+          "max": [
+            373.5999718924752,
+            379.0015173558836,
+            291.36384905332096
+          ],
+          "size": [
+            747.3350714727868,
+            431.98707292835775,
+            744.0726832345155
+          ],
+          "center": [
+            -0.06756384391820802,
+            163.00798089170473,
+            -80.67249256393677
+          ]
+        },
+        "landmarks": {
+          "ROT": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ISLE_17": [
+            -15.61193990378721,
+            218.70698187197925,
+            -53.524095259017486
+          ]
+        }
+      },
+      {
+        "time": 19.2,
+        "bounds": {
+          "min": [
+            -323.67936735094304,
+            -124.98525672476484,
+            -395.86742313736886
+          ],
+          "max": [
+            404.4186883644815,
+            397.27266732402194,
+            344.63329564045296
+          ],
+          "size": [
+            728.0980557154246,
+            522.2579240487868,
+            740.5007187778218
+          ],
+          "center": [
+            40.369660506769236,
+            136.14370529962855,
+            -25.61706374845795
+          ]
+        },
+        "landmarks": {
+          "ROT": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ISLE_17": [
+            103.37941126343759,
+            221.71721852175554,
+            -64.39878317915603
+          ]
+        }
+      },
+      {
+        "time": 28.8,
+        "bounds": {
+          "min": [
+            -372.80218604104033,
+            -92.25757969101502,
+            -562.0401720525963
+          ],
+          "max": [
+            376.9023065803634,
+            335.6893855822625,
+            187.62947103927107
+          ],
+          "size": [
+            749.7044926214037,
+            427.94696527327756,
+            749.6696430918673
+          ],
+          "center": [
+            2.050060269661543,
+            121.71590294562374,
+            -187.20535050666263
+          ]
+        },
+        "landmarks": {
+          "ROT": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ISLE_17": [
+            -2.7154660597366,
+            182.5860612173854,
+            -185.95389335468442
+          ]
+        }
+      },
+      {
+        "time": 38.4,
+        "bounds": {
+          "min": [
+            -370.29693107563685,
+            -275.28949385719045,
+            -374.62409826608615
+          ],
+          "max": [
+            378.11518289115344,
+            153.50169569199872,
+            374.62235994138723
+          ],
+          "size": [
+            748.4121139667902,
+            428.7911895491892,
+            749.2464582074733
+          ],
+          "center": [
+            3.9091259077582947,
+            -60.893899082595865,
+            -0.0008691623494598844
+          ]
+        },
+        "landmarks": {
+          "ROT": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ISLE_17": [
+            -5.17783568808848e-05,
+            5.296061309792802e-06,
+            -0.00013853179384348274
+          ]
+        }
+      }
+    ],
+    "recommended_normalization": {
+      "scale": 1.866809003874327,
+      "translation": [
+        -1.5093930651113723,
+        407.1977139700876,
+        1.8787131657133382
+      ],
+      "reference_sea_surface_y": -218.125,
+      "reference_solid_node": "ISLE_17_roc_0"
+    }
+  },
+  "phoenix_bird": {
+    "source_file": "C:\\Users\\kamal\\Downloads\\phoenix_bird.glb",
+    "bytes": 1630364,
+    "sha256": "cb68b7f4827d6f7bee47ca7b8bb882437b9945d00c974338e55a720f53b5d6f0",
+    "generator": {
+      "extras": {
+        "author": "NORBERTO-3D (https://sketchfab.com/norberto3d)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/phoenix-bird-844ba0cf144a413ea92c779f18912042",
+        "title": "phoenix bird"
+      },
+      "generator": "Sketchfab-12.65.0",
+      "version": "2.0"
+    },
+    "extensions_used": [],
+    "extensions_required": [],
+    "mesh_count": 2,
+    "vertex_count": 3485,
+    "triangles": 4064,
+    "bounds": {
+      "min": [
+        -717.2937025204192,
+        -74.06400692171667,
+        -241.56825470517035
+      ],
+      "max": [
+        169.09140766190075,
+        598.9758147239536,
+        244.72965958944246
+      ],
+      "size": [
+        886.38511018232,
+        673.0398216456703,
+        486.29791429461284
+      ],
+      "center": [
+        -274.1011474292592,
+        262.45590390111846,
+        1.580702442136058
+      ]
+    },
+    "meshes": [
+      {
+        "node": 7,
+        "name": "Object_7",
+        "skinned": true,
+        "vertices": 2283,
+        "triangles": 2654,
+        "bounds": {
+          "min": [
+            -717.2937025204192,
+            -17.356524185831457,
+            -60.39096124608122
+          ],
+          "max": [
+            169.09140766190075,
+            295.03523994673765,
+            28.457242202335514
+          ],
+          "size": [
+            886.38511018232,
+            312.3917641325691,
+            88.84820344841674
+          ],
+          "center": [
+            -274.1011474292592,
+            138.8393578804531,
+            -15.966859521872852
+          ]
+        },
+        "materials": [
+          "MatI_Ride_FengHuang_01a"
+        ]
+      },
+      {
+        "node": 8,
+        "name": "Object_8",
+        "skinned": true,
+        "vertices": 1202,
+        "triangles": 1410,
+        "bounds": {
+          "min": [
+            -560.7658305755562,
+            -74.06400692171667,
+            -241.56825470517035
+          ],
+          "max": [
+            41.75938165463427,
+            598.9758147239536,
+            244.72965958944246
+          ],
+          "size": [
+            602.5252122301904,
+            673.0398216456703,
+            486.29791429461284
+          ],
+          "center": [
+            -259.50322446046096,
+            262.45590390111846,
+            1.580702442136058
+          ]
+        },
+        "materials": [
+          "MatI_Ride_FengHuang_01b"
+        ]
+      }
+    ],
+    "images": [
+      {
+        "mime": "image/png",
+        "embedded": true,
+        "bytes": 379655,
+        "dimensions": [
+          512,
+          512
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "mime": "image/png",
+        "embedded": true,
+        "bytes": 25346,
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGB"
+      },
+      {
+        "mime": "image/png",
+        "embedded": true,
+        "bytes": 333061,
+        "dimensions": [
+          512,
+          512
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "mime": "image/png",
+        "embedded": true,
+        "bytes": 31391,
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGB"
+      }
+    ],
+    "materials": [
+      {
+        "alphaMode": "BLEND",
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 1
+        },
+        "name": "MatI_Ride_FengHuang_01a",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0.0
+        }
+      },
+      {
+        "alphaMode": "BLEND",
+        "doubleSided": true,
+        "emissiveFactor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "emissiveTexture": {
+          "index": 3
+        },
+        "name": "MatI_Ride_FengHuang_01b",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 2
+          },
+          "metallicFactor": 0.0
+        }
+      }
+    ],
+    "animations": [
+      {
+        "name": "Take 001",
+        "duration": 3.3333332538604736,
+        "channels": 264,
+        "targets": [
+          {
+            "node": 15,
+            "name": "B_Jaw_07",
+            "path": "translation"
+          },
+          {
+            "node": 15,
+            "name": "B_Jaw_07",
+            "path": "scale"
+          },
+          {
+            "node": 15,
+            "name": "B_Jaw_07",
+            "path": "rotation"
+          },
+          {
+            "node": 16,
+            "name": "B_Hair_1_08",
+            "path": "translation"
+          },
+          {
+            "node": 16,
+            "name": "B_Hair_1_08",
+            "path": "scale"
+          },
+          {
+            "node": 16,
+            "name": "B_Hair_1_08",
+            "path": "rotation"
+          },
+          {
+            "node": 17,
+            "name": "B_Hair_2_09",
+            "path": "translation"
+          },
+          {
+            "node": 17,
+            "name": "B_Hair_2_09",
+            "path": "scale"
+          },
+          {
+            "node": 17,
+            "name": "B_Hair_2_09",
+            "path": "rotation"
+          },
+          {
+            "node": 18,
+            "name": "B_Hair_0_010",
+            "path": "translation"
+          },
+          {
+            "node": 18,
+            "name": "B_Hair_0_010",
+            "path": "scale"
+          },
+          {
+            "node": 18,
+            "name": "B_Hair_0_010",
+            "path": "rotation"
+          },
+          {
+            "node": 22,
+            "name": "B_Hair_47_014",
+            "path": "translation"
+          },
+          {
+            "node": 22,
+            "name": "B_Hair_47_014",
+            "path": "scale"
+          },
+          {
+            "node": 22,
+            "name": "B_Hair_47_014",
+            "path": "rotation"
+          },
+          {
+            "node": 21,
+            "name": "B_Hair_46_013",
+            "path": "translation"
+          },
+          {
+            "node": 21,
+            "name": "B_Hair_46_013",
+            "path": "scale"
+          },
+          {
+            "node": 21,
+            "name": "B_Hair_46_013",
+            "path": "rotation"
+          },
+          {
+            "node": 20,
+            "name": "B_Hair_45_012",
+            "path": "translation"
+          },
+          {
+            "node": 20,
+            "name": "B_Hair_45_012",
+            "path": "scale"
+          },
+          {
+            "node": 20,
+            "name": "B_Hair_45_012",
+            "path": "rotation"
+          },
+          {
+            "node": 19,
+            "name": "B_Hair_44_011",
+            "path": "translation"
+          },
+          {
+            "node": 19,
+            "name": "B_Hair_44_011",
+            "path": "scale"
+          },
+          {
+            "node": 19,
+            "name": "B_Hair_44_011",
+            "path": "rotation"
+          },
+          {
+            "node": 26,
+            "name": "B_Hair_6_018",
+            "path": "translation"
+          },
+          {
+            "node": 26,
+            "name": "B_Hair_6_018",
+            "path": "scale"
+          },
+          {
+            "node": 26,
+            "name": "B_Hair_6_018",
+            "path": "rotation"
+          },
+          {
+            "node": 25,
+            "name": "B_Hair_5_017",
+            "path": "translation"
+          },
+          {
+            "node": 25,
+            "name": "B_Hair_5_017",
+            "path": "scale"
+          },
+          {
+            "node": 25,
+            "name": "B_Hair_5_017",
+            "path": "rotation"
+          },
+          {
+            "node": 24,
+            "name": "B_Hair_4_016",
+            "path": "translation"
+          },
+          {
+            "node": 24,
+            "name": "B_Hair_4_016",
+            "path": "scale"
+          },
+          {
+            "node": 24,
+            "name": "B_Hair_4_016",
+            "path": "rotation"
+          },
+          {
+            "node": 23,
+            "name": "B_Hair_3_015",
+            "path": "translation"
+          },
+          {
+            "node": 23,
+            "name": "B_Hair_3_015",
+            "path": "scale"
+          },
+          {
+            "node": 23,
+            "name": "B_Hair_3_015",
+            "path": "rotation"
+          },
+          {
+            "node": 14,
+            "name": "b_Head_06",
+            "path": "translation"
+          },
+          {
+            "node": 14,
+            "name": "b_Head_06",
+            "path": "scale"
+          },
+          {
+            "node": 14,
+            "name": "b_Head_06",
+            "path": "rotation"
+          },
+          {
+            "node": 13,
+            "name": "b_Neck_2_05",
+            "path": "translation"
+          },
+          {
+            "node": 13,
+            "name": "b_Neck_2_05",
+            "path": "scale"
+          },
+          {
+            "node": 13,
+            "name": "b_Neck_2_05",
+            "path": "rotation"
+          },
+          {
+            "node": 12,
+            "name": "b_Neck_1_04",
+            "path": "translation"
+          },
+          {
+            "node": 12,
+            "name": "b_Neck_1_04",
+            "path": "scale"
+          },
+          {
+            "node": 12,
+            "name": "b_Neck_1_04",
+            "path": "rotation"
+          },
+          {
+            "node": 11,
+            "name": "b_Neck_0_03",
+            "path": "translation"
+          },
+          {
+            "node": 11,
+            "name": "b_Neck_0_03",
+            "path": "scale"
+          },
+          {
+            "node": 11,
+            "name": "b_Neck_0_03",
+            "path": "rotation"
+          },
+          {
+            "node": 29,
+            "name": "B_Hair_9_021",
+            "path": "translation"
+          },
+          {
+            "node": 29,
+            "name": "B_Hair_9_021",
+            "path": "scale"
+          },
+          {
+            "node": 29,
+            "name": "B_Hair_9_021",
+            "path": "rotation"
+          },
+          {
+            "node": 28,
+            "name": "B_Hair_8_020",
+            "path": "translation"
+          },
+          {
+            "node": 28,
+            "name": "B_Hair_8_020",
+            "path": "scale"
+          },
+          {
+            "node": 28,
+            "name": "B_Hair_8_020",
+            "path": "rotation"
+          },
+          {
+            "node": 27,
+            "name": "B_Hair_7_019",
+            "path": "translation"
+          },
+          {
+            "node": 27,
+            "name": "B_Hair_7_019",
+            "path": "scale"
+          },
+          {
+            "node": 27,
+            "name": "B_Hair_7_019",
+            "path": "rotation"
+          },
+          {
+            "node": 32,
+            "name": "B_Hair_12_024",
+            "path": "translation"
+          },
+          {
+            "node": 32,
+            "name": "B_Hair_12_024",
+            "path": "scale"
+          },
+          {
+            "node": 32,
+            "name": "B_Hair_12_024",
+            "path": "rotation"
+          },
+          {
+            "node": 31,
+            "name": "B_Hair_11_023",
+            "path": "translation"
+          },
+          {
+            "node": 31,
+            "name": "B_Hair_11_023",
+            "path": "scale"
+          },
+          {
+            "node": 31,
+            "name": "B_Hair_11_023",
+            "path": "rotation"
+          },
+          {
+            "node": 30,
+            "name": "B_Hair_10_022",
+            "path": "translation"
+          },
+          {
+            "node": 30,
+            "name": "B_Hair_10_022",
+            "path": "scale"
+          },
+          {
+            "node": 30,
+            "name": "B_Hair_10_022",
+            "path": "rotation"
+          },
+          {
+            "node": 35,
+            "name": "B_Hair_15_027",
+            "path": "translation"
+          },
+          {
+            "node": 35,
+            "name": "B_Hair_15_027",
+            "path": "scale"
+          },
+          {
+            "node": 35,
+            "name": "B_Hair_15_027",
+            "path": "rotation"
+          },
+          {
+            "node": 34,
+            "name": "B_Hair_14_026",
+            "path": "translation"
+          },
+          {
+            "node": 34,
+            "name": "B_Hair_14_026",
+            "path": "scale"
+          },
+          {
+            "node": 34,
+            "name": "B_Hair_14_026",
+            "path": "rotation"
+          },
+          {
+            "node": 33,
+            "name": "B_Hair_13_025",
+            "path": "translation"
+          },
+          {
+            "node": 33,
+            "name": "B_Hair_13_025",
+            "path": "scale"
+          },
+          {
+            "node": 33,
+            "name": "B_Hair_13_025",
+            "path": "rotation"
+          },
+          {
+            "node": 10,
+            "name": "B_Spine_02",
+            "path": "translation"
+          },
+          {
+            "node": 10,
+            "name": "B_Spine_02",
+            "path": "scale"
+          },
+          {
+            "node": 10,
+            "name": "B_Spine_02",
+            "path": "rotation"
+          },
+          {
+            "node": 42,
+            "name": "B_Tail_5_034",
+            "path": "translation"
+          },
+          {
+            "node": 42,
+            "name": "B_Tail_5_034",
+            "path": "scale"
+          },
+          {
+            "node": 42,
+            "name": "B_Tail_5_034",
+            "path": "rotation"
+          },
+          {
+            "node": 41,
+            "name": "B_Tail_4_033",
+            "path": "translation"
+          },
+          {
+            "node": 41,
+            "name": "B_Tail_4_033",
+            "path": "scale"
+          },
+          {
+            "node": 41,
+            "name": "B_Tail_4_033",
+            "path": "rotation"
+          },
+          {
+            "node": 40,
+            "name": "B_Tail_3_032",
+            "path": "translation"
+          },
+          {
+            "node": 40,
+            "name": "B_Tail_3_032",
+            "path": "scale"
+          },
+          {
+            "node": 40,
+            "name": "B_Tail_3_032",
+            "path": "rotation"
+          },
+          {
+            "node": 39,
+            "name": "B_Tail_2_031",
+            "path": "translation"
+          },
+          {
+            "node": 39,
+            "name": "B_Tail_2_031",
+            "path": "scale"
+          },
+          {
+            "node": 39,
+            "name": "B_Tail_2_031",
+            "path": "rotation"
+          },
+          {
+            "node": 38,
+            "name": "B_Tail_1_030",
+            "path": "translation"
+          },
+          {
+            "node": 38,
+            "name": "B_Tail_1_030",
+            "path": "scale"
+          },
+          {
+            "node": 38,
+            "name": "B_Tail_1_030",
+            "path": "rotation"
+          },
+          {
+            "node": 37,
+            "name": "B_Tail_0_029",
+            "path": "translation"
+          },
+          {
+            "node": 37,
+            "name": "B_Tail_0_029",
+            "path": "scale"
+          },
+          {
+            "node": 37,
+            "name": "B_Tail_0_029",
+            "path": "rotation"
+          },
+          {
+            "node": 45,
+            "name": "b_Left_Foot_037",
+            "path": "translation"
+          },
+          {
+            "node": 45,
+            "name": "b_Left_Foot_037",
+            "path": "scale"
+          },
+          {
+            "node": 45,
+            "name": "b_Left_Foot_037",
+            "path": "rotation"
+          },
+          {
+            "node": 44,
+            "name": "B_Left_Calf_036",
+            "path": "translation"
+          },
+          {
+            "node": 44,
+            "name": "B_Left_Calf_036",
+            "path": "scale"
+          },
+          {
+            "node": 44,
+            "name": "B_Left_Calf_036",
+            "path": "rotation"
+          },
+          {
+            "node": 43,
+            "name": "B_Left_Thigh_035",
+            "path": "translation"
+          },
+          {
+            "node": 43,
+            "name": "B_Left_Thigh_035",
+            "path": "scale"
+          },
+          {
+            "node": 43,
+            "name": "B_Left_Thigh_035",
+            "path": "rotation"
+          },
+          {
+            "node": 48,
+            "name": "b_Right_Foot_039",
+            "path": "translation"
+          },
+          {
+            "node": 48,
+            "name": "b_Right_Foot_039",
+            "path": "scale"
+          },
+          {
+            "node": 48,
+            "name": "b_Right_Foot_039",
+            "path": "rotation"
+          },
+          {
+            "node": 47,
+            "name": "B_Right_Calf_00",
+            "path": "translation"
+          },
+          {
+            "node": 47,
+            "name": "B_Right_Calf_00",
+            "path": "scale"
+          },
+          {
+            "node": 47,
+            "name": "B_Right_Calf_00",
+            "path": "rotation"
+          },
+          {
+            "node": 46,
+            "name": "B_Right_Thigh_038",
+            "path": "translation"
+          },
+          {
+            "node": 46,
+            "name": "B_Right_Thigh_038",
+            "path": "scale"
+          },
+          {
+            "node": 46,
+            "name": "B_Right_Thigh_038",
+            "path": "rotation"
+          },
+          {
+            "node": 54,
+            "name": "B_Hair_27_045",
+            "path": "translation"
+          },
+          {
+            "node": 54,
+            "name": "B_Hair_27_045",
+            "path": "scale"
+          },
+          {
+            "node": 54,
+            "name": "B_Hair_27_045",
+            "path": "rotation"
+          },
+          {
+            "node": 53,
+            "name": "B_Hair_26_044",
+            "path": "translation"
+          },
+          {
+            "node": 53,
+            "name": "B_Hair_26_044",
+            "path": "scale"
+          },
+          {
+            "node": 53,
+            "name": "B_Hair_26_044",
+            "path": "rotation"
+          },
+          {
+            "node": 52,
+            "name": "B_Hair_25_043",
+            "path": "translation"
+          },
+          {
+            "node": 52,
+            "name": "B_Hair_25_043",
+            "path": "scale"
+          },
+          {
+            "node": 52,
+            "name": "B_Hair_25_043",
+            "path": "rotation"
+          },
+          {
+            "node": 51,
+            "name": "B_Hair_24_042",
+            "path": "translation"
+          },
+          {
+            "node": 51,
+            "name": "B_Hair_24_042",
+            "path": "scale"
+          },
+          {
+            "node": 51,
+            "name": "B_Hair_24_042",
+            "path": "rotation"
+          },
+          {
+            "node": 50,
+            "name": "B_Hair_23_041",
+            "path": "translation"
+          },
+          {
+            "node": 50,
+            "name": "B_Hair_23_041",
+            "path": "scale"
+          },
+          {
+            "node": 50,
+            "name": "B_Hair_23_041",
+            "path": "rotation"
+          },
+          {
+            "node": 49,
+            "name": "B_Hair_22_040",
+            "path": "translation"
+          },
+          {
+            "node": 49,
+            "name": "B_Hair_22_040",
+            "path": "scale"
+          },
+          {
+            "node": 49,
+            "name": "B_Hair_22_040",
+            "path": "rotation"
+          },
+          {
+            "node": 60,
+            "name": "B_Hair_33_051",
+            "path": "translation"
+          },
+          {
+            "node": 60,
+            "name": "B_Hair_33_051",
+            "path": "scale"
+          },
+          {
+            "node": 60,
+            "name": "B_Hair_33_051",
+            "path": "rotation"
+          },
+          {
+            "node": 59,
+            "name": "B_Hair_32_050",
+            "path": "translation"
+          },
+          {
+            "node": 59,
+            "name": "B_Hair_32_050",
+            "path": "scale"
+          },
+          {
+            "node": 59,
+            "name": "B_Hair_32_050",
+            "path": "rotation"
+          },
+          {
+            "node": 58,
+            "name": "B_Hair_31_049",
+            "path": "translation"
+          },
+          {
+            "node": 58,
+            "name": "B_Hair_31_049",
+            "path": "scale"
+          },
+          {
+            "node": 58,
+            "name": "B_Hair_31_049",
+            "path": "rotation"
+          },
+          {
+            "node": 57,
+            "name": "B_Hair_30_048",
+            "path": "translation"
+          },
+          {
+            "node": 57,
+            "name": "B_Hair_30_048",
+            "path": "scale"
+          },
+          {
+            "node": 57,
+            "name": "B_Hair_30_048",
+            "path": "rotation"
+          },
+          {
+            "node": 56,
+            "name": "B_Hair_29_047",
+            "path": "translation"
+          },
+          {
+            "node": 56,
+            "name": "B_Hair_29_047",
+            "path": "scale"
+          },
+          {
+            "node": 56,
+            "name": "B_Hair_29_047",
+            "path": "rotation"
+          },
+          {
+            "node": 55,
+            "name": "B_Hair_28_046",
+            "path": "translation"
+          },
+          {
+            "node": 55,
+            "name": "B_Hair_28_046",
+            "path": "scale"
+          },
+          {
+            "node": 55,
+            "name": "B_Hair_28_046",
+            "path": "rotation"
+          },
+          {
+            "node": 65,
+            "name": "B_Hair_43_056",
+            "path": "translation"
+          },
+          {
+            "node": 65,
+            "name": "B_Hair_43_056",
+            "path": "scale"
+          },
+          {
+            "node": 65,
+            "name": "B_Hair_43_056",
+            "path": "rotation"
+          },
+          {
+            "node": 64,
+            "name": "B_Hair_42_055",
+            "path": "translation"
+          },
+          {
+            "node": 64,
+            "name": "B_Hair_42_055",
+            "path": "scale"
+          },
+          {
+            "node": 64,
+            "name": "B_Hair_42_055",
+            "path": "rotation"
+          },
+          {
+            "node": 63,
+            "name": "B_Hair_41_054",
+            "path": "translation"
+          },
+          {
+            "node": 63,
+            "name": "B_Hair_41_054",
+            "path": "scale"
+          },
+          {
+            "node": 63,
+            "name": "B_Hair_41_054",
+            "path": "rotation"
+          },
+          {
+            "node": 62,
+            "name": "B_Hair_40_053",
+            "path": "translation"
+          },
+          {
+            "node": 62,
+            "name": "B_Hair_40_053",
+            "path": "scale"
+          },
+          {
+            "node": 62,
+            "name": "B_Hair_40_053",
+            "path": "rotation"
+          },
+          {
+            "node": 61,
+            "name": "B_Hair_39_052",
+            "path": "translation"
+          },
+          {
+            "node": 61,
+            "name": "B_Hair_39_052",
+            "path": "scale"
+          },
+          {
+            "node": 61,
+            "name": "B_Hair_39_052",
+            "path": "rotation"
+          },
+          {
+            "node": 70,
+            "name": "B_Hair_38_061",
+            "path": "translation"
+          },
+          {
+            "node": 70,
+            "name": "B_Hair_38_061",
+            "path": "scale"
+          },
+          {
+            "node": 70,
+            "name": "B_Hair_38_061",
+            "path": "rotation"
+          },
+          {
+            "node": 69,
+            "name": "B_Hair_37_060",
+            "path": "translation"
+          },
+          {
+            "node": 69,
+            "name": "B_Hair_37_060",
+            "path": "scale"
+          },
+          {
+            "node": 69,
+            "name": "B_Hair_37_060",
+            "path": "rotation"
+          },
+          {
+            "node": 68,
+            "name": "B_Hair_36_059",
+            "path": "translation"
+          },
+          {
+            "node": 68,
+            "name": "B_Hair_36_059",
+            "path": "scale"
+          },
+          {
+            "node": 68,
+            "name": "B_Hair_36_059",
+            "path": "rotation"
+          },
+          {
+            "node": 67,
+            "name": "B_Hair_35_058",
+            "path": "translation"
+          },
+          {
+            "node": 67,
+            "name": "B_Hair_35_058",
+            "path": "scale"
+          },
+          {
+            "node": 67,
+            "name": "B_Hair_35_058",
+            "path": "rotation"
+          },
+          {
+            "node": 66,
+            "name": "B_Hair_34_057",
+            "path": "translation"
+          },
+          {
+            "node": 66,
+            "name": "B_Hair_34_057",
+            "path": "scale"
+          },
+          {
+            "node": 66,
+            "name": "B_Hair_34_057",
+            "path": "rotation"
+          },
+          {
+            "node": 73,
+            "name": "B_Hair_21_064",
+            "path": "translation"
+          },
+          {
+            "node": 73,
+            "name": "B_Hair_21_064",
+            "path": "scale"
+          },
+          {
+            "node": 73,
+            "name": "B_Hair_21_064",
+            "path": "rotation"
+          },
+          {
+            "node": 72,
+            "name": "B_Hair_20_063",
+            "path": "translation"
+          },
+          {
+            "node": 72,
+            "name": "B_Hair_20_063",
+            "path": "scale"
+          },
+          {
+            "node": 72,
+            "name": "B_Hair_20_063",
+            "path": "rotation"
+          },
+          {
+            "node": 71,
+            "name": "B_Hair_19_062",
+            "path": "translation"
+          },
+          {
+            "node": 71,
+            "name": "B_Hair_19_062",
+            "path": "scale"
+          },
+          {
+            "node": 71,
+            "name": "B_Hair_19_062",
+            "path": "rotation"
+          },
+          {
+            "node": 76,
+            "name": "B_Hair_18_067",
+            "path": "translation"
+          },
+          {
+            "node": 76,
+            "name": "B_Hair_18_067",
+            "path": "scale"
+          },
+          {
+            "node": 76,
+            "name": "B_Hair_18_067",
+            "path": "rotation"
+          },
+          {
+            "node": 75,
+            "name": "B_Hair_17_066",
+            "path": "translation"
+          },
+          {
+            "node": 75,
+            "name": "B_Hair_17_066",
+            "path": "scale"
+          },
+          {
+            "node": 75,
+            "name": "B_Hair_17_066",
+            "path": "rotation"
+          },
+          {
+            "node": 74,
+            "name": "B_Hair_16_065",
+            "path": "translation"
+          },
+          {
+            "node": 74,
+            "name": "B_Hair_16_065",
+            "path": "scale"
+          },
+          {
+            "node": 74,
+            "name": "B_Hair_16_065",
+            "path": "rotation"
+          },
+          {
+            "node": 77,
+            "name": "B_Right_Wing_9_068",
+            "path": "translation"
+          },
+          {
+            "node": 77,
+            "name": "B_Right_Wing_9_068",
+            "path": "scale"
+          },
+          {
+            "node": 77,
+            "name": "B_Right_Wing_9_068",
+            "path": "rotation"
+          },
+          {
+            "node": 78,
+            "name": "B_Left_Wing_9_069",
+            "path": "translation"
+          },
+          {
+            "node": 78,
+            "name": "B_Left_Wing_9_069",
+            "path": "scale"
+          },
+          {
+            "node": 78,
+            "name": "B_Left_Wing_9_069",
+            "path": "rotation"
+          },
+          {
+            "node": 36,
+            "name": "B_Pelvis_028",
+            "path": "translation"
+          },
+          {
+            "node": 36,
+            "name": "B_Pelvis_028",
+            "path": "scale"
+          },
+          {
+            "node": 36,
+            "name": "B_Pelvis_028",
+            "path": "rotation"
+          },
+          {
+            "node": 84,
+            "name": "B_Left_Wing_8_075",
+            "path": "translation"
+          },
+          {
+            "node": 84,
+            "name": "B_Left_Wing_8_075",
+            "path": "scale"
+          },
+          {
+            "node": 84,
+            "name": "B_Left_Wing_8_075",
+            "path": "rotation"
+          },
+          {
+            "node": 83,
+            "name": "B_Left_Wing_7_074",
+            "path": "translation"
+          },
+          {
+            "node": 83,
+            "name": "B_Left_Wing_7_074",
+            "path": "scale"
+          },
+          {
+            "node": 83,
+            "name": "B_Left_Wing_7_074",
+            "path": "rotation"
+          },
+          {
+            "node": 82,
+            "name": "B_Left_Wing_6_073",
+            "path": "translation"
+          },
+          {
+            "node": 82,
+            "name": "B_Left_Wing_6_073",
+            "path": "scale"
+          },
+          {
+            "node": 82,
+            "name": "B_Left_Wing_6_073",
+            "path": "rotation"
+          },
+          {
+            "node": 81,
+            "name": "B_Left_Wing_2_072",
+            "path": "translation"
+          },
+          {
+            "node": 81,
+            "name": "B_Left_Wing_2_072",
+            "path": "scale"
+          },
+          {
+            "node": 81,
+            "name": "B_Left_Wing_2_072",
+            "path": "rotation"
+          },
+          {
+            "node": 87,
+            "name": "B_Left_Wing_5_078",
+            "path": "translation"
+          },
+          {
+            "node": 87,
+            "name": "B_Left_Wing_5_078",
+            "path": "scale"
+          },
+          {
+            "node": 87,
+            "name": "B_Left_Wing_5_078",
+            "path": "rotation"
+          },
+          {
+            "node": 86,
+            "name": "B_Left_Wing_4_077",
+            "path": "translation"
+          },
+          {
+            "node": 86,
+            "name": "B_Left_Wing_4_077",
+            "path": "scale"
+          },
+          {
+            "node": 86,
+            "name": "B_Left_Wing_4_077",
+            "path": "rotation"
+          },
+          {
+            "node": 85,
+            "name": "B_Left_Wing_3_076",
+            "path": "translation"
+          },
+          {
+            "node": 85,
+            "name": "B_Left_Wing_3_076",
+            "path": "scale"
+          },
+          {
+            "node": 85,
+            "name": "B_Left_Wing_3_076",
+            "path": "rotation"
+          },
+          {
+            "node": 80,
+            "name": "B_Left_Wing_1_071",
+            "path": "translation"
+          },
+          {
+            "node": 80,
+            "name": "B_Left_Wing_1_071",
+            "path": "scale"
+          },
+          {
+            "node": 80,
+            "name": "B_Left_Wing_1_071",
+            "path": "rotation"
+          },
+          {
+            "node": 79,
+            "name": "B_Left_Wing_0_070",
+            "path": "translation"
+          },
+          {
+            "node": 79,
+            "name": "B_Left_Wing_0_070",
+            "path": "scale"
+          },
+          {
+            "node": 79,
+            "name": "B_Left_Wing_0_070",
+            "path": "rotation"
+          },
+          {
+            "node": 92,
+            "name": "B_Right_Wing_5_083",
+            "path": "translation"
+          },
+          {
+            "node": 92,
+            "name": "B_Right_Wing_5_083",
+            "path": "scale"
+          },
+          {
+            "node": 92,
+            "name": "B_Right_Wing_5_083",
+            "path": "rotation"
+          },
+          {
+            "node": 91,
+            "name": "B_Right_Wing_4_082",
+            "path": "translation"
+          },
+          {
+            "node": 91,
+            "name": "B_Right_Wing_4_082",
+            "path": "scale"
+          },
+          {
+            "node": 91,
+            "name": "B_Right_Wing_4_082",
+            "path": "rotation"
+          },
+          {
+            "node": 90,
+            "name": "B_Right_Wing_3_081",
+            "path": "translation"
+          },
+          {
+            "node": 90,
+            "name": "B_Right_Wing_3_081",
+            "path": "scale"
+          },
+          {
+            "node": 90,
+            "name": "B_Right_Wing_3_081",
+            "path": "rotation"
+          },
+          {
+            "node": 96,
+            "name": "B_Right_Wing_8_087",
+            "path": "translation"
+          },
+          {
+            "node": 96,
+            "name": "B_Right_Wing_8_087",
+            "path": "scale"
+          },
+          {
+            "node": 96,
+            "name": "B_Right_Wing_8_087",
+            "path": "rotation"
+          },
+          {
+            "node": 95,
+            "name": "B_Right_Wing_7_086",
+            "path": "translation"
+          },
+          {
+            "node": 95,
+            "name": "B_Right_Wing_7_086",
+            "path": "scale"
+          },
+          {
+            "node": 95,
+            "name": "B_Right_Wing_7_086",
+            "path": "rotation"
+          },
+          {
+            "node": 94,
+            "name": "B_Right_Wing_6_085",
+            "path": "translation"
+          },
+          {
+            "node": 94,
+            "name": "B_Right_Wing_6_085",
+            "path": "scale"
+          },
+          {
+            "node": 94,
+            "name": "B_Right_Wing_6_085",
+            "path": "rotation"
+          },
+          {
+            "node": 93,
+            "name": "B_Right_Wing_2_084",
+            "path": "translation"
+          },
+          {
+            "node": 93,
+            "name": "B_Right_Wing_2_084",
+            "path": "scale"
+          },
+          {
+            "node": 93,
+            "name": "B_Right_Wing_2_084",
+            "path": "rotation"
+          },
+          {
+            "node": 89,
+            "name": "B_Right_Wing_1_080",
+            "path": "translation"
+          },
+          {
+            "node": 89,
+            "name": "B_Right_Wing_1_080",
+            "path": "scale"
+          },
+          {
+            "node": 89,
+            "name": "B_Right_Wing_1_080",
+            "path": "rotation"
+          },
+          {
+            "node": 88,
+            "name": "B_Right_Wing_0_079",
+            "path": "translation"
+          },
+          {
+            "node": 88,
+            "name": "B_Right_Wing_0_079",
+            "path": "scale"
+          },
+          {
+            "node": 88,
+            "name": "B_Right_Wing_0_079",
+            "path": "rotation"
+          },
+          {
+            "node": 9,
+            "name": "b_Root_01",
+            "path": "translation"
+          },
+          {
+            "node": 9,
+            "name": "b_Root_01",
+            "path": "scale"
+          },
+          {
+            "node": 9,
+            "name": "b_Root_01",
+            "path": "rotation"
+          }
+        ]
+      }
+    ],
+    "joint_counts": [
+      89
+    ],
+    "cameras": [],
+    "animation_samples": [
+      {
+        "time": 0.0,
+        "bounds": {
+          "min": [
+            -717.2933687682414,
+            -74.06392179623631,
+            -241.568271010863
+          ],
+          "max": [
+            169.09142080638182,
+            598.975782862874,
+            244.72965032259611
+          ],
+          "size": [
+            886.3847895746233,
+            673.0397046591103,
+            486.2979213334591
+          ],
+          "center": [
+            -274.1009739809298,
+            262.45593053331885,
+            1.5806896558665642
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -41.22199297130362,
+            116.22088623046871,
+            -14.986836643067953
+          ],
+          "b_Head_06": [
+            131.81978290384276,
+            219.94253506662932,
+            -24.27290656086446
+          ],
+          "b_Right_Foot_039": [
+            -116.62725108439199,
+            19.487337895066464,
+            13.683690326494006
+          ],
+          "B_Left_Wing_0_070": [
+            -10.43327742203618,
+            139.24434497111682,
+            -40.73311051126903
+          ],
+          "B_Right_Wing_0_079": [
+            -7.901995150285003,
+            139.24433608515608,
+            7.057863608039603
+          ]
+        }
+      },
+      {
+        "time": 0.05,
+        "bounds": {
+          "min": [
+            -754.8784873371582,
+            -60.761414727575506,
+            -229.81365458254646
+          ],
+          "max": [
+            172.67315308988185,
+            599.9953823679735,
+            246.33342821780766
+          ],
+          "size": [
+            927.55164042704,
+            660.756797095549,
+            476.14708280035416
+          ],
+          "center": [
+            -291.1026671236382,
+            269.61698382019904,
+            8.259886817630601
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -39.34852064399695,
+            117.93972757205697,
+            -15.08606633906396
+          ],
+          "b_Head_06": [
+            135.42065993229065,
+            219.09938749757387,
+            -23.90023580517513
+          ],
+          "b_Right_Foot_039": [
+            -114.6056070873814,
+            20.674274822285696,
+            13.329914088723475
+          ],
+          "B_Left_Wing_0_070": [
+            -8.208858847551358,
+            140.5840022900425,
+            -40.74642456137187
+          ],
+          "B_Right_Wing_0_079": [
+            -5.8310684494665,
+            140.58344994890805,
+            7.052433657807216
+          ]
+        }
+      },
+      {
+        "time": 0.1,
+        "bounds": {
+          "min": [
+            -761.3466180591357,
+            -68.98259331040624,
+            -240.661095077635
+          ],
+          "max": [
+            179.7151901703952,
+            601.7434852250125,
+            250.25362740003638
+          ],
+          "size": [
+            941.0618082295309,
+            670.7260785354188,
+            490.9147224776714
+          ],
+          "center": [
+            -290.81571394437026,
+            266.3804459573031,
+            4.796266161200691
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -35.52416163840383,
+            121.44844045523355,
+            -15.288626033153818
+          ],
+          "b_Head_06": [
+            142.49951908718813,
+            217.57213565313563,
+            -23.145811678680385
+          ],
+          "b_Right_Foot_039": [
+            -110.59652308522907,
+            23.250808753394313,
+            12.64105328653815
+          ],
+          "B_Left_Wing_0_070": [
+            -3.7299467374045134,
+            143.36855241433733,
+            -40.77454457959367
+          ],
+          "B_Right_Wing_0_079": [
+            -1.6525275304944453,
+            143.36855878189314,
+            7.038308573614911
+          ]
+        }
+      },
+      {
+        "time": 0.15,
+        "bounds": {
+          "min": [
+            -745.1631390986519,
+            -73.34326953506252,
+            -246.89941532655342
+          ],
+          "max": [
+            190.17348732856487,
+            587.1449104897313,
+            249.15263700627204
+          ],
+          "size": [
+            935.3366264272167,
+            660.4881800247938,
+            496.0520523328255
+          ],
+          "center": [
+            -277.4948258850435,
+            256.9008204773344,
+            1.1266108398593104
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -29.377317540013216,
+            127.08794675321258,
+            -15.614197680158574
+          ],
+          "b_Head_06": [
+            152.99028722089875,
+            216.1077552275885,
+            -22.022064026839644
+          ],
+          "b_Right_Foot_039": [
+            -104.718415615867,
+            27.98944190662793,
+            11.642255495136386
+          ],
+          "B_Left_Wing_0_070": [
+            3.243917218895543,
+            148.08077247585211,
+            -40.83425740261525
+          ],
+          "B_Right_Wing_0_079": [
+            4.892884165258872,
+            148.0792437332212,
+            6.995287026752927
+          ]
+        }
+      },
+      {
+        "time": 0.2,
+        "bounds": {
+          "min": [
+            -704.9714313442234,
+            -115.66877112247889,
+            -260.2743112736565
+          ],
+          "max": [
+            201.20059614584446,
+            553.2223635821755,
+            238.33003515918296
+          ],
+          "size": [
+            906.1720274900679,
+            668.8911347046544,
+            498.60434643283946
+          ],
+          "center": [
+            -251.8854175991895,
+            218.7767962298483,
+            -10.972138057236776
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -22.394378442383857,
+            133.49453705378338,
+            -15.984053649589178
+          ],
+          "b_Head_06": [
+            164.04027497566224,
+            215.37127341564863,
+            -20.838099464246227
+          ],
+          "b_Right_Foot_039": [
+            -98.54777385832075,
+            33.98708121654897,
+            10.606811627806222
+          ],
+          "B_Left_Wing_0_070": [
+            10.95908512025085,
+            153.66023234438006,
+            -40.91971052448205
+          ],
+          "B_Right_Wing_0_079": [
+            12.172785049991619,
+            153.66022402559187,
+            6.922860704334724
+          ]
+        }
+      },
+      {
+        "time": 0.25,
+        "bounds": {
+          "min": [
+            -653.2320827867738,
+            -153.27588753118175,
+            -343.4659485610932
+          ],
+          "max": [
+            214.1248089513849,
+            498.8203045679349,
+            316.5884709126882
+          ],
+          "size": [
+            867.3568917381588,
+            652.0961920991167,
+            660.0544194737814
+          ],
+          "center": [
+            -219.55363691769446,
+            172.77220851837657,
+            -13.438738824202517
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -13.073469832980967,
+            142.04612657000575,
+            -16.47774171438616
+          ],
+          "b_Head_06": [
+            176.94506426969738,
+            217.8209149987939,
+            -19.742206268941903
+          ],
+          "b_Right_Foot_039": [
+            -92.08773750646937,
+            43.781175518436655,
+            9.487302586300993
+          ],
+          "B_Left_Wing_0_070": [
+            20.676064837659055,
+            161.9107009262871,
+            -41.12045644877185
+          ],
+          "B_Right_Wing_0_079": [
+            21.466696889727835,
+            161.9107453526199,
+            6.730982681121843
+          ]
+        }
+      },
+      {
+        "time": 0.3,
+        "bounds": {
+          "min": [
+            -619.8629149940317,
+            -169.99928018302035,
+            -492.6680332611878
+          ],
+          "max": [
+            221.12525578001694,
+            381.89440643126636,
+            452.39072699326255
+          ],
+          "size": [
+            840.9881707740486,
+            551.8936866142867,
+            945.0587602544504
+          ],
+          "center": [
+            -199.3688296070074,
+            105.94756312412301,
+            -20.138653133962634
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -7.778203161790283,
+            146.9043415133982,
+            -16.758209001968524
+          ],
+          "b_Head_06": [
+            183.96465050539004,
+            220.1927030935815,
+            -19.185354040249305
+          ],
+          "b_Right_Foot_039": [
+            -88.85547918128205,
+            49.924728375040026,
+            8.87638486704222
+          ],
+          "B_Left_Wing_0_070": [
+            25.927372304176643,
+            167.03267601329932,
+            -41.24654949613953
+          ],
+          "B_Right_Wing_0_079": [
+            26.50213547580964,
+            167.03267368814664,
+            6.607965526112905
+          ]
+        }
+      },
+      {
+        "time": 0.35,
+        "bounds": {
+          "min": [
+            -574.4078032178861,
+            -195.99984230211027,
+            -447.21689610815
+          ],
+          "max": [
+            230.57294807817306,
+            286.346171024866,
+            457.78360584766745
+          ],
+          "size": [
+            804.9807512960592,
+            482.3460133269763,
+            905.0005019558175
+          ],
+          "center": [
+            -171.91742756985653,
+            45.17316436137787,
+            5.2833548697587105
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -0.5939824448208276,
+            153.4956048896046,
+            -17.13872598496515
+          ],
+          "b_Head_06": [
+            193.58243121795556,
+            223.62519425598572,
+            -18.27112257929894
+          ],
+          "b_Right_Foot_039": [
+            -84.699217232617,
+            58.735085551224586,
+            7.962835554543028
+          ],
+          "B_Left_Wing_0_070": [
+            32.686890239406374,
+            174.58959079495014,
+            -41.3941065961752
+          ],
+          "B_Right_Wing_0_079": [
+            32.93593389910149,
+            174.5897779598883,
+            6.463207193372818
+          ]
+        }
+      },
+      {
+        "time": 0.4,
+        "bounds": {
+          "min": [
+            -642.8559692468986,
+            -364.5347140929995,
+            -220.228491640378
+          ],
+          "max": [
+            235.62597035145896,
+            271.74198920222886,
+            190.12946468398505
+          ],
+          "size": [
+            878.4819395983575,
+            636.2767032952283,
+            410.35795632436304
+          ],
+          "center": [
+            -203.6149994477198,
+            -46.39636244538531,
+            -15.049513478196474
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            3.524558291009946,
+            157.27421521562238,
+            -17.35686720819405
+          ],
+          "b_Head_06": [
+            198.9539625664583,
+            225.81844209371238,
+            -17.667854344049555
+          ],
+          "b_Right_Foot_039": [
+            -83.06745969709966,
+            64.6256200070024,
+            7.39426017608791
+          ],
+          "B_Left_Wing_0_070": [
+            36.16430621583602,
+            179.5015667357101,
+            -41.470907604422294
+          ],
+          "B_Right_Wing_0_079": [
+            36.21160226408393,
+            179.50155773753144,
+            6.387035575605116
+          ]
+        }
+      },
+      {
+        "time": 0.45,
+        "bounds": {
+          "min": [
+            -708.1862282530948,
+            -337.29704203335825,
+            -231.70102649957812
+          ],
+          "max": [
+            235.4415094056367,
+            272.45299831706757,
+            202.45749116626666
+          ],
+          "size": [
+            943.6277376587315,
+            609.7500403504258,
+            434.1585176658448
+          ],
+          "center": [
+            -236.37235942372905,
+            -32.42202185814534,
+            -14.621767666655728
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            3.7019749272419147,
+            157.4369888675032,
+            -17.366264197207986
+          ],
+          "b_Head_06": [
+            199.00809588129076,
+            226.40832673555735,
+            -17.694835218478143
+          ],
+          "b_Right_Foot_039": [
+            -83.9322387862408,
+            65.7458156821823,
+            7.395026180161385
+          ],
+          "B_Left_Wing_0_070": [
+            35.9191330163037,
+            180.26946015915237,
+            -41.48322314181302
+          ],
+          "B_Right_Wing_0_079": [
+            35.97143624909768,
+            180.26937614937643,
+            6.3747100509626256
+          ]
+        }
+      },
+      {
+        "time": 0.5,
+        "bounds": {
+          "min": [
+            -734.8699163635538,
+            -278.1442305552673,
+            -252.35555009153097
+          ],
+          "max": [
+            229.18663865608582,
+            269.0629491960648,
+            234.19073271215578
+          ],
+          "size": [
+            964.0565550196396,
+            547.2071797513321,
+            486.5462828036867
+          ],
+          "center": [
+            -252.84163885373397,
+            -4.5406406796012675,
+            -9.082408689687597
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            0.20528510496100105,
+            154.2288970947265,
+            -17.181059717269537
+          ],
+          "b_Head_06": [
+            193.04446033671232,
+            228.71287920654078,
+            -18.94975105283608
+          ],
+          "b_Right_Foot_039": [
+            -86.80732441973251,
+            62.07830958792374,
+            8.231593594212143
+          ],
+          "B_Left_Wing_0_070": [
+            31.358767945988347,
+            178.2582087983639,
+            -41.53157425584253
+          ],
+          "B_Right_Wing_0_079": [
+            31.77023042062343,
+            178.25822163666442,
+            6.324614897125448
+          ]
+        }
+      },
+      {
+        "time": 0.55,
+        "bounds": {
+          "min": [
+            -741.0639363241061,
+            -259.095002989398,
+            -268.75416001192923
+          ],
+          "max": [
+            219.9174322730947,
+            261.44970884868525,
+            259.9692090279181
+          ],
+          "size": [
+            960.9813685972008,
+            520.5447118380832,
+            528.7233690398473
+          ],
+          "center": [
+            -260.57325202550567,
+            1.1773529296436323,
+            -4.392475492005559
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -5.685325629636479,
+            148.82448030833456,
+            -16.869059639176108
+          ],
+          "b_Head_06": [
+            183.96443646025034,
+            229.64168022590627,
+            -20.429966818225832
+          ],
+          "b_Right_Foot_039": [
+            -90.28673192121913,
+            54.786625747798524,
+            9.33435747663437
+          ],
+          "B_Left_Wing_0_070": [
+            24.59883367724628,
+            173.65964211992392,
+            -41.50600502449191
+          ],
+          "B_Right_Wing_0_079": [
+            25.470720433019068,
+            173.6583996185719,
+            6.344014924855617
+          ]
+        }
+      },
+      {
+        "time": 0.6,
+        "bounds": {
+          "min": [
+            -739.3013191633062,
+            -244.0530362802753,
+            -277.2856462788892
+          ],
+          "max": [
+            209.55722418742127,
+            261.75408932431134,
+            275.73858330170725
+          ],
+          "size": [
+            948.8585433507275,
+            505.80712560458664,
+            553.0242295805965
+          ],
+          "center": [
+            -264.87204748794244,
+            8.850526522018015,
+            -0.7735314885909759
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -12.733844476861563,
+            142.35772951724147,
+            -16.49573019510644
+          ],
+          "b_Head_06": [
+            173.83629587485356,
+            228.4643768160562,
+            -21.589521572827888
+          ],
+          "b_Right_Foot_039": [
+            -94.43081590947581,
+            46.333164929267596,
+            10.354130312593714
+          ],
+          "B_Left_Wing_0_070": [
+            16.987001793881014,
+            167.62218888739346,
+            -41.380931167069605
+          ],
+          "B_Right_Wing_0_079": [
+            18.266396323839867,
+            167.62218001926462,
+            6.4599330905756025
+          ]
+        }
+      },
+      {
+        "time": 0.65,
+        "bounds": {
+          "min": [
+            -738.1222708051203,
+            -194.80366419407937,
+            -372.8903074731671
+          ],
+          "max": [
+            198.81967751649412,
+            266.306137006208,
+            403.86928961589143
+          ],
+          "size": [
+            936.9419483216144,
+            461.1098012002874,
+            776.7595970890586
+          ],
+          "center": [
+            -269.65129664431305,
+            35.75123640606432,
+            15.489491071362153
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -20.609439330409185,
+            135.1321500392312,
+            -16.078594125512293
+          ],
+          "b_Head_06": [
+            163.16747078352017,
+            225.44402045136326,
+            -22.06967630343325
+          ],
+          "b_Right_Foot_039": [
+            -99.77525244008481,
+            37.80135258248584,
+            11.122960948007577
+          ],
+          "B_Left_Wing_0_070": [
+            9.123260326748046,
+            160.22231534343987,
+            -41.125459004260364
+          ],
+          "B_Right_Wing_0_079": [
+            10.655783675743683,
+            160.22257589541715,
+            6.707962817452779
+          ]
+        }
+      },
+      {
+        "time": 0.7,
+        "bounds": {
+          "min": [
+            -727.3778312023057,
+            -57.79955175235305,
+            -586.4106892527566
+          ],
+          "max": [
+            188.0695987522995,
+            279.05842584583183,
+            542.2687122271042
+          ],
+          "size": [
+            915.4474299546052,
+            336.8579775981849,
+            1128.6794014798606
+          ],
+          "center": [
+            -269.6541162250031,
+            110.6294370467394,
+            -22.070988512826204
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -28.319621034062838,
+            128.05834745045826,
+            -15.670219272371243
+          ],
+          "b_Head_06": [
+            152.26124119926914,
+            222.811948794742,
+            -22.3872549538782
+          ],
+          "b_Right_Foot_039": [
+            -105.37414260288652,
+            30.073643786763405,
+            11.81715127519665
+          ],
+          "B_Left_Wing_0_070": [
+            1.5828182765228827,
+            152.79767022503563,
+            -40.863574084410665
+          ],
+          "B_Right_Wing_0_079": [
+            3.3348406942615103,
+            152.7976588407081,
+            6.962304365788566
+          ]
+        }
+      },
+      {
+        "time": 0.75,
+        "bounds": {
+          "min": [
+            -708.9249108635158,
+            -93.79161089812592,
+            -419.42359272479166
+          ],
+          "max": [
+            176.57887126972346,
+            524.7281148732582,
+            394.88883791671424
+          ],
+          "size": [
+            885.5037821332393,
+            618.5197257713841,
+            814.3124306415059
+          ],
+          "center": [
+            -266.1730197968962,
+            215.46825198756613,
+            -12.267377404038712
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -36.199808249296474,
+            120.82855606079097,
+            -15.252839965314958
+          ],
+          "b_Head_06": [
+            139.99413183493144,
+            221.4742550560709,
+            -22.803848332766872
+          ],
+          "b_Right_Foot_039": [
+            -111.72006745758256,
+            23.000495282801875,
+            12.60381016071811
+          ],
+          "B_Left_Wing_0_070": [
+            -5.904120900139292,
+            144.8861456255347,
+            -40.63588370629952
+          ],
+          "B_Right_Wing_0_079": [
+            -3.8843493424426323,
+            144.88628987112344,
+            7.179448889460137
+          ]
+        }
+      },
+      {
+        "time": 0.8,
+        "bounds": {
+          "min": [
+            -702.8168993449864,
+            -98.01845511566974,
+            -298.2757117093231
+          ],
+          "max": [
+            171.39851340722967,
+            588.7575854711007,
+            296.020568984387
+          ],
+          "size": [
+            874.215412752216,
+            686.7760405867705,
+            594.2962806937101
+          ],
+          "center": [
+            -265.70919296887837,
+            245.3695651777155,
+            -1.1275713624680463
+          ]
+        },
+        "landmarks": {
+          "b_Root_01": [
+            -39.494322863986206,
+            117.80596226319298,
+            -15.078343828432784
+          ],
+          "b_Head_06": [
+            134.37303360820417,
+            221.15549017227028,
+            -23.222985682635144
+          ],
+          "b_Right_Foot_039": [
+            -114.62755773431536,
+            20.36472824432839,
+            13.06084205414913
+          ],
+          "B_Left_Wing_0_070": [
+            -8.956513120404043,
+            141.41054443318845,
+            -40.59618818507341
+          ],
+          "B_Right_Wing_0_079": [
+            -6.748527289769389,
+            141.4105355480666,
+            7.210813350097324
+          ]
+        }
+      }
+    ],
+    "flight_cycle_bounds": {
+      "min": [
+        -761.3466180591357,
+        -364.5347140929995,
+        -586.4106892527566
+      ],
+      "max": [
+        235.62597035145896,
+        601.7434852250125,
+        542.2687122271042
+      ],
+      "size": [
+        996.9725884105947,
+        966.278199318012,
+        1128.6794014798606
+      ],
+      "center": [
+        -262.8603238538384,
+        118.6043855660065,
+        -22.070988512826204
+      ]
+    },
+    "recommended_normalization": {
+      "horizontal_forward_yaw": 1.5171840054879187,
+      "horizontal_forward_yaw_degrees": 86.92824025921087,
+      "scale_for_maximum_wingspan_7": 0.006201938292505379,
+      "bind_body_pivot_world": [
+        -41.22199297130362,
+        116.22088623046871,
+        -14.986836643067953
+      ],
+      "body_pivot_offset_before_yaw": [
+        41.22199297130362,
+        -116.22088623046871,
+        14.986836643067953
+      ]
+    }
+  }
+}

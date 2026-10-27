@@ -1,3 +1,14 @@
+# Phoenix free-flight milestone - 26 October 2026
+
+- [x] Inspect the actual user-supplied island and phoenix models, rigs and maps.
+- [x] Use official REA CLI analysis on public source and record retained evidence.
+- [x] Integrate fixed island, original phoenix wing animation, and independent pilot controls.
+- [x] Add damped steering/speed/pitch/bank, chase camera, pause, reset, and mobile inputs.
+- [x] Add geometry-derived terrain clearance and controller/terrain/asset/release checks.
+- [ ] Tune the flight feel with the user's hands-on feedback.
+- [ ] Agree on landing/perched/takeoff behavior and select resume landing locations.
+- [ ] Add land, read a resume section, and fly-away interactions.
+
 # Quick resume workshop experiment - 26 October 2026
 
 - [x] Research public portfolio source and creator case studies.
