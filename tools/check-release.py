@@ -36,7 +36,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def check_release(base_url):
     pages = {}
-    for name in ("index.html", "quick.html"):
+    for name in ("index.html", "quick.html", "flight.html"):
         markup = (ROOT / name).read_text(encoding="utf-8")
         parser = Links()
         parser.feed(markup)
@@ -62,10 +62,14 @@ def check_release(base_url):
     assert 'id="quick-motion"' in quick and 'src="quick-workshop.mjs"' in quick
     assert 'data-quick-scene=' not in quick
     assert (ROOT / "media/robot-expressive.glb").read_bytes()[:4] == b"glTF"
-    for dependency in ("quick-workshop.mjs", "quick-workshop-core.mjs", "vendor/GLTFLoader.js",
+    for dependency in ("quick-workshop.mjs", "quick-workshop-core.mjs", "phoenix-island.mjs",
+                       "phoenix-flight-core.mjs", "phoenix-terrain.mjs", "phoenix-island.css", "vendor/GLTFLoader.js",
                        "vendor/BufferGeometryUtils.js", "vendor/three.module.min.js", "media/robot-license.txt"):
         with urlopen(base_url + dependency, timeout=10) as response:
             assert response.status == 200
+    for model in ("island", "phoenix"):
+        with urlopen(base_url + f"media/phoenix-island/{model}.glb", timeout=10) as response:
+            assert response.read()[:4] == b"glTF"
     for anchor in ("projects", "experience", "skills", "education", "contact"):
         assert anchor in pages["quick.html"].ids
 

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07151f">
+  <meta name="description" content="Explore Kamaldeep Singh's island from the wings of a phoenix. An interactive flight experiment.">
+  <title>The Island — Kamaldeep Singh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Marcellus&display=swap">
+  <link rel="stylesheet" href="phoenix-island.css">
+</head>
+<body>
+  <main id="flight-app">
+    <canvas id="flight-canvas" aria-label="A freely controlled phoenix flying around a moonlit island. Use arrow keys or W A S D to steer." tabindex="0"></canvas>
+    <header class="flight-header">
+      <a class="identity" href="quick.html"><span class="identity-mark" aria-hidden="true">K<span>•</span>S</span><span>Kamaldeep Singh<small>The island</small></span></a>
+      <nav aria-label="Flight controls">
+        <button id="view-toggle" type="button" hidden>Island view</button>
+        <button id="flight-pause" type="button" hidden>Pause</button>
+        <a href="quick.html">Quick résumé <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <section id="flight-intro" class="intro" aria-labelledby="intro-title">
+      <div class="intro-copy">
+        <span class="eyebrow">An open sky. A little curiosity.</span>
+        <h1 id="intro-title">Take the<br><em>scenic route.</em></h1>
+        <p>Your phoenix. An island to explore.<br>Steer freely and find your own perspective.</p>
+        <button id="flight-start" class="primary" type="button" disabled><span id="start-label">Preparing the island</span><span aria-hidden="true">↗</span></button>
+        <div id="asset-progress" class="load-progress" role="progressbar" aria-label="Loading island and phoenix" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+        <span id="load-status" role="status">Loading the island and phoenix…</span>
+      </div>
+      <div class="intro-foot"><span>FREE FLIGHT</span></div>
+    </section>
+
+    <section id="pause-panel" class="pause-panel" aria-labelledby="pause-title" hidden>
+      <span class="eyebrow">Take your time</span>
+      <h2 id="pause-title">A moment in the sky.</h2>
+      <p>Your flight will continue from here.</p>
+      <button id="flight-resume" class="primary" type="button">Continue flying <span aria-hidden="true">↗</span></button>
+    </section>
+
+    <div id="flight-hud" class="flight-hud" hidden>
+      <div class="flight-location"><i aria-hidden="true"></i><span id="flight-location">Over the island</span><span id="flight-state">Cruising</span></div>
+      <div class="keyboard-help"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows · steer</span><span><kbd>Shift</kbd> boost</span><span><kbd>Space</kbd> slow</span><button id="flight-reset" type="button">Return to start <span aria-hidden="true">↻</span></button></div>
+      <div class="touch-help">Drag to steer · up to climb</div>
+      <div class="flight-instruments" aria-hidden="true"><span id="speed-value">0</span><small>FLIGHT SPEED</small><i></i><span id="height-value">0</span><small>ALTITUDE</small></div>
+    </div>
+    <div id="touch-controls" class="touch-controls" hidden>
+      <div id="flight-stick" class="flight-stick" role="group" aria-label="Drag to steer the phoenix"><i></i><span></span></div>
+      <div class="touch-actions"><button id="touch-climb" type="button" aria-label="Climb">↑</button><button id="touch-descend" type="button" aria-label="Descend">↓</button><button id="touch-boost" type="button">Boost</button></div>
+    </div>
+    <button id="credits-toggle" class="credits-toggle" type="button" aria-expanded="false">World & character credits</button>
+    <aside id="flight-credits" class="flight-credits" hidden>
+      <button id="credits-close" type="button" aria-label="Close credits">×</button>
+      <h2>World & character</h2>
+      <p><a href="https://sketchfab.com/3d-models/island-80036f71b0014f0fbae6732d2465b64d" target="_blank" rel="noopener">ISLAND</a> by Stéphane Agullo.</p>
+      <p><a href="https://sketchfab.com/3d-models/phoenix-bird-844ba0cf144a413ea92c779f18912042" target="_blank" rel="noopener">phoenix bird</a> by NORBERTO-3D.</p>
+      <p>Both models: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Models and their supplied animations are by their credited creators. Flight controls, camera, and presentation are adapted for this portfolio.</p>
+    </aside>
+    <div id="flight-error" class="flight-error" role="alert" hidden><h2>The island couldn’t load.</h2><p id="error-detail">Please reload and try again.</p><a class="primary" href="quick.html">Read the quick résumé <span aria-hidden="true">↗</span></a></div>
+    <noscript><div class="flight-error"><h2>This journey needs JavaScript.</h2><a href="quick.html">Read the quick résumé instead</a></div></noscript>
+  </main>
+  <script type="module" src="phoenix-island.mjs"></script>
+</body>
+</html>
