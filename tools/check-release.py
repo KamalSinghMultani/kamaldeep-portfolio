@@ -58,8 +58,14 @@ def check_release(base_url):
     assert 'id="alley-stage"' in index
     assert 'href="quick.html"' in index
     assert "<details" not in quick and 'id="alley-stage"' not in quick
-    assert quick.count("<canvas data-quick-scene=") == 6
-    assert 'id="quick-motion"' in quick and "QuickSceneCore" in quick
+    assert quick.count('id="workshop-canvas"') == 1
+    assert 'id="quick-motion"' in quick and 'src="quick-workshop.mjs"' in quick
+    assert 'data-quick-scene=' not in quick
+    assert (ROOT / "media/robot-expressive.glb").read_bytes()[:4] == b"glTF"
+    for dependency in ("quick-workshop.mjs", "quick-workshop-core.mjs", "vendor/GLTFLoader.js",
+                       "vendor/BufferGeometryUtils.js", "vendor/three.module.min.js", "media/robot-license.txt"):
+        with urlopen(base_url + dependency, timeout=10) as response:
+            assert response.status == 200
     for anchor in ("projects", "experience", "skills", "education", "contact"):
         assert anchor in pages["quick.html"].ids
 

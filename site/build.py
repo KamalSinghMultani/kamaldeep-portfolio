@@ -188,8 +188,10 @@ def main():
     if os.path.isdir(release):
         shutil.rmtree(release)
     os.makedirs(release, exist_ok=True)
-    for name in ('index.html', 'quick.html', 'kamaldeep-singh-resume.pdf'):
+    for name in ('index.html', 'quick.html', 'kamaldeep-singh-resume.pdf',
+                 'quick-workshop.mjs', 'quick-workshop-core.mjs'):
         shutil.copy2(os.path.join(HERE, name), os.path.join(release, name))
+    shutil.copytree(VENDOR, os.path.join(release, 'vendor'))
     media = os.path.join(HERE, 'media')
     if os.path.isdir(media):
         shutil.copytree(media, os.path.join(release, 'media'), dirs_exist_ok=True)
