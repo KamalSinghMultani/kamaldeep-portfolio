@@ -23,12 +23,12 @@ for (const model of [island, phoenix]) {
   assert.match(model.asset.extras.license, /CC-BY-4\.0/);
 }
 const html = fs.readFileSync(path.join(root, 'flight.html'), 'utf8');
-for (const id of ['flight-start', 'flight-pause', 'flight-resume', 'flight-reset', 'view-toggle', 'flight-stick', 'touch-climb', 'touch-descend', 'touch-boost']) {
+for (const id of ['flight-start', 'flight-pause', 'flight-resume', 'flight-reset', 'view-toggle', 'flight-stick', 'touch-climb', 'touch-descend', 'touch-boost', 'touch-roll-left', 'touch-roll-right', 'touch-loop']) {
   assert(html.includes(`id="${id}"`), `Flight control exists: ${id}`);
 }
 assert(html.includes('NORBERTO-3D') && html.includes('Stéphane Agullo'));
 assert(html.includes('href="quick.html"'));
-for (const filename of ['phoenix-island.mjs', 'phoenix-flight-core.mjs', 'phoenix-terrain.mjs', 'phoenix-island.css', 'vendor/GLTFLoader.js', 'vendor/BufferGeometryUtils.js']) {
+for (const filename of ['phoenix-island.mjs', 'phoenix-flight-core.mjs', 'phoenix-collision.mjs', 'phoenix-camera.mjs', 'phoenix-model.mjs', 'phoenix-island.css', 'vendor/GLTFLoader.js', 'vendor/BufferGeometryUtils.js']) {
   assert(fs.statSync(path.join(root, filename)).isFile(), `Deployment includes ${filename}`);
 }
 console.log('Phoenix assets passed: actual embedded models/flight rig, dependencies, controls, fallback resume link, and attribution packaged.');
