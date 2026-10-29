@@ -43,13 +43,15 @@
 
     <div id="flight-hud" class="flight-hud" hidden>
       <div class="flight-location"><i aria-hidden="true"></i><span id="flight-location">Over the island</span><span id="flight-state">Cruising</span></div>
-      <div class="keyboard-help"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows · steer</span><span><kbd>Shift</kbd> boost</span><span><kbd>Space</kbd> slow</span><button id="flight-reset" type="button">Return to start <span aria-hidden="true">↻</span></button></div>
+      <p id="flight-feedback" class="flight-feedback" role="status"></p>
+      <div class="keyboard-help"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows · steer</span><span><kbd>Shift</kbd> boost</span><span><kbd>Space</kbd> slow</span><span><kbd>Q</kbd><kbd>E</kbd> roll</span><span><kbd>L</kbd> loop</span><button id="flight-reset" type="button">Return to start <span aria-hidden="true">↻</span></button></div>
       <div class="touch-help">Drag to steer · up to climb</div>
       <div class="flight-instruments" aria-hidden="true"><span id="speed-value">0</span><small>FLIGHT SPEED</small><i></i><span id="height-value">0</span><small>ALTITUDE</small></div>
     </div>
     <div id="touch-controls" class="touch-controls" hidden>
       <div id="flight-stick" class="flight-stick" role="group" aria-label="Drag to steer the phoenix"><i></i><span></span></div>
       <div class="touch-actions"><button id="touch-climb" type="button" aria-label="Climb">↑</button><button id="touch-descend" type="button" aria-label="Descend">↓</button><button id="touch-boost" type="button">Boost</button></div>
+      <div class="touch-tricks"><button id="touch-roll-left" type="button">Roll left</button><button id="touch-loop" type="button">Loop</button><button id="touch-roll-right" type="button">Roll right</button></div>
     </div>
     <button id="credits-toggle" class="credits-toggle" type="button" aria-expanded="false">World & character credits</button>
     <aside id="flight-credits" class="flight-credits" hidden>
