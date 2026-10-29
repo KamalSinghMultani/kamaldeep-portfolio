@@ -4,13 +4,14 @@ import { createFlightState, stepFlight, resetFlight, requestTrick } from './phoe
 import { createCollisionWorld } from './phoenix-collision.mjs';
 import { createCameraState, updateCameraRig } from './phoenix-camera.mjs';
 import { prepareIsland, createPhoenixVisual } from './phoenix-model.mjs';
+import { readFlightCommands } from './phoenix-input.mjs';
 
 const $ = id => document.getElementById(id);
 const app = $('flight-app'), canvas = $('flight-canvas');
 const coarse = matchMedia('(pointer: coarse)');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const keys = new Set();
-const pointer = { turn: 0, climb: 0, boost: false, vertical: 0, active: false };
+const pointer = { turn: 0, climb: 0, forward: 0, boost: false, vertical: 0, active: false };
 const heldTouch = new Map();
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#050b25');
@@ -32,6 +33,7 @@ let introClock = 0, failed = false, pointerOrigin = null;
 let steeringPointerId = null;
 let frameMilliseconds = 16.7;
 let feedbackUntil = 0;
+const islandView = { angle: Math.atan2(245, 280), elevation: .4, distance: 400 };
 
 // Baked island textures carry the original art direction. Light the bird gently.
 scene.add(new THREE.HemisphereLight('#cfddff', '#18384e', .65));
@@ -41,7 +43,7 @@ const warm = new THREE.DirectionalLight('#ffc782', .5);
 warm.position.set(100, 40, -90); scene.add(warm);
 
 function clearInput() {
-  keys.clear(); pointer.turn = 0; pointer.climb = 0; pointer.vertical = 0; pointer.boost = false;
+  keys.clear(); pointer.turn = 0; pointer.climb = 0; pointer.forward = 0; pointer.vertical = 0; pointer.boost = false; pointer.stop = false;
   pointer.active = false; pointerOrigin = null; steeringPointerId = null; heldTouch.clear();
   $('flight-stick').querySelector('span').style.transform = '';
 }
@@ -64,7 +66,8 @@ function updateCamera(dt, snap = false) {
   if (!started || overview) {
     const drift = !started && !reduced.matches ? Math.sin(introClock * .04) * .045 : 0;
     const fit = Math.max(1, .85 / camera.aspect);
-    desiredCamera.set((245 * Math.cos(drift) - 280 * Math.sin(drift)) * fit, 28 + 150 * fit, (280 * Math.cos(drift) + 245 * Math.sin(drift)) * fit);
+    const distance = islandView.distance * fit, angle = islandView.angle + drift;
+    desiredCamera.set(Math.sin(angle) * distance * Math.cos(islandView.elevation), 28 + Math.sin(islandView.elevation) * distance, Math.cos(angle) * distance * Math.cos(islandView.elevation));
     desiredFocus.set(0, 28, 0);
   } else {
     updateCameraRig(chase, flight, dt, { aspect: camera.aspect, collision: collision?.clipCamera }, snap);
@@ -88,7 +91,8 @@ function updateCamera(dt, snap = false) {
 function updateHUD() {
   const radius = Math.hypot(flight.position.x, flight.position.z);
   $('flight-location').textContent = radius < 125 ? 'Above the island' : radius < 200 ? 'Along the coast' : 'Over open water';
-  $('flight-state').textContent = flight.trick ? (flight.trick.name === 'loop' ? 'Looping' : 'Rolling') : flight.blocked ? 'Obstacle ahead · turn or climb' : flight.boundaryAssist > .1 ? 'Edge of the sky · turn back' : pointer.boost || keys.has('ShiftLeft') || keys.has('ShiftRight') ? 'Soaring' : flight.speed < 8 ? 'Gliding slowly' : 'Cruising';
+  const commands = readInput();
+  $('flight-state').textContent = overview ? 'Drag / arrows to orbit · scroll to zoom' : flight.trick ? (flight.trick.name === 'loop' ? 'Looping' : 'Rolling') : flight.blocked ? 'Obstacle · choose another direction' : flight.actualSpeed < .05 ? 'Hovering · waiting for your command' : commands.climb > 0 ? 'Ascending' : commands.climb < 0 ? 'Descending' : commands.forward < 0 ? 'Moving backward' : commands.strafe ? 'Moving sideways' : 'Moving forward';
   $('speed-value').textContent = Math.round(flight.actualSpeed ?? flight.speed);
   $('height-value').textContent = Math.round(flight.position.y);
   canvas.dataset.x = flight.position.x.toFixed(2); canvas.dataset.y = flight.position.y.toFixed(2); canvas.dataset.z = flight.position.z.toFixed(2);
@@ -103,11 +107,12 @@ function updateHUD() {
   canvas.dataset.trickPitch = flight.trickPitch.toFixed(3);
   canvas.dataset.blocked = String(flight.blocked);
   canvas.dataset.cameraY = camera.position.y.toFixed(2);
+  canvas.dataset.vx = flight.velocity.x.toFixed(3); canvas.dataset.vy = flight.velocity.y.toFixed(3); canvas.dataset.vz = flight.velocity.z.toFixed(3);
   if (performance.now() > feedbackUntil) $('flight-feedback').textContent = '';
 }
 
 function trick(type) {
-  if (!started || paused) return;
+  if (!started || paused || overview) return;
   if (!requestTrick(flight, type)) {
     $('flight-feedback').textContent = flight.trickRejectedReason || 'Find some open sky before trying that maneuver.';
     feedbackUntil = performance.now() + 4000;
@@ -116,14 +121,7 @@ function trick(type) {
 }
 
 function readInput() {
-  const turn = (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
-  const climb = (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0) - (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0);
-  return {
-    turn: THREE.MathUtils.clamp(turn + pointer.turn, -1, 1),
-    climb: THREE.MathUtils.clamp(climb + pointer.climb + pointer.vertical, -1, 1),
-    boost: pointer.boost || keys.has('ShiftLeft') || keys.has('ShiftRight'),
-    brake: keys.has('Space'),
-  };
+  return overview ? { brake: true } : readFlightCommands(keys, pointer);
 }
 
 function loop(now) {
@@ -182,10 +180,11 @@ function reset() {
 }
 
 function toggleView() {
-  overview = !overview;
+  overview = !overview; clearInput();
   $('view-toggle').textContent = overview ? 'Follow phoenix' : 'Island view';
   $('view-toggle').setAttribute('aria-pressed', String(overview));
   canvas.dataset.camera = overview ? 'overview' : 'follow';
+  updateHUD();
   if (paused) { updateCamera(0, true); renderer.render(scene, camera); }
   else canvas.focus({ preventScroll: true });
 }
@@ -223,7 +222,7 @@ async function initialize() {
   loaded = true; app.dataset.status = 'ready'; app.dataset.mode = 'intro';
   canvas.dataset.animation = phoenix.clip.name; canvas.dataset.camera = 'overview';
   $('flight-start').disabled = false; $('start-label').textContent = 'Take flight';
-  $('load-status').textContent = coarse.matches ? 'Drag to steer. Use the arrows to climb or descend.' : 'W A S D or arrow keys to steer. Dragging works too.';
+  $('load-status').textContent = coarse.matches ? 'The stick moves and turns. ↑ / ↓ move straight up and down. Release to hover.' : 'W/S forward/back · A/D sideways · ←/→ turn · Space/C up/down. Release to hover.';
   $('asset-progress').querySelector('i').style.width = '100%'; $('asset-progress').setAttribute('aria-valuenow', '100');
   resize(); updateHUD(); wake();
 }
@@ -255,8 +254,15 @@ window.addEventListener('keydown', event => {
   if (!started || event.ctrlKey || event.metaKey || event.altKey) return;
   if (event.code === 'Escape' || event.code === 'KeyP') { if (!event.repeat) pause(!paused); event.preventDefault(); return; }
   if (event.target instanceof Element && event.target.closest('button,a,aside')) return;
+  if (overview && ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.code)) {
+    event.preventDefault();
+    islandView.angle += event.code === 'ArrowRight' ? .14 : event.code === 'ArrowLeft' ? -.14 : 0;
+    islandView.elevation = THREE.MathUtils.clamp(islandView.elevation + (event.code === 'ArrowUp' ? .08 : event.code === 'ArrowDown' ? -.08 : 0), .12, 1.45);
+    if (paused) { updateCamera(0, true); renderer.render(scene, camera); }
+    return;
+  }
   if (paused) return;
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(event.code)) {
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyC','KeyX','KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(event.code)) {
     keys.add(event.code); event.preventDefault();
   }
   if (event.code === 'KeyR' && !event.repeat) reset();
@@ -274,29 +280,43 @@ document.addEventListener('visibilitychange', () => {
 
 function bindSteering(element, isStick = false) {
   element.addEventListener('pointerdown', event => {
-    if (!started || paused || event.button > 0 || steeringPointerId !== null) return;
+    if (!started || paused && !overview || event.button > 0 || steeringPointerId !== null) return;
     steeringPointerId = event.pointerId;
-    pointer.active = true; pointerOrigin = { x: event.clientX, y: event.clientY };
+    pointer.active = true; pointerOrigin = { x: event.clientX, y: event.clientY, angle: islandView.angle, elevation: islandView.elevation };
     element.setPointerCapture(event.pointerId);
     if (!isStick) canvas.focus({ preventScroll: true });
   });
   element.addEventListener('pointermove', event => {
     if (!pointer.active || !pointerOrigin || event.pointerId !== steeringPointerId) return;
+    if (overview) {
+      islandView.angle = pointerOrigin.angle - (event.clientX - pointerOrigin.x) * .006;
+      islandView.elevation = THREE.MathUtils.clamp(pointerOrigin.elevation + (event.clientY - pointerOrigin.y) * .004, .12, 1.45);
+      if (paused) { updateCamera(0, true); renderer.render(scene, camera); }
+      return;
+    }
     const max = isStick ? 35 : Math.min(innerWidth, innerHeight) * .18;
     const x = THREE.MathUtils.clamp((event.clientX - pointerOrigin.x) / max, -1, 1);
     const y = THREE.MathUtils.clamp((event.clientY - pointerOrigin.y) / max, -1, 1);
-    pointer.turn = x; pointer.climb = -y;
+    pointer.turn = x;
+    if (isStick) pointer.forward = -y;
+    else pointer.climb = -y;
     if (isStick) element.querySelector('span').style.transform = `translate(${x * 29}px,${y * 29}px)`;
   });
   const release = event => {
     if (event.pointerId !== steeringPointerId) return;
-    steeringPointerId = null; pointer.active = false; pointerOrigin = null; pointer.turn = 0; pointer.climb = 0;
+    steeringPointerId = null; pointer.active = false; pointerOrigin = null; pointer.turn = 0; pointer.climb = 0; pointer.forward = 0;
     if (isStick) element.querySelector('span').style.transform = '';
   };
   element.addEventListener('pointerup', release); element.addEventListener('pointercancel', release);
   element.addEventListener('lostpointercapture', release);
 }
 bindSteering(canvas); bindSteering($('flight-stick'), true);
+canvas.addEventListener('wheel', event => {
+  if (!started || !overview) return;
+  event.preventDefault();
+  islandView.distance = THREE.MathUtils.clamp(islandView.distance * Math.exp(event.deltaY * .001), 140, 650);
+  if (paused) { updateCamera(0, true); renderer.render(scene, camera); }
+}, { passive: false });
 function updateTouchActions() {
   const actions = [...heldTouch.values()];
   pointer.vertical = (actions.includes('climb') ? 1 : 0) - (actions.includes('descend') ? 1 : 0);

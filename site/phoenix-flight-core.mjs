@@ -1,8 +1,9 @@
 /**
  * Pure arcade flight. +Y up; yaw0 faces -Z, positive turn goes toward +X.
- * Visual pitch/bank are damped. motionPitch follows current climb intent: a
- * descent reversal cannot keep moving upward while the visual pose levels out.
- * No height-field, automatic climb, or automatic boundary steering is applied.
+ * Input.forward/strafe are local -1..1 axes; climb is independent world-up.
+ * Neutral input hovers exactly. Released axes stop immediately; reversing an
+ * axis clears its previous motion before easing into the new direction. Yaw,
+ * visual pitch, and bank never create translation. Combined input is normalized.
  *
  * resolveMotion(start,end,bodyRadius,state) optionally returns the static-world
  * sweep result {position,hit,normal,startedPenetrating,recoveryDistance}. Invalid
@@ -13,7 +14,8 @@
  * leave steering live. A loop sweeps a prechecked vertical circle and returns to
  * its initial position/heading; descend or brake cancels it. Add trickRoll and
  * trickPitch to the actor's normal bank/pitch. Collision cancels a trick with an
- * eased visual recovery, never a teleport to the trick's start.
+ * eased visual recovery, never a teleport to the trick's start. Cancellation
+ * restores only currently held translation commands, with no momentum drift.
  */
 const TAU = Math.PI * 2;
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
@@ -23,8 +25,8 @@ const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
 const validPosition = p => p && [p.x, p.y, p.z].every(Number.isFinite);
 
 export const DEFAULT_FLIGHT_OPTIONS = Object.freeze({
-  cruiseSpeed: 17, boostSpeed: 30, minimumSpeed: 4, brakeSpeed: 3,
-  speedResponse: 2.2, turnResponse: 5.8, pitchResponse: 5.2, bankResponse: 4.8,
+  cruiseSpeed: 17, boostSpeed: 30, minimumSpeed: 0, brakeSpeed: 0,
+  speedResponse: 5.5, turnResponse: 5.8, pitchResponse: 5.2, bankResponse: 4.8,
   maximumTurnRate: 1.08, maximumPitch: .65, maximumBank: .62,
   minimumAltitude: 2.5, maximumAltitude: 160, worldRadius: 400,
   boundaryMargin: 32, bodyRadius: 1.2, maximumDelta: .05,
@@ -74,15 +76,8 @@ function resolve(state, start, end) {
 
 function cancelTrick(state, reason) {
   if (!state.trick) return;
-  if (state.trick.name === 'loop') {
-    const trick = state.trick, tangentPitch = trick.pitch + TAU * trick.elapsed / trick.duration;
-    // Preserve horizontal transport through an interrupted upper arc. A loop
-    // can be moving backwards relative to entry yaw; restoring cruise velocity
-    // immediately would reverse the bird by 34 units/s in a single frame.
-    state.recoveryVelocity = { x: Math.sin(trick.yaw) * Math.cos(tangentPitch) * trick.speed,
-      z: -Math.cos(trick.yaw) * Math.cos(tangentPitch) * trick.speed };
-    state.recoveryRemaining = .8;
-  }
+  Object.assign(state.commandVelocity, { forward: 0, strafe: 0, climb: 0 });
+  state.recoveryVelocity = null; state.recoveryRemaining = 0;
   state.trick = null;
   state.trickRoll = angle(state.trickRoll); state.trickPitch = angle(state.trickPitch);
   state.trickCancelledReason = reason;
@@ -92,7 +87,7 @@ export function createFlightState(options = {}) {
   const p = options.position || options.spawn || { x: 0, y: 38, z: 135 };
   const config = configuration({}, options);
   const state = { config, spawn: { position: { x: finite(p.x, 0), y: finite(p.y, 38), z: finite(p.z, 135) },
-    yaw: finite(options.yaw, 0), pitch: finite(options.pitch, 0), speed: finite(options.speed, config.cruiseSpeed) }, position: {}, velocity: {} };
+    yaw: finite(options.yaw, 0), pitch: finite(options.pitch, 0), speed: 0 }, position: {}, velocity: {} };
   return resetFlight(state, options);
 }
 
@@ -102,8 +97,9 @@ export function resetFlight(state, options = {}) {
   Object.assign(state.position, bounded({ x: finite(p.x, state.spawn.position.x), y: finite(p.y, state.spawn.position.y), z: finite(p.z, state.spawn.position.z) }, state.config));
   state.yaw = angle(finite(options.yaw, state.spawn.yaw));
   state.pitch = clamp(finite(options.pitch, state.spawn.pitch), -state.config.maximumPitch, state.config.maximumPitch);
-  state.motionPitch = state.pitch; state.bank = 0; state.turnRate = 0;
-  state.speed = Math.max(0, finite(options.speed, state.spawn.speed));
+  state.motionPitch = 0; state.bank = 0; state.turnRate = 0;
+  state.speed = 0;
+  Object.assign(state.commandVelocity ??= {}, { forward: 0, strafe: 0, climb: 0 });
   state.actualSpeed = 0; state.paused = Boolean(options.paused); state.time = 0; state.distance = 0;
   state.boundaryAssist = 0; state.terrainAssist = false;
   state.collision = null; state.blocked = false; state.startedPenetrating = false;
@@ -131,10 +127,18 @@ export function requestTrick(state, name) {
   if (Math.abs(state.trickRoll) > .02 || Math.abs(state.trickPitch) > .02) return reject('Wait for the wings to settle.');
   const c = state.config;
   const trick = { name, elapsed: 0, duration: name === 'loop' ? c.loopDuration : c.rollDuration,
-    start: { ...state.position }, yaw: state.yaw, pitch: state.motionPitch, speed: state.speed };
+    start: { ...state.position }, yaw: state.yaw, pitch: state.motionPitch, speed: state.actualSpeed };
   if (name === 'loop') {
-    if (state.speed < c.minimumLoopSpeed) return reject('Gain some speed before looping.');
-    trick.radius = state.speed * trick.duration / TAU;
+    if (state.actualSpeed < c.minimumLoopSpeed) return reject('Gain some speed before looping.');
+    const actualForward = state.velocity.x * Math.sin(state.yaw) - state.velocity.z * Math.cos(state.yaw);
+    const actualStrafe = state.velocity.x * Math.cos(state.yaw) + state.velocity.z * Math.sin(state.yaw);
+    if (actualForward < c.minimumLoopSpeed || Math.abs(actualStrafe) > actualForward * .25 || Math.abs(state.velocity.y) > actualForward * .25) {
+      return reject('Move forward in a straight line before looping.');
+    }
+    // Entry follows the already visible attitude; vertical/sideways travel is
+    // rejected above instead of snapping a hovering bird through ninety degrees.
+    trick.pitch = state.pitch;
+    trick.radius = trick.speed * trick.duration / TAU;
     let previous = { ...state.position };
     for (let i = 1; i <= 96; i++) {
       const next = loopPosition(trick, i / 96);
@@ -150,15 +154,31 @@ export function requestTrick(state, name) {
   return true;
 }
 
-function applyMotion(state, old, wanted, climb) {
+function applyMotion(state, old, wanted, climb, intent) {
   const candidate = bounded(wanted, state.config);
   const boundaryBlocked = distance(candidate, wanted) > 1e-8;
   const result = resolve(state, old, candidate);
   // A slope slide may add upward displacement even to a downward command.
   // Block that request at contact rather than lifting the bird over the slope.
   const ascentLimit = climb < -.001 ? old.y : Math.max(old.y, candidate.y);
-  if (!result.startedPenetrating && result.position.y > ascentLimit + 1e-8) {
+  let intentBlocked = result.position.y > ascentLimit + 1e-8;
+  if (intent && !result.startedPenetrating) {
+    const dx = result.position.x - old.x, dz = result.position.z - old.z;
+    const components = { forward: dx * Math.sin(intent.yaw) - dz * Math.cos(intent.yaw),
+      strafe: dx * Math.cos(intent.yaw) + dz * Math.sin(intent.yaw), climb: result.position.y - old.y };
+    for (const axis of ['forward', 'strafe', 'climb']) {
+      intentBlocked ||= Math.abs(intent[axis]) < 1e-10 ? Math.abs(components[axis]) > 1e-8 : components[axis] * intent[axis] < -1e-8;
+    }
+  }
+  if (!result.startedPenetrating && intentBlocked) {
     result.position = { ...old }; result.hit = true; result.intentBlocked = true;
+  } else if (intent && !result.startedPenetrating) {
+    // Remove harmless solver roundoff on explicitly inactive world axes, too:
+    // a vertical command preserves the exact previous X/Z, not just a tolerance.
+    if (intent.forward === 0 && intent.strafe === 0) {
+      result.position.x = old.x; result.position.z = old.z;
+    }
+    if (intent.climb === 0) result.position.y = old.y;
   }
   if (result.hit) state.collision = result;
   state.startedPenetrating ||= Boolean(result.startedPenetrating);
@@ -174,14 +194,18 @@ export function stepFlight(state, input = {}, deltaSeconds = 0, options) {
   if (state.paused || !Number.isFinite(deltaSeconds) || deltaSeconds <= 0) return state;
   const c = state.config, dt = Math.min(deltaSeconds, c.maximumDelta);
   const count = Math.max(1, Math.ceil(dt / c.integrationStep - 1e-10)), h = dt / count;
-  const turn = clamp(finite(input.turn, 0), -1, 1), climb = clamp(finite(input.climb, 0), -1, 1);
-  const throttle = clamp(finite(input.throttle, 1), 0, 1);
+  const turn = input.brake ? 0 : clamp(finite(input.turn, 0), -1, 1), climb = clamp(finite(input.climb, 0), -1, 1);
+  let forward = input.brake ? 0 : clamp(finite(input.forward, 0), -1, 1);
+  let strafe = input.brake ? 0 : clamp(finite(input.strafe, 0), -1, 1);
+  let vertical = input.brake ? 0 : climb;
+  const magnitude = Math.hypot(forward, strafe, vertical);
+  if (magnitude > 1) { forward /= magnitude; strafe /= magnitude; vertical /= magnitude; }
   const initial = { ...state.position };
   let travelled = 0;
   state.collision = null; state.blocked = false; state.startedPenetrating = false;
   for (let i = 0; i < count; i++) {
     const old = { ...state.position };
-    if (state.trick?.name === 'loop' && (climb < -.001 || input.brake || input.cancelTrick)) cancelTrick(state, 'Loop cancelled by pilot.');
+    if (state.trick && (input.brake || input.cancelTrick || (state.trick.name === 'loop' && climb < -.001))) cancelTrick(state, 'Trick cancelled by pilot.');
     if (state.trick?.name === 'loop') {
       const trick = state.trick;
       trick.elapsed = Math.min(trick.duration, trick.elapsed + h);
@@ -194,37 +218,35 @@ export function stepFlight(state, input = {}, deltaSeconds = 0, options) {
       if (motion.result.hit || motion.blocked) cancelTrick(state, 'Loop interrupted by an obstacle.');
       else if (phase >= 1 - 1e-10) { state.trick = null; state.trickPitch = 0; }
     } else {
+      if (turn === 0 || state.turnRate * turn < 0) state.turnRate = 0;
       const yaw = damped(state.turnRate, turn * c.maximumTurnRate, c.turnResponse, h);
       const yawMid = state.yaw + yaw.integral * .5;
       state.turnRate = yaw.value; state.yaw = angle(state.yaw + yaw.integral);
-      const targetPitch = climb * c.maximumPitch;
+      const targetPitch = vertical * c.maximumPitch;
       state.pitch = damped(state.pitch, targetPitch, c.pitchResponse, h).value;
-      if ((climb < -.001 && state.motionPitch > 0) || (climb > .001 && state.motionPitch < 0)) state.motionPitch = 0;
-      const oldMotionPitch = state.motionPitch;
-      state.motionPitch = damped(state.motionPitch, targetPitch, c.pitchResponse, h).value;
-      const pitchMid = (oldMotionPitch + state.motionPitch) * .5;
-      state.bank = damped(state.bank, c.maximumTurnRate > 0 ? -state.turnRate / c.maximumTurnRate * c.maximumBank : 0, c.bankResponse, h).value;
+      const turnBank = c.maximumTurnRate > 0 ? -state.turnRate / c.maximumTurnRate * c.maximumBank : 0;
+      state.bank = damped(state.bank, clamp(turnBank - strafe * c.maximumBank * .65, -c.maximumBank, c.maximumBank), c.bankResponse, h).value;
       const radius = Math.hypot(old.x, old.z);
       const edge = clamp((radius - (c.worldRadius - c.boundaryMargin)) / c.boundaryMargin, 0, 1);
-      const outward = radius > 1e-8 ? Math.max(0, (old.x * Math.sin(state.yaw) - old.z * Math.cos(state.yaw)) / radius) : 0;
+      const requestedX = Math.sin(yawMid) * forward + Math.cos(yawMid) * strafe;
+      const requestedZ = -Math.cos(yawMid) * forward + Math.sin(yawMid) * strafe;
+      const outward = radius > 1e-8 ? Math.max(0, (old.x * requestedX + old.z * requestedZ) / radius) : 0;
       state.boundaryAssist = edge * outward;
-      const desiredSpeed = input.brake ? c.brakeSpeed : c.minimumSpeed + ((input.boost ? c.boostSpeed : c.cruiseSpeed) - c.minimumSpeed) * throttle;
-      const targetSpeed = desiredSpeed * (1 - state.boundaryAssist) + Math.min(c.brakeSpeed, desiredSpeed) * state.boundaryAssist;
-      const motion = damped(state.speed, targetSpeed, c.speedResponse, h);
-      state.speed = motion.value;
-      const horizontal = Math.cos(pitchMid) * motion.integral;
-      let dx = Math.sin(yawMid) * horizontal, dz = -Math.cos(yawMid) * horizontal;
-      if (state.recoveryVelocity && state.recoveryRemaining > 0) {
-        const x = damped(state.recoveryVelocity.x, dx / h, c.trickRecovery, h);
-        const z = damped(state.recoveryVelocity.z, dz / h, c.trickRecovery, h);
-        state.recoveryVelocity.x = x.value; state.recoveryVelocity.z = z.value;
-        dx = x.integral; dz = z.integral;
-        state.recoveryRemaining = Math.max(0, state.recoveryRemaining - h);
-        if (state.recoveryRemaining < 1e-8) { state.recoveryRemaining = 0; state.recoveryVelocity = null; }
+      const baseSpeed = (input.boost ? c.boostSpeed : c.cruiseSpeed) * (1 - state.boundaryAssist);
+      const travel = {};
+      for (const [axis, command] of [['forward', forward], ['strafe', strafe], ['climb', vertical]]) {
+        if (command === 0 || state.commandVelocity[axis] * command < 0) state.commandVelocity[axis] = 0;
+        if (command === 0) travel[axis] = 0;
+        else {
+          const motion = damped(state.commandVelocity[axis], command * baseSpeed, c.speedResponse, h);
+          state.commandVelocity[axis] = motion.value; travel[axis] = motion.integral;
+        }
       }
-      const next = { x: old.x + dx,
-        y: old.y + Math.sin(pitchMid) * motion.integral, z: old.z + dz };
-      const constrained = applyMotion(state, old, next, climb);
+      state.speed = Math.hypot(state.commandVelocity.forward, state.commandVelocity.strafe, state.commandVelocity.climb);
+      state.motionPitch = state.speed > 1e-8 ? Math.atan2(state.commandVelocity.climb, Math.hypot(state.commandVelocity.forward, state.commandVelocity.strafe)) : 0;
+      const next = { x: old.x + Math.sin(yawMid) * travel.forward + Math.cos(yawMid) * travel.strafe,
+        y: old.y + travel.climb, z: old.z - Math.cos(yawMid) * travel.forward + Math.sin(yawMid) * travel.strafe };
+      const constrained = applyMotion(state, old, next, vertical, { yaw: yawMid, forward, strafe, climb: vertical });
       if (constrained.result.hit && state.trick) cancelTrick(state, 'Roll interrupted by an obstacle.');
       if (state.trick) {
         state.trick.elapsed = Math.min(state.trick.duration, state.trick.elapsed + h);
