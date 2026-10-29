@@ -3,13 +3,17 @@
 ## Phoenix island flight
 
 The experiment now includes `/flight.html`, using the user-selected phoenix and
-island GLBs. Choose **Take flight**, then steer with **WASD / arrows**, hold
-**Shift** to boost or **Space** to slow down. **P / Escape** pauses; **R** returns
+island GLBs. Choose **Take flight**, then use **W/S** forward/back, **A/D** sideways,
+**left/right arrows** to turn, and **Space/C** (or up/down arrows) straight up/down.
+Release to hover. **Shift** moves faster; **X** stops. **P / Escape** pauses; **R** returns
 to the starting position. **Q / E** roll left/right; **L** performs a loop when
 the route is clear. Drag steering and mobile controls are also available.
-The **Island view** button switches the camera perspective.
+The **Island view** button holds the bird while you inspect the landscape with
+drag/arrow-key orbit and scroll zoom.
 
-The flight controller smooths speed, turn, pitch and bank, with a separate damped
+The flight controller starts stationary and moves only on command. Vertical
+movement is independent of horizontal travel; releasing an axis stops its drift.
+Pitch and bank are visual poses. The experience has a separate damped
 chase camera and continuous collisions against the island's actual 3D surfaces.
 Descent input is never replaced by an automatic terrain climb. The provided wing
 clip drives the original rig with its body anchored to the pilot; the island's

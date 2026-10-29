@@ -1,0 +1,77 @@
+{
+  "source": "Supplied island.glb, static normalized transforms from prepareIsland; proposals only, no landing interaction implemented.",
+  "coordinates": "+Y up, world X/Z; island ground roughly X -120..120, Z -115..119. Names describe existing model geometry, not new buildings.",
+  "method": "Terrain triangles transformed to world coordinates; highest ground at each X/Z sampled directly. Beach/terrace clearances sampled on 16-point rings at radii 2,4,6 with body spheres at Y+2.5 and horizontal offsets up to3.5. Samples are not a continuous footprint certificate. Structure and peak points identify landmarks, not ready landing pads.",
+  "candidates": [
+    {
+      "id": "west-beach",
+      "label": "Broad western beach",
+      "position": { "x": -98, "y": 2.442, "z": -92 },
+      "mesh": "ISLE_17_ile-sable_0",
+      "localSlopeDegrees": 5.45,
+      "sampledPatchRadius": 6,
+      "outerRingHeightRange": 1.271,
+      "outerRingMaxSlopeDegrees": 7.25,
+      "status": "Promising natural approach; add a level landing marker/platform and verify the final bird foot/wing footprint.",
+      "notes": "Largest sampled open gentle patch among candidates; near sea level. Existing minimum flight altitude must allow an explicit landing state."
+    },
+    {
+      "id": "south-terrace",
+      "label": "Southern rock terrace",
+      "position": { "x": -44, "y": 14.993, "z": 66 },
+      "mesh": "ISLE_17_ile-roc_0",
+      "localSlopeDegrees": 6.89,
+      "sampledPatchRadius": 4,
+      "outerRingHeightRange": 0.792,
+      "outerRingMaxSlopeDegrees": 8.46,
+      "status": "Promising terrace; needs a small level landing surface and clearance checks at the final pose.",
+      "notes": "Eight-unit sampled diameter is only slightly larger than the approximately seven-unit phoenix wingspan."
+    },
+    {
+      "id": "eastern-huts",
+      "label": "Eastern hillside huts",
+      "position": { "x": 25, "y": 30.588, "z": 13 },
+      "mesh": "ISLE_17_ile-herbe_0",
+      "localSlopeDegrees": 13.18,
+      "sampledPatchRadius": null,
+      "status": "Landmark zone only; requires a dedicated platform and obstacle/approach inspection.",
+      "notes": "Nearby existing huts have roofs around Y36..39, spanning X16..48 and Z-17..16. Ground is sloped and structures/palms restrict wing clearance."
+    },
+    {
+      "id": "upper-huts",
+      "label": "Two high hillside huts",
+      "position": { "x": -50, "y": 80.767, "z": -17 },
+      "mesh": "ISLE_17_ile-sable_0",
+      "localSlopeDegrees": 3.75,
+      "sampledPatchRadius": null,
+      "status": "Landmark zone only; requires a new adjacent landing platform, not landing between the huts.",
+      "notes": "Existing roof centers are (-46.69,86.80,-15.89) and (-54.95,85.53,-17.72). The ground point is between/under building footprints and is not certified clear."
+    },
+    {
+      "id": "lighthouse",
+      "label": "Existing lighthouse",
+      "position": { "x": 85.97, "y": 30.527, "z": -74.18 },
+      "mesh": "ISLE_17_roc_0 and ISLE_17_phare-light_0",
+      "localSlopeDegrees": 0,
+      "sampledPatchRadius": null,
+      "status": "Landmark only; lighthouse top is too small for the phoenix wingspan. Build/choose an adjacent landing ledge.",
+      "notes": "Light geometry center (85.97,27.50,-74.18), size4.74x3.75x4.74. Island base nearby is around Y11.3; highest roof ray hit around Y30.53 is part of the structure, not a broad ground pad."
+    },
+    {
+      "id": "high-spire",
+      "label": "Highest rocky spire",
+      "position": { "x": -44, "y": 109.5, "z": -45 },
+      "mesh": "ISLE_17_roc_0",
+      "localSlopeDegrees": 10.08,
+      "sampledPatchRadius": null,
+      "status": "Scenic landmark only; requires an authored platform and careful edge/approach clearance.",
+      "notes": "Nearby maximum rock height is Y110.51. This has not been confirmed as a volcano. The separate actual lava mesh is below sea level at Y-85.87..-78.59."
+    }
+  ],
+  "limitations": [
+    "No candidate has a finished landing controller, feet contact pose, takeoff transition or resume overlay.",
+    "Body-sphere probes exclude decorative palm leaves and cannot certify feather clearance.",
+    "Patch measurements are discrete samples of sloped low-poly ground; final platforms need exact placement and visual review.",
+    "Resume section assignments and route order remain design choices for the user."
+  ]
+}

@@ -1,5 +1,9 @@
 # Flight correction audit — 28 October 2026
 
+This records the earlier cruise-controller correction. The later direct-command
+revision supersedes cruise and cancellation momentum; see
+[ISLAND-LANDINGS.md](ISLAND-LANDINGS.md) and the current controls in README.md.
+
 The user reported weak steering, glitches, and downward steering that could still
 raise the phoenix. Three parallel agents audited flight, collision, and camera;
 the integration was then exercised in the in-app browser.

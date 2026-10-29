@@ -15,19 +15,27 @@ python -m http.server 8767 --bind 127.0.0.1 --directory dist/site
 
 Open http://127.0.0.1:8767/flight.html and choose **Take flight**.
 
-- **W / Up**: climb; **S / Down**: descend.
-- **A / Left** and **D / Right**: turn and bank.
-- **Shift**: boost; **Space**: slow flight.
+- **W / S**: forward/backward; **A / D**: sideways.
+- **Left / Right arrows**: turn in place or while moving.
+- **Space / C**, or **Up / Down arrows**: straight up/down.
+- **Shift**: move faster; **X**: stop and cancel a trick.
 - **Q / E**: roll left/right while continuing to steer.
 - **L**: a vertical loop, available when its complete route has clearance.
-  The loop follows its route for 3.2 seconds; **S / Down** or **Space** cancels it.
+  Start it while moving forward in a straight line. It follows its route for
+  3.2 seconds; **C / Down** or **X** cancels it.
 - **P / Escape**: pause; **R**: return to the starting position.
-- **F**, or **Island view**: switch between chase camera and island overview.
-- Mouse/touch dragging also steers. Coarse-pointer devices have a virtual stick,
+- **F**, or **Island view**: hold flight and inspect the island. Drag or use
+  arrow keys to orbit; scroll to zoom. **Follow phoenix** returns to flight.
+- Canvas dragging turns/climbs. The touch stick moves forward/back and turns;
+  coarse-pointer devices also have
   climb/descent buttons, a held boost button, and roll/loop buttons.
 
-The bird cruises without holding a forward key. Steering has acceleration and
-damping; release the turn input to settle back to straight flight. The camera
+The bird starts in a stationary hover. No key means no translation. Up/down
+alone changes only world height, including immediately after forward movement.
+Released axes stop immediately; held axes accelerate smoothly. Turning alone
+changes facing without moving the bird. Pitch/bank never steer translation.
+Only combined movement commands produce diagonal travel, with their combined
+speed normalized. Rolls/loops are explicit optional maneuvers. The camera
 tracks the pilot rather than the animated wing/body joints. The sky's distant
 boundary limits outward movement; the visitor chooses the return direction.
 Descending input immediately stops upward travel, even while visual pitch eases
@@ -38,6 +46,7 @@ climb. A blocked descent stays blocked until the visitor turns or climbs clear.
 
 - `phoenix-island.mjs` owns model loading, scene presentation, and inputs.
 - `phoenix-flight-core.mjs` owns numerically tested, frame-rate-independent flight.
+- `phoenix-input.mjs` maps independent keyboard/touch commands to movement axes.
 - `phoenix-collision.mjs` spatially indexes the selected solid meshes and sweeps
   a body sphere continuously against real faces, edges, and vertices. Openings
   and undersides retain their actual geometry. Camera sweeps stop at the first
@@ -82,3 +91,6 @@ destination, read the section, and choose **Fly away**. That landing/read/takeof
 loop is not implemented in this milestone. The provided bird has no separate
 landing, perched, or takeoff clips; its transition and landing locations should
 be agreed with the user before adding that behavior.
+
+Measured landmark proposals and landing-space limitations are in
+[ISLAND-LANDINGS.md](ISLAND-LANDINGS.md). No resume section is assigned yet.

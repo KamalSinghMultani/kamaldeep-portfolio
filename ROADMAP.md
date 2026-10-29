@@ -8,6 +8,8 @@
 - [x] Replace automatic terrain climb with continuous 3D collisions and intent-preserving descent.
 - [x] Stabilize the animated body and chase camera; repair multi-touch steering conflicts.
 - [x] Add steerable rolls, clearance-checked loops, and actual-island route regression checks.
+- [x] Replace cruise with command-only hover/forward/reverse/strafe/vertical movement.
+- [x] Inspect six real landmark zones and measure natural landing-space candidates.
 - [ ] Tune the flight feel with the user's hands-on feedback.
 - [ ] Agree on landing/perched/takeoff behavior and select resume landing locations.
 - [ ] Add land, read a resume section, and fly-away interactions.
