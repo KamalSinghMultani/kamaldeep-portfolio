@@ -18,23 +18,37 @@ Open http://127.0.0.1:8767/flight.html and choose **Take flight**.
 - **W / Up**: climb; **S / Down**: descend.
 - **A / Left** and **D / Right**: turn and bank.
 - **Shift**: boost; **Space**: slow flight.
+- **Q / E**: roll left/right while continuing to steer.
+- **L**: a vertical loop, available when its complete route has clearance.
+  The loop follows its route for 3.2 seconds; **S / Down** or **Space** cancels it.
 - **P / Escape**: pause; **R**: return to the starting position.
 - **F**, or **Island view**: switch between chase camera and island overview.
 - Mouse/touch dragging also steers. Coarse-pointer devices have a virtual stick,
-  climb/descent buttons, and a held boost button.
+  climb/descent buttons, a held boost button, and roll/loop buttons.
 
 The bird cruises without holding a forward key. Steering has acceleration and
 damping; release the turn input to settle back to straight flight. The camera
 tracks the pilot rather than the animated wing/body joints. The sky's distant
-boundary gently turns the bird back toward the island.
+boundary limits outward movement; the visitor chooses the return direction.
+Descending input immediately stops upward travel, even while visual pitch eases
+through level. Obstacles can stop or slide the body, but never trigger an automatic
+climb. A blocked descent stays blocked until the visitor turns or climbs clear.
 
 ## Model integration
 
-- `phoenix-island.mjs` owns model loading, scene presentation, camera, and inputs.
+- `phoenix-island.mjs` owns model loading, scene presentation, and inputs.
 - `phoenix-flight-core.mjs` owns numerically tested, frame-rate-independent flight.
-- `phoenix-terrain.mjs` bakes actual world-space triangles into a conservative
-  height field once. Controller updates use four-array-read lookups rather than
-  raycasting the full model repeatedly.
+- `phoenix-collision.mjs` spatially indexes the selected solid meshes and sweeps
+  a body sphere continuously against real faces, edges, and vertices. Openings
+  and undersides retain their actual geometry. Camera sweeps stop at the first
+  obstruction and shorten the follow arm instead of lifting above a heightfield.
+- `phoenix-camera.mjs` follows body translation immediately and damps its orbit
+  and focus offsets. Tricks leave the horizon steady.
+- `phoenix-model.mjs` shares the exact asset transforms with model/world checks.
+  It removes the imported body's translational flap bob while retaining the
+  supplied wing, tail, and joint animation.
+- `phoenix-terrain.mjs` is retained as an earlier heightfield experiment. The
+  flight runtime no longer uses it.
 - The authored island presentation/turntable animation is not played. The island
   remains stationary while the visitor controls the phoenix.
 - The phoenix's supplied `Take 001` clip drives its real 89-joint skeleton.
@@ -49,16 +63,19 @@ evidence, and source-derived architecture findings are in
 
 ## Verification and limits
 
-Run `python tools/check.py` after building. Flight checks compare the controller
-at 30/60/120/144 Hz and cover steering, boost/brake, pause, terrain/altitude/bounds,
-and reset. Terrain tests cover world transforms, indexed/nonindexed geometry,
-narrow ledges, and conservative clearance. Asset checks inspect the real shipped
-GLBs and their rig/embedded resources; the release check also serves them via HTTP.
+Run `python tools/check.py` after building. Flight checks compare frame rates and
+cover input reversal, collisions, bounds, tricks, pause, and reset. Collision tests
+cover arches, undersides, corners, narrow passages, and continuous face/edge/vertex
+hits. Model tests advance the actual skeleton through descending/turning/rolling
+poses and verify its body stays anchored. Whole-island checks use the actual GLB
+triangles. Asset checks inspect the shipped rig/embedded resources; release checks
+also serve the modules and assets via HTTP.
 
-The terrain field is an upper-surface approximation. It avoids penetrating the
-island, but does not support flight through arches or under overhangs. Wing-tip
-and foliage-side collisions remain approximate. This is an initial flight
-controller to tune through user feedback, not a full aerodynamic simulation.
+Collision uses a 1.2-unit sphere around the phoenix's body; wing tips and selected
+decorative foliage remain approximate. It supports openings large enough for the
+body, although the wings may visually overlap narrow openings. There is no deep
+rock teleport recovery; normal movement uses continuous sweeps from a clear spawn.
+This is an arcade flight controller to tune through hands-on feedback.
 
 The user's next planned interaction remains: free flight, land at a resume
 destination, read the section, and choose **Fly away**. That landing/read/takeoff

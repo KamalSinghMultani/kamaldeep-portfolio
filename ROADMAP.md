@@ -5,6 +5,9 @@
 - [x] Integrate fixed island, original phoenix wing animation, and independent pilot controls.
 - [x] Add damped steering/speed/pitch/bank, chase camera, pause, reset, and mobile inputs.
 - [x] Add geometry-derived terrain clearance and controller/terrain/asset/release checks.
+- [x] Replace automatic terrain climb with continuous 3D collisions and intent-preserving descent.
+- [x] Stabilize the animated body and chase camera; repair multi-touch steering conflicts.
+- [x] Add steerable rolls, clearance-checked loops, and actual-island route regression checks.
 - [ ] Tune the flight feel with the user's hands-on feedback.
 - [ ] Agree on landing/perched/takeoff behavior and select resume landing locations.
 - [ ] Add land, read a resume section, and fly-away interactions.
