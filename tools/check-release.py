@@ -64,7 +64,7 @@ def check_release(base_url):
     assert (ROOT / "media/robot-expressive.glb").read_bytes()[:4] == b"glTF"
     for dependency in ("quick-workshop.mjs", "quick-workshop-core.mjs", "phoenix-island.mjs",
                        "phoenix-flight-core.mjs", "phoenix-terrain.mjs", "phoenix-collision.mjs",
-                       "phoenix-camera.mjs", "phoenix-model.mjs", "phoenix-island.css", "vendor/GLTFLoader.js",
+                       "phoenix-camera.mjs", "phoenix-model.mjs", "phoenix-input.mjs", "phoenix-island.css", "vendor/GLTFLoader.js",
                        "vendor/BufferGeometryUtils.js", "vendor/three.module.min.js", "media/robot-license.txt"):
         with urlopen(base_url + dependency, timeout=10) as response:
             assert response.status == 200

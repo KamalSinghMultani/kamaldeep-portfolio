@@ -28,7 +28,7 @@ for (const id of ['flight-start', 'flight-pause', 'flight-resume', 'flight-reset
 }
 assert(html.includes('NORBERTO-3D') && html.includes('Stéphane Agullo'));
 assert(html.includes('href="quick.html"'));
-for (const filename of ['phoenix-island.mjs', 'phoenix-flight-core.mjs', 'phoenix-collision.mjs', 'phoenix-camera.mjs', 'phoenix-model.mjs', 'phoenix-island.css', 'vendor/GLTFLoader.js', 'vendor/BufferGeometryUtils.js']) {
+for (const filename of ['phoenix-island.mjs', 'phoenix-flight-core.mjs', 'phoenix-input.mjs', 'phoenix-collision.mjs', 'phoenix-camera.mjs', 'phoenix-model.mjs', 'phoenix-island.css', 'vendor/GLTFLoader.js', 'vendor/BufferGeometryUtils.js']) {
   assert(fs.statSync(path.join(root, filename)).isFile(), `Deployment includes ${filename}`);
 }
 console.log('Phoenix assets passed: actual embedded models/flight rig, dependencies, controls, fallback resume link, and attribution packaged.');

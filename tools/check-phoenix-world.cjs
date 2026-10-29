@@ -57,11 +57,11 @@ const { loadGeometry } = require('./phoenix-test-assets.cjs');
     const yaw = Math.atan2(-x, z);
     const high = make({ x, y: 135, z }, yaw);
     assertClear(high.position, `descent ${bearing}`);
-    advance(high, { climb: -1, boost: true }, fps * 16, `descent ${bearing}`, true);
+    advance(high, { forward: 1, climb: -1, boost: true }, fps * 16, `descent ${bearing}`, true);
     counts.descentRoutes++;
     const low = make({ x, y: 20 + bearing % 3 * 12, z }, yaw);
     assertClear(low.position, `cliff ${bearing}`);
-    advance(low, { climb: -.12, boost: true }, fps * 9, `cliff ${bearing}`, true);
+    advance(low, { forward: 1, climb: -.12, boost: true }, fps * 9, `cliff ${bearing}`, true);
     counts.cliffRoutes++;
   }
 
@@ -73,7 +73,7 @@ const { loadGeometry } = require('./phoenix-test-assets.cjs');
       const yaw = axis === 'z' ? (direction > 0 ? 0 : Math.PI) : (direction > 0 ? -Math.PI / 2 : Math.PI / 2);
       const state = make(position, yaw);
       const label = `${axis} transect ${offset}/${direction}`;
-      advance(state, {}, fps * 20, label);
+      advance(state, { forward: 1 }, fps * 20, label);
       assert(Math.abs(state.position.y - altitude) < 1e-7, `${label}: overhead flight stays level`);
       assert(axis === 'z' ? state.position.z * direction < -150 : state.position.x * direction < -150,
         `${label}: crosses the complete island`);
@@ -81,18 +81,28 @@ const { loadGeometry } = require('./phoenix-test-assets.cjs');
     }
   }
 
+  const vertical = make({x:0,y:65,z:250});
+  advance(vertical, { climb: 1 }, fps * 2, 'pure ascent');
+  assert(Math.abs(vertical.position.x) < 1e-8 && Math.abs(vertical.position.z-250) < 1e-8,
+    'Pure climb introduces no horizontal travel');
+  advance(vertical, { climb: -1 }, fps * 2, 'pure descent', true);
+  assert(Math.abs(vertical.position.x) < 1e-8 && Math.abs(vertical.position.z-250) < 1e-8,
+    'Pure descent introduces no horizontal travel');
+
   for (const type of ['rollLeft', 'rollRight', 'loop']) {
     const state = make({x:0,y:65,z:250});
+    if (type === 'loop') advance(state, { forward: 1 }, fps, 'loop approach');
+    const origin = { ...state.position };
     assert(requestTrick(state, type), `${type}: accepted in clear water airspace`);
     assert(state.trick, `${type}: maneuver becomes active`);
     let frames = 0;
     while (state.trick && frames < fps * 8) {
-      advance(state, {}, 1, type);
+      advance(state, type === 'loop' ? {} : { forward: 1 }, 1, type);
       frames++;
     }
     assert(!state.trick, `${type}: finishes`);
     if (type === 'loop') {
-      assert(Math.hypot(state.position.x, state.position.y-65, state.position.z-250) < 1,
+      assert(Math.hypot(state.position.x-origin.x, state.position.y-origin.y, state.position.z-origin.z) < 1,
         'A real loop returns near its starting flight path');
     }
     counts.tricks++;
@@ -106,10 +116,15 @@ const { loadGeometry } = require('./phoenix-test-assets.cjs');
       const outside = {x:Math.sin(angle)*195,y:height,z:Math.cos(angle)*195};
       const hit = world.clipCamera(outside, {x:0,y:height,z:0}, radius);
       if (!hit.hit || hit.startedPenetrating) continue;
-      const position = {x:hit.position.x+hit.normal.x*.15,y:hit.position.y+hit.normal.y*.15,z:hit.position.z+hit.normal.z*.15};
+      const outward = { x: Math.sin(angle), z: Math.cos(angle) };
+      const position = {x:hit.position.x+outward.x*20,y:hit.position.y,z:hit.position.z+outward.z*20};
       const clear = world.constrainMotion(position, position, radius);
       if (clear.startedPenetrating) continue;
       const state = make(position, Math.atan2(-outside.x, outside.z));
+      for (let frame = 0; frame < fps * 3 && Math.hypot(state.position.x-hit.position.x,state.position.z-hit.position.z) > 2.5; frame++) {
+        advance(state, { forward: 1 }, 1, 'rock loop approach');
+      }
+      if (state.actualSpeed < state.config.minimumLoopSpeed) continue;
       if (!requestTrick(state,'loop')) {
         assert(state.trickRejectedReason, 'An obstructed loop explains why it cannot start');
         assert(!state.trick, 'Rejected loop does not become active');
