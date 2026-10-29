@@ -34,6 +34,7 @@ let steeringPointerId = null;
 let frameMilliseconds = 16.7;
 let feedbackUntil = 0;
 const islandView = { angle: Math.atan2(245, 280), elevation: .4, distance: 400 };
+const islandOrbit = { ...islandView };
 
 // Baked island textures carry the original art direction. Light the bird gently.
 scene.add(new THREE.HemisphereLight('#cfddff', '#18384e', .65));
@@ -66,8 +67,9 @@ function updateCamera(dt, snap = false) {
   if (!started || overview) {
     const drift = !started && !reduced.matches ? Math.sin(introClock * .04) * .045 : 0;
     const fit = Math.max(1, .85 / camera.aspect);
-    const distance = islandView.distance * fit, angle = islandView.angle + drift;
-    desiredCamera.set(Math.sin(angle) * distance * Math.cos(islandView.elevation), 28 + Math.sin(islandView.elevation) * distance, Math.cos(angle) * distance * Math.cos(islandView.elevation));
+    for (const key of ['angle', 'elevation', 'distance']) islandOrbit[key] = snap ? islandView[key] : THREE.MathUtils.damp(islandOrbit[key], islandView[key], 6, dt);
+    const distance = islandOrbit.distance * fit, angle = islandOrbit.angle + drift;
+    desiredCamera.set(Math.sin(angle) * distance * Math.cos(islandOrbit.elevation), 28 + Math.sin(islandOrbit.elevation) * distance, Math.cos(angle) * distance * Math.cos(islandOrbit.elevation));
     desiredFocus.set(0, 28, 0);
   } else {
     updateCameraRig(chase, flight, dt, { aspect: camera.aspect, collision: collision?.clipCamera }, snap);
@@ -76,12 +78,8 @@ function updateCamera(dt, snap = false) {
     camera.position.copy(cameraPosition); camera.lookAt(cameraFocus); camera.updateProjectionMatrix();
     return;
   }
-  if (snap) { cameraPosition.copy(desiredCamera); cameraFocus.copy(desiredFocus); }
-  else {
-    const response = started && !overview ? 3.2 : 2;
-    cameraPosition.lerp(desiredCamera, 1 - Math.exp(-response * dt));
-    cameraFocus.lerp(desiredFocus, 1 - Math.exp(-4.5 * dt));
-  }
+  // Damp orbit coordinates instead of cutting a chord through the island.
+  cameraPosition.copy(desiredCamera); cameraFocus.copy(desiredFocus);
   camera.position.copy(cameraPosition); camera.lookAt(cameraFocus);
   const targetFov = started && !overview ? 57 + Math.max(0, flight.speed - 17) * .38 : 57;
   camera.fov = THREE.MathUtils.damp(camera.fov, targetFov, 2.5, dt);
@@ -185,8 +183,8 @@ function toggleView() {
   $('view-toggle').setAttribute('aria-pressed', String(overview));
   canvas.dataset.camera = overview ? 'overview' : 'follow';
   updateHUD();
-  if (paused) { updateCamera(0, true); renderer.render(scene, camera); }
-  else canvas.focus({ preventScroll: true });
+  updateCamera(0, true); renderer.render(scene, camera);
+  if (!paused) canvas.focus({ preventScroll: true });
 }
 
 function fail(error) {
